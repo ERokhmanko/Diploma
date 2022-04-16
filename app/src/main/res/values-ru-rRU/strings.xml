@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Диплом</string>
+    <string name="prompt_login">Логин</string>
+    <string name="prompt_password">Пароль</string>
+    <string name="action_sign_in">Войти</string>
+    <string name="action_sign_up">Зарегистрироваться</string>
+    <string name="welcome">Добро пожаловать!</string>
+    <string name="invalid_username">Некорректное имя</string>
+    <string name="invalid_password">Пароль должен содержать > 5 символов</string>
+    <string name="login_failed">Ошибка входа</string>
+    <string name="prompt_name">Имя</string>
+    <string name="place_for_your_photo">Место для Вашей фотографии</string>
+    <string name="error_auth">Неверный логин или пароль</string>
+    <string name="page_profile">Профиль</string>
+    <string name="page_users">Пользователи</string>
+    <string name="page_events">События</string>
+    <string name="page_main">Главная</string>
+    <string name="error_loading">Что-то пошло не так. Повторите попытку позже</string>
+    <string name="retry_loading">Повторить</string>
+    <string name="empty_posts">Здесь нет никаких постов.\\\\nЕсли вы создадите новую запись, она появится здесь</string>
+    <string name="menu_remove">Удалить</string>
+    <string name="menu_edit">Редактировать</string>
+    <string name="menu_hide">Скрыть</string>
+    <string name="ad">Реклама</string>
+    <string name="avatar">Фотография владельца поста</string>
+    <string name="icon_like">Значок \"большой палец вверх\"</string>
+    <string name="first_like">Аватар первого лайка</string>
+    <string name="second_like">Аватар второго лайка</string>
+    <string name="play_video">Кнопка с повернутым треугольником для запуска видео</string>
+</resources>

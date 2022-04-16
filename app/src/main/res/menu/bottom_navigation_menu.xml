@@ -1,0 +1,24 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/page_main"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_other_houses_24"
+        android:title="@string/page_main"/>
+    <item
+        android:id="@+id/page_events"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_notifications_24"
+        android:title="@string/page_events"/>
+
+    <item
+        android:id="@+id/page_users"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_people_24"
+        android:title="@string/page_users"/>
+
+    <item
+        android:id="@+id/page_profile"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_face_24"
+        android:title="@string/page_profile"/>
+</menu>

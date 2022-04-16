@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/indent"
+    tools:context=".ui.HomeFragment">
+
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/share" />
+
+    <ImageView
+        android:id="@+id/avatar"
+        android:layout_width="@dimen/avatar_height"
+        android:layout_height="@dimen/avatar_width"
+        android:layout_marginBottom="@dimen/indent"
+        app:layout_constraintBottom_toTopOf="@id/barrier"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/avatar" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/menu"
+        style="@style/Widget.AppCompat.ElementsPostCard"
+        android:layout_width="37dp"
+        android:layout_height="50dp"
+        app:icon="@drawable/ic_baseline_more_vert_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/author"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/indent"
+        android:ellipsize="end"
+        android:singleLine="true"
+        app:layout_constraintBottom_toTopOf="@id/placeWork"
+        app:layout_constraintEnd_toStartOf="@id/menu"
+        app:layout_constraintStart_toEndOf="@id/avatar"
+        app:layout_constraintTop_toTopOf="@id/avatar"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="Имя автора" />
+
+    <TextView
+        android:id="@+id/placeWork"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/indent"
+        android:ellipsize="end"
+        android:singleLine="true"
+        app:layout_constraintBottom_toTopOf="@id/published"
+        app:layout_constraintEnd_toStartOf="@id/menu"
+        app:layout_constraintStart_toEndOf="@id/avatar"
+        app:layout_constraintTop_toBottomOf="@id/author"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="Последнее место работы" />
+
+    <TextView
+        android:id="@+id/published"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/indent"
+        app:layout_constraintBottom_toBottomOf="@id/avatar"
+        app:layout_constraintStart_toEndOf="@id/avatar"
+        app:layout_constraintTop_toBottomOf="@id/placeWork"
+        tools:text="Дата публикации" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="avatar, published, menu" />
+
+    <TextView
+        android:id="@+id/content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/indent"
+        android:layout_marginBottom="@dimen/indent"
+        app:layout_constraintBottom_toTopOf="@id/barrier_mediaView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/barrier"
+        tools:text="Текст контента" />
+
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier_mediaView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="content" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/play_pause_audio"
+        style="@style/Widget.App.Button.OutlinedButton.IconOnly"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:checkable="true"
+        app:icon="@drawable/ic_play_pause"
+        app:layout_constraintBottom_toTopOf="@+id/barrier_like_count"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mediaView" />
+
+    <TextView
+        android:id="@+id/name_track"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/name_album"
+        app:layout_constraintEnd_toStartOf="@id/time"
+        app:layout_constraintStart_toEndOf="@id/play_pause_audio"
+        app:layout_constraintTop_toTopOf="@id/play_pause_audio"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="Название песни" />
+
+    <TextView
+        android:id="@+id/name_album"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        app:layout_constraintBottom_toTopOf="@id/barrier_like_count"
+        app:layout_constraintEnd_toStartOf="@id/time"
+        app:layout_constraintStart_toEndOf="@id/play_pause_audio"
+        app:layout_constraintTop_toBottomOf="@id/name_track"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="Название альбома" />
+
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:padding="10dp"
+        app:layout_constraintBottom_toTopOf="@id/barrier_like_count"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/play_pause_audio"
+        tools:text="11:46" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_audio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="play_pause_audio,
+        name_track, name_album, time" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier_like_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="mediaView" />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/diver_like_count"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/barrier_like_count" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView_header_appraisers"
+        android:layout_width="@dimen/size_appraisers"
+        android:layout_height="@dimen/size_appraisers"
+        android:layout_marginTop="@dimen/indent"
+        android:layout_marginBottom="@dimen/indent"
+        android:elevation="@dimen/elevation"
+        app:cardCornerRadius="@dimen/radius"
+        app:layout_constraintBottom_toBottomOf="@id/barrier_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/barrier_like_count">
+
+        <ImageView
+            android:id="@+id/header_icon_like"
+            style="@style/HeaderAppraisers"
+            android:layout_width="@dimen/size_appraisers"
+            android:layout_height="@dimen/size_appraisers"
+            android:src="@drawable/ic_baseline_thumb_up_off_alt_24"
+            app:layout_constraintStart_toStartOf="@id/cardView_header_appraisers"
+            app:layout_constraintTop_toTopOf="@id/cardView_header_appraisers"
+            android:contentDescription="@string/icon_like" />
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView_first_like"
+        android:layout_width="@dimen/size_appraisers"
+        android:layout_height="@dimen/size_appraisers"
+        android:layout_marginStart="-10dp"
+        android:layout_marginTop="@dimen/indent"
+        android:layout_marginBottom="@dimen/indent"
+        android:elevation="@dimen/elevation"
+        app:cardCornerRadius="@dimen/radius"
+        app:layout_constraintBottom_toBottomOf="@id/barrier_icon"
+        app:layout_constraintStart_toEndOf="@id/cardView_header_appraisers"
+        app:layout_constraintTop_toBottomOf="@id/barrier_like_count">
+
+        <ImageView
+            android:id="@+id/first_like"
+            android:layout_width="@dimen/size_appraisers"
+            android:layout_height="@dimen/size_appraisers"
+            app:layout_constraintStart_toStartOf="@id/cardView_first_like"
+            app:layout_constraintTop_toTopOf="@id/cardView_first_like"
+            android:contentDescription="@string/first_like" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_like"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="cardView_header_appraisers,cardView_first_like,
+        like_count, diver_like_count" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView_second_like"
+        android:layout_width="@dimen/size_appraisers"
+        android:layout_height="@dimen/size_appraisers"
+        android:layout_marginStart="-10dp"
+        android:layout_marginTop="@dimen/indent"
+        android:layout_marginBottom="@dimen/indent"
+        android:elevation="@dimen/elevation"
+        android:visibility="gone"
+        app:cardCornerRadius="@dimen/radius"
+        app:layout_constraintBottom_toBottomOf="@id/barrier_icon"
+        app:layout_constraintStart_toEndOf="@id/cardView_first_like"
+        app:layout_constraintTop_toBottomOf="@id/barrier_like_count">
+
+        <ImageView
+            android:id="@+id/second_like"
+            android:layout_width="@dimen/size_appraisers"
+            android:layout_height="@dimen/size_appraisers"
+            app:layout_constraintStart_toStartOf="@id/cardView_second_like"
+            app:layout_constraintTop_toTopOf="@id/cardView_second_like"
+            android:contentDescription="@string/second_like" />
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/like_count"
+        android:layout_width="@dimen/width_like_count"
+        android:layout_height="@dimen/height_like_count"
+        android:layout_marginStart="@dimen/indent"
+        android:padding="4dp"
+        app:layout_constraintBottom_toBottomOf="@id/barrier_icon"
+        app:layout_constraintStart_toEndOf="@+id/cardView_second_like"
+        app:layout_constraintTop_toTopOf="@id/barrier_like_count"
+        tools:text="100к" />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/materialDivider"
+        android:layout_width="match_parent"
+
+        android:layout_height="match_parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/barrier_icon" />
+
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="cardView_header_appraisers" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView_button"
+        android:layout_width="@dimen/size_icon"
+        android:layout_height="@dimen/size_icon"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="@dimen/indent"
+        android:elevation="@dimen/elevation"
+        app:cardCornerRadius="@dimen/radius"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/barrier_icon">
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/like"
+            style="@style/Widget.AppCompat.LikeChecked"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            app:icon="@drawable/ic_baseline_thumb_up_off_alt_24"
+            app:layout_constraintStart_toStartOf="@id/cardView_button"
+            app:layout_constraintTop_toBottomOf="@id/cardView_button"
+            tools:checked="true" />
+
+    </androidx.cardview.widget.CardView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/comment"
+        style="@style/Widget.AppCompat.ElementsPostCard"
+        android:layout_width="@dimen/size_icon"
+        android:layout_height="@dimen/size_icon"
+        app:icon="@drawable/ic_baseline_comment_24"
+        app:layout_constraintEnd_toStartOf="@id/repost"
+        app:layout_constraintStart_toEndOf="@+id/cardView_button"
+        app:layout_constraintTop_toTopOf="@id/cardView_button" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/repost"
+        style="@style/Widget.AppCompat.ElementsPostCard"
+        android:layout_width="@dimen/size_icon"
+        android:layout_height="@dimen/size_icon"
+        android:textColor="?attr/colorControlNormal"
+        app:icon="@drawable/ic_baseline_shortcut_24"
+        app:layout_constraintEnd_toStartOf="@id/share"
+        app:layout_constraintStart_toEndOf="@+id/comment"
+        app:layout_constraintTop_toTopOf="@id/comment" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/share"
+        style="@style/Widget.AppCompat.ElementsPostCard"
+        android:layout_width="@dimen/size_icon"
+        android:layout_height="@dimen/size_icon"
+        android:layout_marginEnd="20dp"
+        android:textColor="?attr/colorControlNormal"
+        app:icon="@drawable/ic_baseline_send_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/repost" />
+
+    <View
+        android:id="@+id/mediaView"
+        android:layout_width="372dp"
+        android:layout_height="270dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/barrier_mediaView" />
+
+    <ImageButton
+        android:id="@+id/play_video"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/mediaView"
+        app:layout_constraintEnd_toEndOf="@+id/mediaView"
+        app:layout_constraintStart_toStartOf="@+id/mediaView"
+        app:layout_constraintTop_toTopOf="@+id/mediaView"
+        app:srcCompat="@android:drawable/ic_media_play"
+        android:contentDescription="@string/play_video" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_media"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="mediaView, play_video" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
