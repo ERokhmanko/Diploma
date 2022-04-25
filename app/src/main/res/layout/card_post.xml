@@ -24,7 +24,7 @@
         app:layout_constraintBottom_toTopOf="@id/barrier"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:contentDescription="@string/avatar" />
+        android:contentDescription="@string/avatar_post" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/menu"
@@ -47,6 +47,9 @@
         app:layout_constraintStart_toEndOf="@id/avatar"
         app:layout_constraintTop_toTopOf="@id/avatar"
         app:layout_constraintVertical_chainStyle="packed"
+        android:fontFamily="sans-serif"
+        android:textSize="17sp"
+        android:textStyle="bold"
         tools:text="Имя автора" />
 
     <TextView

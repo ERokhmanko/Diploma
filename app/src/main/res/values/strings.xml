@@ -24,11 +24,26 @@
     <string name="menu_edit">Edit</string>
     <string name="menu_hide">Hide</string>
     <string name="ad">Advertisement</string>
-    <string name="avatar">Photo of the post owner</string>
+    <string name="avatar_post">Photo of the post owner</string>
     <string name="icon_like">The \"thumbs up\" icon</string>
     <string name="first_like">Avatar of the first like</string>
     <string name="second_like">Avatar of the second like</string>
     <string name="play_video">Button with a rotated triangle to start the video</string>
-    @string\
+    <string name="avatar_user">Profile picture of the owner</string>
+    <string name="empty_user">There are no registered users yet.</string>
+    <string name="work_experience">work experience</string>
+    <string name="posts">posts</string>
+    <string name="title_post">Post</string>
+    <string name="title_event">event</string>
+    <string name="title_job">job</string>
+    <string name="description_photo">An element with a picture that you have chosen yourself</string>
+    <string name="remove">Remove</string>
+    <string name="description_post_save">Save</string>
+    <string name="location">A button to add your location</string>
+    <string name="attach">Button for adding multimedia</string>
+    <string name="mentions">Button to add a mentor</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_camera">Camera</string>
+    <string name="menu_audio">Audio</string>
 
 </resources>

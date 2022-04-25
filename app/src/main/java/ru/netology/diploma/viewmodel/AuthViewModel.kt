@@ -1,10 +1,7 @@
 package ru.netology.diploma.viewmodel
 
 import android.net.Uri
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.netology.diploma.R
@@ -12,7 +9,7 @@ import ru.netology.diploma.auth.AppAuth
 import ru.netology.diploma.dto.AuthState
 import ru.netology.diploma.dto.MediaUpload
 import ru.netology.diploma.model.LoginFormState
-import ru.netology.diploma.model.PhotoModel
+import ru.netology.diploma.model.FileModel
 import ru.netology.diploma.repository.AuthRepository
 import java.io.File
 import javax.inject.Inject
@@ -24,7 +21,7 @@ class AuthViewModel @Inject constructor
     private val authRepository: AuthRepository
 ) : ViewModel() {
 
-//    val data: LiveData<AuthState> = appAuth
+//    val dataAuth: LiveData<AuthState> = appAuth
 //        .authStateFlow
 //        .asLiveData(Dispatchers.Default) //TODO понять нужно ли заменить
 
@@ -39,9 +36,9 @@ class AuthViewModel @Inject constructor
     val loginFormState: LiveData<LoginFormState>
         get() = _loginForm
 
-    private val noPhoto = PhotoModel()
+    private val noPhoto = FileModel()
     private val _photo = MutableLiveData(noPhoto)
-    val photo: LiveData<PhotoModel>
+    val photo: LiveData<FileModel>
         get() = _photo
 
     fun authUser(login: String, password: String) {
@@ -87,6 +84,6 @@ class AuthViewModel @Inject constructor
     }
 
     fun changePhoto(uri: Uri?, file: File?) {
-        _photo.value = PhotoModel(uri, file)
+        _photo.value = FileModel(uri, file)
     }
 }

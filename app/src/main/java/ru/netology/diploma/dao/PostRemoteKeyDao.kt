@@ -2,7 +2,7 @@ package ru.netology.diploma.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
-import androidx.room.OnConflictStrategy.Companion.REPLACE
+import androidx.room.OnConflictStrategy.REPLACE
 import androidx.room.Query
 import ru.netology.diploma.entity.PostRemoteKeyEntity
 

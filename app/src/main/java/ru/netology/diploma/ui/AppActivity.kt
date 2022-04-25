@@ -53,6 +53,8 @@ class AppActivity : AppCompatActivity() {
                 }
             }
         }
+
+
         if (!viewModelAuth.authenticated) {
             findNavController(R.id.nav_host_fragment_activity_main).navigate(R.id.navigation_sign_in)
         }

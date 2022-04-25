@@ -96,6 +96,17 @@ class HomeFragment : Fragment() {
                     it.refresh is LoadState.Loading
             }
         }
+
+//        lifecycleScope.launchWhenCreated {
+//            adapter.loadStateFlow.collectLatest { state ->
+//                binding.swipeRefresh.isRefreshing =
+//                    state.refresh is LoadState.Loading ||
+//                            state.prepend is LoadState.Loading ||
+//                            state.append is LoadState.Loading
+//            }
+//        } TODO проверить какой вариант лучше
+
+        binding.swipeRefresh.setOnRefreshListener(adapter::refresh)
         return binding.root
     }
 }

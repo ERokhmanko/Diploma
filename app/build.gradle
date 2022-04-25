@@ -66,12 +66,17 @@ dependencies {
     implementation "androidx.room:room-runtime:2.4.2"
     implementation 'com.google.android.gms:play-services-cast-framework:21.0.1'
     kapt "androidx.room:room-compiler:2.4.2"
-    implementation "androidx.room:room-ktx:2.3.0"
+    implementation "androidx.room:room-ktx:2.4.2"
     implementation "androidx.paging:paging-runtime-ktx:3.1.1"
-    implementation "androidx.room:room-paging:2.5.0-alpha01"
+    implementation "androidx.room:room-paging:2.4.2"
     implementation "com.google.dagger:hilt-android:2.40.5"
     kapt "com.google.dagger:hilt-compiler:2.40.5"
+    implementation 'androidx.work:work-runtime-ktx:2.7.1'
+    implementation 'androidx.hilt:hilt-work:1.0.0'
+//    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0" //для запуска корутин, чтобы не блокировало основной thread
+//    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.0'// для хранения данных
 
+    implementation 'com.github.majidarabi:AndroidFilePicker:0.0.8'
     implementation 'com.github.dhaval2404:imagepicker:2.1'
     implementation "com.github.bumptech.glide:glide:4.12.0" //glide
 

@@ -23,9 +23,13 @@
     <string name="menu_edit">Редактировать</string>
     <string name="menu_hide">Скрыть</string>
     <string name="ad">Реклама</string>
-    <string name="avatar">Фотография владельца поста</string>
+    <string name="avatar_post">Фотография владельца поста</string>
     <string name="icon_like">Значок \"большой палец вверх\"</string>
     <string name="first_like">Аватар первого лайка</string>
     <string name="second_like">Аватар второго лайка</string>
     <string name="play_video">Кнопка с повернутым треугольником для запуска видео</string>
+    <string name="avatar_user">Фотография владельца профиля</string>
+    <string name="empty_user">Пока нет зарегистрированных пользователей.</string>
+    <string name="work_experience">опыт работы</string>
+    <string name="posts">посты</string>
 </resources>

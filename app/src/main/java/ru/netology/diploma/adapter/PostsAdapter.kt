@@ -113,14 +113,7 @@ class PostViewHolder(
 
 //            placeWork.text = //TODO подтянуть сюда инфу при работе с ui work
 
-
-            Glide.with(avatar)
-                .load("${post.authorAvatar}")
-                .circleCrop()
-                .placeholder(R.drawable.ic_baseline_avatar_24)
-                .timeout(10_000)
-//                .error(R.drawable.ic_baseline_error_24)//TODO разобраться почему при загрузке пользователей без аватара отображается эта иконка
-                .into(avatar)
+            Utils.uploadingAvatar(avatar, post.authorAvatar)
 
 
             when (post.attachment?.type) {
