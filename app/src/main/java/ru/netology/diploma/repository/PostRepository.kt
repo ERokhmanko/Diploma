@@ -112,7 +112,7 @@ class PostRepository @Inject constructor(
             } else {
                 save(post)
             }
-            postWorkDao.removeById(id)
+//            postWorkDao.removeById(id)
         } catch (e: Exception) {
             throw UnknownError
         }
@@ -175,5 +175,41 @@ class PostRepository @Inject constructor(
             throw UnknownError()
         }
     }
+
+    suspend fun likedPostById(id: Long) {
+        try {
+            postDao.likedById(id)
+            val response = apiService.likedPostById(id)
+            if (!response.isSuccessful) {
+                throw ApiError(response.code(), response.message())
+            }
+
+            val body = response.body() ?: throw ApiError(response.code(), response.message())
+            postDao.insert(PostEntity.fromDto(body))
+
+        } catch (e: IOException) {
+            throw NetworkError
+        } catch (e: Exception) {
+            throw UnknownError
+        }
+    }
+
+    suspend fun unlikedPostById(id: Long) {
+        try {
+            postDao.unlikedById(id)
+            val response = apiService.unlikedPostById(id)
+            if (!response.isSuccessful) {
+                throw ApiError(response.code(), response.message())
+            }
+
+            val body = response.body() ?: throw ApiError(response.code(), response.message())
+            postDao.insert(PostEntity.fromDto(body))
+        } catch (e: IOException) {
+            throw NetworkError
+        } catch (e: Exception) {
+            throw UnknownError
+        }
+    }
+
 
 }

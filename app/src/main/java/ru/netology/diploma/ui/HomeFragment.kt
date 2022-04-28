@@ -1,15 +1,19 @@
 package ru.netology.diploma.ui
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import ru.netology.diploma.R
 import ru.netology.diploma.adapter.PostCallback
 import ru.netology.diploma.adapter.PostLoadStateAdapter
 import ru.netology.diploma.adapter.PostsAdapter
@@ -28,49 +32,55 @@ class HomeFragment : Fragment() {
 
         val binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        val viewModel: PostViewModel by viewModels(
-//             ownerProducer = ::requireParentFragment
-        )
+        val viewModel: PostViewModel by activityViewModels()
+
+        val bundle = Bundle()
 
         val adapter = PostsAdapter(object : PostCallback {
             override fun onLike(post: Post) {
-                TODO("Not yet implemented")
+                if (!post.likedByMe) viewModel.likeById(post.id) else viewModel.unlikeById(post.id)
             }
 
             override fun onShare(post: Post) {
-                TODO("Not yet implemented")
+                val intent = Intent().apply {
+                    action = Intent.ACTION_SEND
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_TEXT, post.content)
+                }
+
+                val shareIntent = Intent.createChooser(intent, getString(R.string.share_post))
+                startActivity(shareIntent)
             }
 
             override fun remove(post: Post) {
-                TODO("Not yet implemented")
+                viewModel.removeById(post.id)
             }
 
             override fun edit(post: Post) {
-                TODO("Not yet implemented")
+                viewModel.edit(post)
+                bundle.putString("content", post.content)
+                findNavController().navigate(R.id.action_navigation_main_to_newPostFragment, bundle)
             }
 
             override fun hide(post: Post) {
-                TODO("Not yet implemented")
+                viewModel.hidePost(post)
             }
 
             override fun onVideo(post: Post) {
-                TODO("Not yet implemented")
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(post.attachment?.url))
+                val videoIntent = Intent.createChooser(intent, getString(R.string.media_chooser))
+                startActivity(videoIntent)
             }
 
-            override fun onImage(post: Post) {
-                TODO("Not yet implemented")
-            }
-
-            override fun onPost(post: Post) {
-                TODO("Not yet implemented")
-            }
 
             override fun onRepost(post: Post) {
                 TODO("Not yet implemented")
             }
 
             override fun onAudio(post: Post) {
-                TODO("Not yet implemented")
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(post.attachment?.url))
+                val audioIntent = Intent.createChooser(intent, getString(R.string.media_chooser))
+                startActivity(audioIntent)
             }
         })
 

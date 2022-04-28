@@ -5,10 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import ru.netology.diploma.R
 import ru.netology.diploma.adapter.JobCallback
 import ru.netology.diploma.adapter.JobsAdapter
 import ru.netology.diploma.adapter.PostCallback
@@ -30,7 +33,7 @@ class ProfileFragment : Fragment() {
     @Inject
     lateinit var appAuth: AppAuth
 
-    private val viewModel: PostViewModel by viewModels()
+    private val viewModel: PostViewModel by activityViewModels()
     private val userViewModel: UserViewModel by viewModels()
     private val jobViewModel: JobViewModel by viewModels()
 
@@ -75,14 +78,6 @@ class ProfileFragment : Fragment() {
                 TODO("Not yet implemented")
             }
 
-            override fun onImage(post: Post) {
-                TODO("Not yet implemented")
-            }
-
-            override fun onPost(post: Post) {
-                TODO("Not yet implemented")
-            }
-
             override fun onRepost(post: Post) {
                 TODO("Not yet implemented")
             }
@@ -118,6 +113,14 @@ class ProfileFragment : Fragment() {
             //TODO сделать запись если список работ пустой
         jobViewModel.data.observe(viewLifecycleOwner) {
             jobsAdapter.submitList(it.jobs)
+        }
+
+        binding.fab.setOnClickListener {
+                binding.groupFab.visibility = View.VISIBLE
+            }
+
+        binding.fabAddPost.setOnClickListener {
+            findNavController().navigate(R.id.action_navigation_profile_to_newPostFragment)
         }
 
         return binding.root

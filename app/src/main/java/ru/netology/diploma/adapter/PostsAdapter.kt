@@ -17,6 +17,7 @@ import ru.netology.diploma.databinding.CardPostBinding
 import ru.netology.diploma.dto.Ad
 import ru.netology.diploma.dto.FeedItem
 import ru.netology.diploma.dto.Post
+import ru.netology.diploma.dto.User
 import ru.netology.diploma.enumeration.AttachmentType
 import ru.netology.diploma.extensions.load
 import ru.netology.diploma.utils.Utils
@@ -29,8 +30,6 @@ interface PostCallback {
     fun edit(post: Post)
     fun hide(post: Post)
     fun onVideo(post: Post)
-    fun onImage(post: Post)
-    fun onPost(post: Post)
     fun onRepost(post: Post)
     fun onAudio(post: Post)
 
@@ -104,10 +103,16 @@ class PostViewHolder(
                 }
                 post.likeOwnerIds.size == 1 -> {
                     groupLike.visibility = View.VISIBLE
+//                    val user = likeOwner.first()
+//                    Utils.uploadingAvatar(firstLike, user.avatar) //TODO придумать как подтягивать аватарки лайкнувших
                 }
                 else -> {
                     groupLike.visibility = View.VISIBLE
                     cardViewSecondLike.visibility = View.VISIBLE
+//                    val firstUser = likeOwner.first()
+//                    val secondUser = likeOwner[2]
+//                    Utils.uploadingAvatar(firstLike, firstUser.avatar)
+//                    Utils.uploadingAvatar(secondLike, secondUser.avatar) //TODO придумать как подтягивать аватарки лайкнувших
                 }
             }
 
@@ -160,9 +165,6 @@ class PostViewHolder(
 
             mediaView.setOnClickListener {
                 when (post.attachment?.type) {
-                    AttachmentType.IMAGE -> {
-                        postCallback.onImage(post)
-                    }
                     AttachmentType.VIDEO -> {
                         postCallback.onVideo(post)
                     }
@@ -172,29 +174,25 @@ class PostViewHolder(
                 }
             }
 
-            content.setOnClickListener {
-                postCallback.onPost(post)
-            }
-
 
             menu.setOnClickListener { view ->
                 PopupMenu(view.context, view).apply {
-                    inflate(R.menu.post_options)
+                    inflate(R.menu.object_options)
                     menu.let {
-                        it.setGroupVisible(R.id.my_post_menu, post.ownedByMe)
-                        it.setGroupVisible(R.id.other_post_menu, !post.ownedByMe)
+                        it.setGroupVisible(R.id.my_object_menu, post.ownedByMe)
+                        it.setGroupVisible(R.id.other_object_menu, !post.ownedByMe)
                     }
                     setOnMenuItemClickListener { menuItem ->
                         when (menuItem.itemId) {
-                            R.id.post_remove -> {
+                            R.id.object_remove -> {
                                 postCallback.remove(post)
                                 true
                             }
-                            R.id.post_edit -> {
+                            R.id.object_edit -> {
                                 postCallback.edit(post)
                                 true
                             }
-                            R.id.post_hide -> {
+                            R.id.object_hide -> {
                                 postCallback.hide(post)
                                 true
                             }

@@ -15,4 +15,6 @@
     <dimen name="app_bar_height">180dp</dimen>
     <dimen name="list_job_margin">90dp</dimen>
     <dimen name="padding_new_post">16dp</dimen>
+    <dimen name="marginTop_like">-10dp</dimen>
+    <dimen name="height_like">60dp</dimen>
 </resources>

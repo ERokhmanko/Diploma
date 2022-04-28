@@ -66,6 +66,12 @@ interface ApiService {
     @POST("media")
     suspend fun upload(@Part media: MultipartBody.Part): Response<Media>
 
+    @POST("posts/{id}/likes")
+    suspend fun likedPostById(@Path("id") id: Long): Response<Post>
+
+    @DELETE("posts/{id}/likes")
+    suspend fun unlikedPostById(@Path("id") id: Long): Response<Post>
+
     //Walls
     @GET("{userId}/wall/{id}/before")
     suspend fun getWallBefore(

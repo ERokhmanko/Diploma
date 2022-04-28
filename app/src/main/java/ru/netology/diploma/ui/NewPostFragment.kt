@@ -10,6 +10,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.net.toFile
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.github.dhaval2404.imagepicker.ImagePicker
@@ -31,7 +32,7 @@ import ru.netology.diploma.viewmodel.PostViewModel
 class NewPostFragment : Fragment() {
 
     private var fragmentBinding: FragmentNewPostBinding? = null
-    private val viewModel: PostViewModel by viewModels() //TODO надо ли менять?
+    private val viewModel: PostViewModel by activityViewModels() //TODO надо ли менять?
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,9 +98,6 @@ class NewPostFragment : Fragment() {
                                 .crop()
                                 .compress(2048)
                                 .provider(ImageProvider.GALLERY)
-                                .galleryMimeTypes(
-                                    arrayOf("image / png", "image / jpeg", "image / jpg")
-                                )
                                 .createIntent(pickPhotoLauncher::launch)
                             true
                         }
@@ -118,7 +116,7 @@ class NewPostFragment : Fragment() {
                         else -> false
                     }
                 }
-            }
+            }.show()
         }
         binding.removeFile.setOnClickListener {
             viewModel.changeFile(null, null)

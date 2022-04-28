@@ -6,6 +6,9 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
+import retrofit2.Response
+import retrofit2.http.DELETE
+import retrofit2.http.Path
 import ru.netology.diploma.entity.PostEntity
 
 @Dao
@@ -25,4 +28,9 @@ interface PostDao {
     @Query("DELETE FROM PostEntity WHERE id = :id")
     suspend fun removeById(id: Long)
 
+    @Query("UPDATE PostEntity SET likedByMe = 1 WHERE id = :id AND likedByMe = 0")
+    suspend fun likedById(id: Long)
+
+    @Query("UPDATE PostEntity SET likedByMe = 0 WHERE id = :id AND likedByMe = 1")
+    suspend fun unlikedById( id: Long)
 }

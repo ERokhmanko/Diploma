@@ -22,7 +22,7 @@ data class PostEntity(
     val link: String? = null,
     var mentionIds: Set<Long> = emptySet(),
     val mentionedMe: Boolean = false,
-    val likeOwnerIds: Set<Long> = emptySet(),
+    val likeOwnerIds: Set<Long> = emptySet(), //TODO нужно ли?
     val likedByMe: Boolean = false,
     @Embedded
     val attachment: AttachmentEmbeddable? = null,

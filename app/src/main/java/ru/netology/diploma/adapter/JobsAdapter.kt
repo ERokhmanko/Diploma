@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.netology.diploma.R
 import ru.netology.diploma.databinding.CardJobBinding
 import ru.netology.diploma.dto.Job
-import java.time.Instant
 
 interface JobCallback {
     fun edit(job: Job)
@@ -49,17 +48,18 @@ class JobViewHolder(
 
             menu.setOnClickListener { view ->
                 PopupMenu(view.context, view).apply {
-                    inflate(R.menu.post_options) //TODO меню подходит? если да, то надо перезвать
+                    inflate(R.menu.object_options)
                     menu.let {
-                        it.setGroupVisible(R.id.my_post_menu, showPopupMenu)
+                        it.setGroupVisible(R.id.my_object_menu, showPopupMenu)
+                        it.setGroupVisible(R.id.other_object_menu, false)  //TODO работает так?
                     }
                     setOnMenuItemClickListener { menuItem ->
                         when (menuItem.itemId) {
-                            R.id.post_remove -> {
+                            R.id.object_remove -> {
                                 jobCallback.remove(job)
                                 true
                             }
-                            R.id.post_edit -> {
+                            R.id.object_edit -> {
                                 jobCallback.edit(job)
                                 true
                             }

@@ -9,7 +9,11 @@
         android:id="@+id/navigation_main"
         android:name="ru.netology.diploma.ui.HomeFragment"
         android:label="@string/page_main"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_navigation_main_to_newPostFragment"
+            app:destination="@id/newPostFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_events"
@@ -27,7 +31,11 @@
         android:id="@+id/navigation_profile"
         android:name="ru.netology.diploma.ui.ProfileFragment"
         android:label="@string/page_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_navigation_profile_to_newPostFragment"
+            app:destination="@id/newPostFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_sign_in"
@@ -44,9 +52,19 @@
     <fragment
         android:id="@+id/navigation_sign_up"
         android:name="ru.netology.diploma.ui.SignUpFragment"
-        android:label="SignUpFragment" >
+        android:label="sign_up"
+        tools:layout="@layout/fragment_sign_up" > >
         <action
             android:id="@+id/action_navigation_signUp_to_navigation_sign_in"
             app:destination="@id/navigation_sign_in" />
+    </fragment>
+    <fragment
+        android:id="@+id/newPostFragment"
+        android:name="ru.netology.diploma.ui.NewPostFragment"
+        android:label="fragment_new_post"
+        tools:layout="@layout/fragment_new_post" >
+        <action
+            android:id="@+id/action_newPostFragment_to_navigation_profile"
+            app:destination="@id/navigation_profile" />
     </fragment>
 </navigation>

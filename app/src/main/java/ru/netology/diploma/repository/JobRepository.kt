@@ -33,7 +33,7 @@ class JobRepository @Inject constructor(
                 throw ApiError(response.code(), response.message())
             }
             val body = response.body() ?: throw ApiError(response.code(), response.message())
-//            jobDao.insert(body.toEntity())
+            jobDao.insert(body.toEntity())
             return body
         } catch (e: IOException) {
             throw NetworkError
