@@ -1,27 +1,17 @@
 package ru.netology.diploma.ui
 
 import android.app.Activity
-import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import android.widget.PopupMenu
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
 import androidx.core.net.toFile
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.github.dhaval2404.imagepicker.constant.ImageProvider
-import com.github.file_picker.FilePicker
-import com.github.file_picker.ListDirection
-import com.github.file_picker.adapter.ItemAdapter
-import com.github.file_picker.extension.showFilePicker
-import com.github.file_picker.listener.OnItemClickListener
-import com.github.file_picker.listener.OnSubmitClickListener
-import com.github.file_picker.model.Media
 import com.google.android.material.snackbar.Snackbar
 import ru.netology.diploma.R
 import ru.netology.diploma.databinding.FragmentNewPostBinding
@@ -40,7 +30,7 @@ class NewPostFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_new_post, menu)
+        inflater.inflate(R.menu.menu_new_object, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

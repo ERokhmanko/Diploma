@@ -80,6 +80,7 @@ dependencies {
     implementation 'com.github.majidarabi:AndroidFilePicker:0.0.8'
     implementation 'com.github.dhaval2404:imagepicker:2.1'
     implementation "com.github.bumptech.glide:glide:4.12.0" //glide
+    implementation 'ru.cleverpumpkin:crunchycalendar:2.2.0' //календарь
 
 
     testImplementation 'junit:junit:4.13.2'

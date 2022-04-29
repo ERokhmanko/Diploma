@@ -14,4 +14,5 @@ interface UserDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE) //TODO оставить реплейс?
     suspend fun insert(user: List<UserEntity>)
+
 }

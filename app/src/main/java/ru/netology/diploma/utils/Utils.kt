@@ -2,6 +2,7 @@ package ru.netology.diploma.utils
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.text.format.DateFormat
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
@@ -41,6 +42,10 @@ object Utils {
             .withZone(ZoneId.systemDefault())
 
         return formatter.format(Instant.parse(value))
+    }
+
+    fun formatDate(value: Long?): String {
+      return if(value==null)"Until now" else DateFormat.format("dd/MM/yyyy", Date(value * 1000)).toString()
     }
 
     fun hideKeyboard(view: View) {

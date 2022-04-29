@@ -10,6 +10,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.netology.diploma.auth.AppAuth
+import ru.netology.diploma.work.RefreshJobsWorker
 import ru.netology.diploma.work.RefreshPostsWorker
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -31,10 +32,11 @@ class Application : Application(), Configuration.Provider {
     override fun onCreate() {
         super.onCreate()
         setupAuth()
-        setupWork()
+        setupWorkPosts()
+        setupWorkJobs()
     }
 
-    private fun setupWork() {
+    private fun setupWorkPosts() {
         appScope.launch {
             val constraints = Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -46,6 +48,24 @@ class Application : Application(), Configuration.Provider {
 
             workManager.get().enqueueUniquePeriodicWork(
                 RefreshPostsWorker.name,
+                ExistingPeriodicWorkPolicy.KEEP,
+                request
+            )
+        }
+    }
+
+    private fun setupWorkJobs() {
+        appScope.launch {
+            val constraints = Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build()
+
+            val request = PeriodicWorkRequestBuilder<RefreshJobsWorker>(1, TimeUnit.MINUTES)
+                .setConstraints(constraints)
+                .build()
+
+            workManager.get().enqueueUniquePeriodicWork(
+                RefreshJobsWorker.name,
                 ExistingPeriodicWorkPolicy.KEEP,
                 request
             )

@@ -37,4 +37,7 @@ class DbModule {
 
     @Provides
     fun providesPostWorkDao(appDb: AppDb) : PostWorkDao = appDb.postWorkDao()
+
+    @Provides
+    fun providesJobWorkDao(appDb: AppDb) : JobWorkDao = appDb.jobWorkDao()
 }

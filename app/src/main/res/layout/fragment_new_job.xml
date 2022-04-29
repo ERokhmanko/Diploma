@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tableLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/margin_line"
+    android:layout_marginTop="@dimen/margin_column"
+    android:layout_marginEnd="@dimen/margin_line"
+    android:gravity="center_horizontal"
+    android:shrinkColumns="*"
+    android:stretchColumns="*">
+
+
+    <TableRow
+        android:id="@+id/tableRowStart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="From" />
+
+        <EditText
+            android:id="@+id/start_edit"
+            android:layout_width="@dimen/column_width"
+            android:layout_height="wrap_content" />
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/tableRowFinish"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/finish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="To" />
+
+        <EditText
+            android:id="@+id/finish_edit"
+            android:layout_width="@dimen/column_width"
+            android:layout_height="wrap_content" />
+
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/tableRowCompany"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/name_company"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="Company" />
+
+        <EditText
+            android:id="@+id/company_edit"
+            android:layout_width="@dimen/column_width"
+            android:layout_height="wrap_content" />
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/tableRow3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/link"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="Website" />
+
+        <EditText
+            android:id="@+id/link_edit"
+            android:layout_width="@dimen/column_width"
+            android:layout_height="wrap_content" />
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/tableRow4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/position"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="Position" />
+
+        <EditText
+            android:id="@+id/position_edit"
+            android:layout_width="@dimen/column_width"
+            android:layout_height="wrap_content" />
+    </TableRow>
+
+</TableLayout>

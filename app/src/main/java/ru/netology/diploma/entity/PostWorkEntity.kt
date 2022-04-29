@@ -11,6 +11,7 @@ import ru.netology.diploma.enumeration.AttachmentType
 @Entity
 data class PostWorkEntity(
     @PrimaryKey(autoGenerate = true)
+    val localId: Long,
     val id: Long,
     val authorId: Long,
     val author: String,
@@ -44,7 +45,7 @@ data class PostWorkEntity(
     )
 
     companion object {
-        fun fromDto(post: Post) = PostWorkEntity(
+        fun fromDto(post: Post) = PostWorkEntity( 0L,
             post.id, post.authorId, post.author, post.authorAvatar,
             post.content,
             post.published,

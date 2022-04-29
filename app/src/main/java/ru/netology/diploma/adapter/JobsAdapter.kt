@@ -1,5 +1,6 @@
 package ru.netology.diploma.adapter
 
+import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.PopupMenu
@@ -9,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.netology.diploma.R
 import ru.netology.diploma.databinding.CardJobBinding
 import ru.netology.diploma.dto.Job
+import ru.netology.diploma.utils.Utils.formatDate
+import java.util.*
 
 interface JobCallback {
     fun edit(job: Job)
@@ -41,8 +44,10 @@ class JobViewHolder(
     fun bind(job: Job) {
 
         with(binding) {
-            workPeriod.text = "${job.start} - ${job.finish}" //TODO исправить
-            nameOrganization.text = job.name
+            val start = formatDate(job.start)
+            val finish = formatDate(job.finish)
+            workPeriod.text = "$start - $finish" //TODO исправить
+            nameCompany.text = job.name
             position.text = job.position
             link.text = job.link
 

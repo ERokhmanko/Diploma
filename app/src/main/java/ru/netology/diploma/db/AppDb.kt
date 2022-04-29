@@ -8,7 +8,7 @@ import ru.netology.diploma.entity.*
 
 @Database(
     entities = [PostEntity::class,
-        PostRemoteKeyEntity::class, UserEntity::class, JobEntity::class, PostWorkEntity::class],
+        PostRemoteKeyEntity::class, UserEntity::class, JobEntity::class, PostWorkEntity::class, JobWorkEntity::class],
     version = 1,
     exportSchema = false
 )
@@ -19,4 +19,5 @@ abstract class AppDb : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun jobDao(): JobDao
     abstract fun postWorkDao(): PostWorkDao
+    abstract fun jobWorkDao(): JobWorkDao
 }

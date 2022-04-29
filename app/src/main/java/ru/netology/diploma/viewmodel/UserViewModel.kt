@@ -3,7 +3,6 @@ package ru.netology.diploma.viewmodel
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ru.netology.diploma.auth.AppAuth
@@ -11,7 +10,6 @@ import ru.netology.diploma.dto.User
 import ru.netology.diploma.model.UserModel
 import ru.netology.diploma.model.UsersModelState
 import ru.netology.diploma.repository.UserRepository
-import ru.netology.diploma.ui.USER_ID
 import javax.inject.Inject
 
 
@@ -51,5 +49,6 @@ class UserViewModel @Inject constructor(
             _dataState.value = UsersModelState(error = true)
         }
     }
+
 }
 

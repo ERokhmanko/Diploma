@@ -17,4 +17,7 @@
     <dimen name="padding_new_post">16dp</dimen>
     <dimen name="marginTop_like">-10dp</dimen>
     <dimen name="height_like">60dp</dimen>
+    <dimen name="column_width">180dp</dimen>
+    <dimen name="margin_line">20dp</dimen>
+    <dimen name="margin_column">50dp</dimen>
 </resources>

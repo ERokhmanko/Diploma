@@ -35,6 +35,9 @@
         <action
             android:id="@+id/action_navigation_profile_to_newPostFragment"
             app:destination="@id/newPostFragment" />
+        <action
+            android:id="@+id/action_navigation_profile_to_newJobFragment"
+            app:destination="@id/newJobFragment" />
     </fragment>
 
     <fragment
@@ -63,8 +66,10 @@
         android:name="ru.netology.diploma.ui.NewPostFragment"
         android:label="fragment_new_post"
         tools:layout="@layout/fragment_new_post" >
-        <action
-            android:id="@+id/action_newPostFragment_to_navigation_profile"
-            app:destination="@id/navigation_profile" />
+
     </fragment>
+    <fragment
+        android:id="@+id/newJobFragment"
+        android:name="ru.netology.diploma.ui.NewJobFragment"
+        android:label="NewJobFragment" />
 </navigation>

@@ -112,7 +112,7 @@ class PostRepository @Inject constructor(
             } else {
                 save(post)
             }
-//            postWorkDao.removeById(id)
+            postWorkDao.removeById(id)
         } catch (e: Exception) {
             throw UnknownError
         }

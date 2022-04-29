@@ -108,7 +108,5 @@ interface ApiService {
     suspend fun removeJobById(@Path("id") id: Long): Response<Unit>
 
 
-
-
 }
 
