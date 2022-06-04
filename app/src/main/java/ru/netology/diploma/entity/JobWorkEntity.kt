@@ -9,6 +9,7 @@ import ru.netology.diploma.dto.User
 @Entity
 data class JobWorkEntity(
     @PrimaryKey(autoGenerate = true)
+    val localId: Long,
     val id: Long,
     val name: String,
     val position: String,
@@ -19,7 +20,7 @@ data class JobWorkEntity(
     fun toDto() = Job(id, name, position, start, finish, link)
 
     companion object {
-        fun fromDto(dto: Job) = JobWorkEntity(
+        fun fromDto(dto: Job) = JobWorkEntity( 0L,
             dto.id,
             dto.name,
             dto.position,

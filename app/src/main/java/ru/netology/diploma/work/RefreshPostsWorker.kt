@@ -1,6 +1,7 @@
 package ru.netology.diploma.work
 
 import android.content.Context
+import android.util.Log
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
@@ -28,10 +29,10 @@ class RefreshPostsWorker @AssistedInject constructor(
             repository.getAll()
             Result.success()
         } catch (e: Exception) {
-            e.printStackTrace()
             Result.failure()
         }
     }
+
 }
 
 

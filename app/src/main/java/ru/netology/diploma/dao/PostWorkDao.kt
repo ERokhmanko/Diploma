@@ -10,14 +10,14 @@ import ru.netology.diploma.entity.PostWorkEntity
 @Dao
 interface PostWorkDao {
 
-    @Query("SELECT * From PostWorkEntity WHERE id = :id")
+    @Query("SELECT * From PostWorkEntity WHERE localId = :id")
     suspend fun getById(id: Long): PostWorkEntity
 
 
     @Insert(onConflict = REPLACE)
     suspend fun insert(work: PostWorkEntity): Long
 
-    @Query("DELETE FROM PostWorkEntity WHERE id = :id")
+    @Query("DELETE FROM PostWorkEntity WHERE localId = :id")
     suspend fun removeById(id: Long)
 
 }

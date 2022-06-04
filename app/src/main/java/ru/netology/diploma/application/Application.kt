@@ -1,6 +1,7 @@
 package ru.netology.diploma.application
 
 import android.app.Application
+import android.util.Log
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.*
 import dagger.Lazy
@@ -10,7 +11,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.netology.diploma.auth.AppAuth
-import ru.netology.diploma.work.RefreshJobsWorker
+import ru.netology.diploma.work.RefreshEventsWorker
+//import ru.netology.diploma.work.RefreshJobsWorker
 import ru.netology.diploma.work.RefreshPostsWorker
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -33,7 +35,7 @@ class Application : Application(), Configuration.Provider {
         super.onCreate()
         setupAuth()
         setupWorkPosts()
-        setupWorkJobs()
+        setupWorkEvents()
     }
 
     private fun setupWorkPosts() {
@@ -54,18 +56,18 @@ class Application : Application(), Configuration.Provider {
         }
     }
 
-    private fun setupWorkJobs() {
+    private fun setupWorkEvents() {
         appScope.launch {
             val constraints = Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
                 .build()
 
-            val request = PeriodicWorkRequestBuilder<RefreshJobsWorker>(1, TimeUnit.MINUTES)
+            val request = PeriodicWorkRequestBuilder<RefreshEventsWorker>(1, TimeUnit.MINUTES)
                 .setConstraints(constraints)
                 .build()
 
             workManager.get().enqueueUniquePeriodicWork(
-                RefreshJobsWorker.name,
+                RefreshEventsWorker.name,
                 ExistingPeriodicWorkPolicy.KEEP,
                 request
             )

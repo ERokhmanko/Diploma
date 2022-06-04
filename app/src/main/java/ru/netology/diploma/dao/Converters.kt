@@ -2,6 +2,7 @@ package ru.netology.diploma.dao
 
 import androidx.room.TypeConverter
 import ru.netology.diploma.enumeration.AttachmentType
+import ru.netology.diploma.enumeration.EventType
 
 class Converters {
     @TypeConverter
@@ -9,6 +10,12 @@ class Converters {
 
     @TypeConverter
     fun fromAttachmentType(value: AttachmentType) = value.name
+
+//    @TypeConverter
+//    fun toEventType(value: String) = enumValueOf<EventType>(value)
+//
+//    @TypeConverter
+//    fun fromEventType(value: EventType) = value.name
 
     @TypeConverter
     fun fromSet(set: Set<Long>): String = set.joinToString(",")

@@ -1,0 +1,555 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/indent"
+    tools:context=".ui.HomeFragment">
+
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/share" />
+
+    <ImageView
+        android:id="@+id/avatar"
+        android:layout_width="@dimen/avatar_height"
+        android:layout_height="@dimen/avatar_width"
+        android:layout_marginBottom="@dimen/indent"
+        android:contentDescription="@string/avatar_post"
+        app:layout_constraintBottom_toTopOf="@id/barrier"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/menu"
+        style="@style/Widget.AppCompat.ElementsPostCard"
+        android:layout_width="37dp"
+        android:layout_height="50dp"
+        app:icon="@drawable/ic_baseline_more_vert_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/author"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/indent"
+        android:ellipsize="end"
+        android:fontFamily="sans-serif"
+        android:singleLine="true"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/published"
+        app:layout_constraintEnd_toStartOf="@id/menu"
+        app:layout_constraintStart_toEndOf="@id/avatar"
+        app:layout_constraintTop_toTopOf="@id/avatar"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="Имя автора" />
+
+    <TextView
+        android:id="@+id/published"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/indent"
+        app:layout_constraintBottom_toBottomOf="@id/avatar"
+        app:layout_constraintStart_toEndOf="@id/avatar"
+        app:layout_constraintTop_toBottomOf="@id/author"
+        tools:text="Дата публикации" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="avatar, published, menu" />
+
+    <TextView
+        android:id="@+id/content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/indent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/barrier"
+        tools:text="Текст контента" />
+
+    <TextView
+        android:id="@+id/datetime"
+        android:layout_width="150dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="@dimen/margin_edit_event"
+        android:padding="5dp"
+        android:text="@string/dateEvent"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/content" />
+
+    <TextView
+        android:id="@+id/datetimeEdit"
+        android:layout_width="150dp"
+        android:layout_height="30dp"
+        android:padding="5dp"
+        app:layout_constraintBottom_toBottomOf="@+id/datetime"
+        app:layout_constraintStart_toEndOf="@+id/datetime"
+        app:layout_constraintTop_toTopOf="@+id/datetime"
+        tools:text="21 мая 2022 18:30" />
+
+    <TextView
+        android:id="@+id/eventType"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="@dimen/margin_edit_event"
+        android:padding="5dp"
+        android:text="@string/format"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/datetime" />
+
+    <TextView
+        android:id="@+id/eventTypeEdit"
+        android:layout_width="150dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="8dp"
+        android:padding="5dp"
+        app:layout_constraintBottom_toBottomOf="@+id/eventType"
+        app:layout_constraintStart_toEndOf="@+id/eventType"
+        app:layout_constraintTop_toTopOf="@+id/eventType"
+        tools:text="Онлайн" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/link"
+        style="@style/Widget.AppCompat.ElementsPostCard"
+        android:layout_width="40dp"
+        android:layout_height="30dp"
+        android:visibility="gone"
+        app:icon="@drawable/ic_baseline_web_24"
+        app:layout_constraintBottom_toBottomOf="@+id/eventTypeEdit"
+        app:layout_constraintStart_toEndOf="@+id/eventTypeEdit"
+        app:layout_constraintTop_toTopOf="@+id/eventTypeEdit"
+        tools:text="Онлайн" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/coordinates"
+        style="@style/Widget.AppCompat.ElementsPostCard"
+        android:layout_width="40dp"
+        android:layout_height="30dp"
+        android:visibility="gone"
+        app:icon="@drawable/ic_baseline_location_on_24"
+        app:layout_constraintBottom_toBottomOf="@+id/eventTypeEdit"
+        app:layout_constraintStart_toEndOf="@+id/eventTypeEdit"
+        app:layout_constraintTop_toTopOf="@+id/eventTypeEdit" />
+
+
+    <TextView
+        android:id="@+id/speakers"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="@dimen/margin_edit_event"
+        android:padding="5dp"
+        android:text="@string/speakers"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eventType" />
+
+    <TextView
+        android:id="@+id/speakersEdit"
+        android:layout_width="150dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="8dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:padding="5dp"
+        app:layout_constraintBottom_toBottomOf="@+id/speakers"
+        app:layout_constraintStart_toEndOf="@+id/speakers"
+        app:layout_constraintTop_toTopOf="@+id/speakers"
+        tools:text="Daria, Doggie, Ira, Ivan" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/moreSpeakers"
+        style="@style/Widget.AppCompat.ElementsMore"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/speakersEdit"
+        app:layout_constraintStart_toEndOf="@+id/speakersEdit"
+        app:layout_constraintTop_toTopOf="@+id/speakersEdit" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier_mediaView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="speakers" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/play_pause_audio"
+        style="@style/Widget.App.Button.OutlinedButton.IconOnly"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:checkable="true"
+        app:icon="@drawable/ic_play_pause"
+        app:layout_constraintBottom_toTopOf="@+id/barrier_like_count"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/videoView" />
+
+    <TextView
+        android:id="@+id/name_track"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/name_album"
+        app:layout_constraintEnd_toStartOf="@id/time"
+        app:layout_constraintStart_toEndOf="@id/play_pause_audio"
+        app:layout_constraintTop_toTopOf="@id/play_pause_audio"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="Название песни" />
+
+    <TextView
+        android:id="@+id/name_album"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        app:layout_constraintBottom_toTopOf="@id/barrier_like_count"
+        app:layout_constraintEnd_toStartOf="@id/time"
+        app:layout_constraintStart_toEndOf="@id/play_pause_audio"
+        app:layout_constraintTop_toBottomOf="@id/name_track"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="Название альбома" />
+
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:padding="10dp"
+        app:layout_constraintBottom_toTopOf="@id/barrier_like_count"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/play_pause_audio"
+        tools:text="11:46" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_audio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="play_pause_audio,
+        name_track, name_album, time" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier_like_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="imageView" />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/diver_like_count"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/barrier_like_count" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView_header_appraisers"
+        android:layout_width="@dimen/size_appraisers"
+        android:layout_height="@dimen/size_appraisers"
+        android:layout_marginTop="@dimen/indent"
+        android:layout_marginBottom="@dimen/indent"
+        android:elevation="@dimen/elevation"
+        app:cardCornerRadius="@dimen/radius"
+        app:layout_constraintBottom_toBottomOf="@id/barrier_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/barrier_like_count">
+
+        <ImageView
+            android:id="@+id/header_icon_like"
+            style="@style/HeaderAppraisers"
+            android:layout_width="@dimen/size_appraisers"
+            android:layout_height="@dimen/size_appraisers"
+            android:contentDescription="@string/icon_like"
+            android:src="@drawable/ic_baseline_thumb_up_off_alt_24"
+            app:layout_constraintStart_toStartOf="@id/cardView_header_appraisers"
+            app:layout_constraintTop_toTopOf="@id/cardView_header_appraisers" />
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView_header_participants"
+        android:layout_width="@dimen/size_appraisers"
+        android:layout_height="@dimen/size_appraisers"
+        android:layout_marginTop="@dimen/indent"
+        android:layout_marginEnd="-10dp"
+        android:layout_marginBottom="@dimen/indent"
+        android:elevation="@dimen/elevation"
+        app:cardCornerRadius="@dimen/radius"
+        app:layout_constraintBottom_toBottomOf="@id/barrier_icon"
+        app:layout_constraintEnd_toStartOf="@id/cardView_first_participant"
+        app:layout_constraintTop_toBottomOf="@id/barrier_like_count">
+
+        <ImageView
+            android:id="@+id/header_icon_participants"
+            style="@style/HeaderAppraisers"
+            android:layout_width="@dimen/size_appraisers"
+            android:layout_height="@dimen/size_appraisers"
+            android:contentDescription="@string/icon_participants"
+            android:src="@drawable/ic_baseline_people_24"
+            app:layout_constraintTop_toTopOf="@id/cardView_header_appraisers" />
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView_first_like"
+        android:layout_width="@dimen/size_appraisers"
+        android:layout_height="@dimen/size_appraisers"
+        android:layout_marginStart="-10dp"
+        android:layout_marginTop="@dimen/indent"
+        android:layout_marginBottom="@dimen/indent"
+        android:elevation="@dimen/elevation"
+        app:cardCornerRadius="@dimen/radius"
+        app:layout_constraintBottom_toBottomOf="@id/barrier_icon"
+        app:layout_constraintStart_toEndOf="@id/cardView_header_appraisers"
+        app:layout_constraintTop_toBottomOf="@id/barrier_like_count">
+
+        <ImageView
+            android:id="@+id/first_like"
+            android:layout_width="@dimen/size_appraisers"
+            android:layout_height="@dimen/size_appraisers"
+            android:contentDescription="@string/first_like"
+            app:layout_constraintStart_toStartOf="@id/cardView_first_like"
+            app:layout_constraintTop_toTopOf="@id/cardView_first_like" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView_first_participant"
+        android:layout_width="@dimen/size_appraisers"
+        android:layout_height="@dimen/size_appraisers"
+        android:layout_marginEnd="-10dp"
+        android:elevation="@dimen/elevation"
+        app:cardCornerRadius="@dimen/radius"
+        app:layout_constraintBottom_toBottomOf="@id/barrier_icon"
+        app:layout_constraintEnd_toStartOf="@+id/cardView_second_participant"
+        app:layout_constraintTop_toTopOf="@id/barrier_like_count">
+
+        <ImageView
+            android:id="@+id/first_participant"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_appraisers"
+            android:contentDescription="@string/first_participant"
+            app:layout_constraintStart_toStartOf="@id/cardView_first_participant"
+            app:layout_constraintTop_toTopOf="@id/cardView_first_participant" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_like"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="cardView_header_appraisers,cardView_first_like,
+        like_count, diver_like_count" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_participant"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="cardView_header_participants,cardView_first_participant,
+        participant_count, diver_like_count" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView_second_like"
+        android:layout_width="@dimen/size_appraisers"
+        android:layout_height="@dimen/size_appraisers"
+        android:layout_marginStart="-10dp"
+        android:layout_marginTop="@dimen/indent"
+        android:layout_marginBottom="@dimen/indent"
+        android:elevation="@dimen/elevation"
+        android:visibility="gone"
+        app:cardCornerRadius="@dimen/radius"
+        app:layout_constraintBottom_toBottomOf="@id/barrier_icon"
+        app:layout_constraintStart_toEndOf="@id/cardView_first_like"
+        app:layout_constraintTop_toBottomOf="@id/barrier_like_count">
+
+        <ImageView
+            android:id="@+id/second_like"
+            android:layout_width="@dimen/size_appraisers"
+            android:layout_height="@dimen/size_appraisers"
+            android:contentDescription="@string/second_like"
+            app:layout_constraintStart_toStartOf="@id/cardView_second_like"
+            app:layout_constraintTop_toTopOf="@id/cardView_second_like" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView_second_participant"
+        android:layout_width="@dimen/size_appraisers"
+        android:layout_height="@dimen/size_appraisers"
+        android:layout_marginTop="@dimen/indent"
+        android:layout_marginBottom="@dimen/indent"
+        android:elevation="@dimen/elevation"
+        android:visibility="invisible"
+        app:cardCornerRadius="@dimen/radius"
+        app:layout_constraintBottom_toBottomOf="@id/barrier_icon"
+        app:layout_constraintEnd_toStartOf="@+id/participant_count"
+        app:layout_constraintTop_toBottomOf="@id/barrier_like_count">
+
+        <ImageView
+            android:id="@+id/second_participant"
+            android:layout_width="32dp"
+            android:layout_height="@dimen/size_appraisers"
+            android:contentDescription="@string/second_participant"
+            app:layout_constraintStart_toStartOf="@id/cardView_second_participant"
+            app:layout_constraintTop_toTopOf="@id/cardView_second_participant" />
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/like_count"
+        android:layout_width="@dimen/width_like_count"
+        android:layout_height="@dimen/height_like_count"
+        android:layout_marginStart="@dimen/indent"
+        android:padding="4dp"
+        app:layout_constraintBottom_toBottomOf="@id/barrier_icon"
+        app:layout_constraintStart_toEndOf="@+id/cardView_second_like"
+        app:layout_constraintTop_toTopOf="@id/barrier_like_count"
+        tools:text="100к" />
+
+    <TextView
+        android:id="@+id/participant_count"
+        android:layout_width="@dimen/width_like_count"
+        android:layout_height="@dimen/height_like_count"
+        android:padding="4dp"
+        app:layout_constraintBottom_toBottomOf="@id/barrier_icon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/barrier_like_count"
+        tools:text="100к" />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/materialDivider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/barrier_icon" />
+
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="cardView_header_appraisers" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView_button_like"
+        android:layout_width="@dimen/size_icon"
+        android:layout_height="@dimen/size_icon"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="@dimen/indent"
+        android:elevation="@dimen/elevation"
+        app:cardCornerRadius="@dimen/radius"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/barrier_icon">
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/like"
+            style="@style/Widget.AppCompat.LikeChecked"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_like"
+            android:layout_marginTop="@dimen/marginTop_like"
+            android:checkable="true"
+            app:icon="@drawable/ic_baseline_thumb_up_off_alt_24"
+            app:layout_constraintStart_toStartOf="@id/cardView_button_like"
+            app:layout_constraintTop_toTopOf="@id/cardView_button_like"
+            tools:checked="true" />
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView_button_join"
+        android:layout_width="@dimen/size_icon"
+        android:layout_height="@dimen/size_icon"
+        android:layout_marginTop="@dimen/indent"
+        android:elevation="@dimen/elevation"
+        app:cardCornerRadius="@dimen/radius"
+        app:layout_constraintEnd_toStartOf="@id/share"
+        app:layout_constraintStart_toEndOf="@id/cardView_button_like"
+        app:layout_constraintTop_toBottomOf="@id/barrier_icon">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/join"
+            style="@style/Widget.AppCompat.LikeChecked"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_like"
+            android:layout_marginTop="@dimen/marginTop_like"
+            android:checkable="true"
+            app:icon="@drawable/ic_baseline_group_add_24"
+            app:layout_constraintStart_toStartOf="@+id/cardView_button_join"
+            app:layout_constraintTop_toTopOf="@id/cardView_button_join" />
+
+    </androidx.cardview.widget.CardView>
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/share"
+        style="@style/Widget.AppCompat.ElementsPostCard"
+        android:layout_width="@dimen/size_icon"
+        android:layout_height="@dimen/size_icon"
+        android:layout_marginEnd="20dp"
+        android:textColor="?attr/colorControlNormal"
+        app:icon="@drawable/ic_baseline_send_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/cardView_button_join" />
+
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="372dp"
+        android:layout_height="270dp"
+        android:layout_marginTop="4dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/barrier_like_count"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/videoView"
+        tools:ignore="ContentDescription" />
+
+    <VideoView
+        android:id="@+id/videoView"
+        android:layout_width="372dp"
+        android:layout_height="270dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/barrier_mediaView" />
+
+    <ImageButton
+        android:id="@+id/play_video"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/play_video"
+        app:layout_constraintBottom_toBottomOf="@+id/videoView"
+        app:layout_constraintEnd_toEndOf="@+id/videoView"
+        app:layout_constraintStart_toStartOf="@+id/videoView"
+        app:layout_constraintTop_toTopOf="@+id/videoView"
+        app:srcCompat="@android:drawable/ic_media_play" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_media"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="videoView, play_video" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

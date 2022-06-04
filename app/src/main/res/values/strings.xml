@@ -8,6 +8,8 @@
     <string name="action_sign_up">Sign up</string>
     <string name="welcome">"Welcome !"</string>
     <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_link">Not a valid link</string>
+    <string name="empty_field">This field cannot be empty</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="place_for_your_photo">Place for your photo</string>
@@ -20,22 +22,26 @@
     <string name="retry_loading">Retry</string>
     <string name="ok" translatable="false">OK</string>
     <string name="empty_posts">There are no posts.\nIf you create a new post, it will appear here</string>
+    <string name="empty_events">There are no events.\nIf you create a new post, it will appear here</string>
     <string name="menu_remove">Remove</string>
     <string name="menu_edit">Edit</string>
     <string name="menu_hide">Hide</string>
     <string name="ad">Advertisement</string>
     <string name="avatar_post">Photo of the post owner</string>
     <string name="icon_like">The \"thumbs up\" icon</string>
+    <string name="icon_participants">The \"participants\" icon</string>
     <string name="first_like">Avatar of the first like</string>
+    <string name="first_participant">Avatar of the first participant</string>
     <string name="second_like">Avatar of the second like</string>
+    <string name="second_participant">Avatar of the second participant</string>
     <string name="play_video">Button with a rotated triangle to start the video</string>
     <string name="avatar_user">Profile picture of the owner</string>
     <string name="empty_user">There are no registered users yet.</string>
     <string name="work_experience">work experience</string>
     <string name="posts">posts</string>
     <string name="title_post">Post</string>
-    <string name="title_event">event</string>
-    <string name="title_job">job</string>
+    <string name="title_event">Event</string>
+    <string name="title_job">Job</string>
     <string name="description_photo">An element with a picture that you have chosen yourself</string>
     <string name="remove">Remove</string>
     <string name="description_post_save">Save</string>
@@ -46,6 +52,37 @@
     <string name="menu_camera">Camera</string>
     <string name="menu_audio">Audio</string>
     <string name="share_post">Share post</string>
+    <string name="share_event">Share event</string>
     <string name="media_chooser">Select an application</string>
+    <string name="period_of_work" translatable="false">%1$s - %2$s </string>
+    <string name="start_of_work" translatable="false">%1$s</string>
+    <string name="empty_jobs">The user has not yet specified a place of work</string>
+    <string name="dateEvent">Date of the event</string>
+    <string name="format">Format</string>
+    <string name="participants">Participants</string>
+    <string name="more">more…</string>
+    <string name="menu_online">online</string>
+    <string name="menu_offline">offline</string>
+    <string name="title_speakers">List of speakers</string>
+    <string name="repost">You reposted the user\'s post</string>
+    <string name="fab">A button for adding posts, events and jobs</string>
+    <string name="title_users">List of users</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
+    <string name="company">Company</string>
+    <string name="position">Position</string>
+    <string name="website">Website</string>
+    <string name="date">date</string>
+    <string name="time">time</string>
+    <string name="formatEvent">format</string>
+    <string name="link_event">link to the event</string>
+    <string name="event_location">event location</string>
+    <string name="speakers">Speakers</string>
+    <string name="mentors">Mentors</string>
+    <string name="title_mentors">list of mentors</string>
+    <string-array name="event_type">
+        <item>online</item>
+        <item>offline</item>
+    </string-array>
 
 </resources>

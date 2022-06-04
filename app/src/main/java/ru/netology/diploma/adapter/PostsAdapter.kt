@@ -3,45 +3,50 @@ package ru.netology.diploma.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.PopupMenu
 import androidx.core.view.isVisible
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.map
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import ru.netology.diploma.BuildConfig.BASE_URL
+import okio.utf8Size
 import ru.netology.diploma.R
 import ru.netology.diploma.databinding.CardAdBinding
 import ru.netology.diploma.databinding.CardPostBinding
-import ru.netology.diploma.dto.Ad
-import ru.netology.diploma.dto.FeedItem
-import ru.netology.diploma.dto.Post
-import ru.netology.diploma.dto.User
+import ru.netology.diploma.dto.*
 import ru.netology.diploma.enumeration.AttachmentType
 import ru.netology.diploma.extensions.load
+import ru.netology.diploma.model.UserModel
 import ru.netology.diploma.utils.Utils
 import ru.netology.diploma.utils.Utils.formatDate
 
 interface PostCallback {
     fun onLike(post: Post)
     fun onShare(post: Post)
-    fun remove(post: Post)
-    fun edit(post: Post)
-    fun hide(post: Post)
+    fun remove(post: Post) {}
+    fun edit(post: Post) {}
+    fun hide(post: Post) {}
     fun onVideo(post: Post)
     fun onRepost(post: Post)
     fun onAudio(post: Post)
-
+    fun onlikeOwner(post: Post)
+    fun onMentors(post: Post)
 }
 
-class PostsAdapter(private val postCallback: PostCallback) :
+class PostsAdapter(
+    private val postCallback: PostCallback,
+    private val users: LiveData<UserModel>,
+    private val jobs: LiveData<List<Job>>
+) :
     PagingDataAdapter<FeedItem, RecyclerView.ViewHolder>(PostsDiffCallback()) {
 
     override fun getItemViewType(position: Int): Int =
         when (getItem(position)) {
             is Ad -> R.layout.card_ad
             is Post -> R.layout.card_post
+            is Event -> R.layout.card_event
             null -> error("Unknown item type")
         }
 
@@ -51,7 +56,7 @@ class PostsAdapter(private val postCallback: PostCallback) :
             R.layout.card_post -> {
                 val binding =
                     CardPostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                PostViewHolder(binding, postCallback)
+                PostViewHolder(binding, postCallback, users, jobs)
             }
             R.layout.card_ad -> {
                 val binding =
@@ -66,7 +71,7 @@ class PostsAdapter(private val postCallback: PostCallback) :
         when (val item = getItem(position)) {
             is Ad -> (holder as? AdViewHolder)?.bind(item)
             is Post -> (holder as? PostViewHolder)?.bind(item)
-            null -> error("Unknown view type")
+            else -> error("Unknown view type")
         }
     }
 
@@ -77,13 +82,16 @@ class AdViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(ad: Ad) {
-        binding.imageAd.load("$BASE_URL/media/${ad.name}")
+        binding.imageAd.load(ad.name)
+
     }
 }
 
 class PostViewHolder(
     private val binding: CardPostBinding,
-    private val postCallback: PostCallback
+    private val postCallback: PostCallback,
+    private val users: LiveData<UserModel>,
+    private val jobs: LiveData<List<Job>>
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(post: Post) {
@@ -97,36 +105,68 @@ class PostViewHolder(
             groupLike.visibility =
                 if (!post.likeOwnerIds.isNullOrEmpty()) View.VISIBLE else View.GONE
 
+
+            //TODO разобраться от куда тянуть юзеров, лайв дата тянет только после загрузки страницы юзеров
+            val userLike = mutableListOf<String?>()
+            val nameMentorsList = mutableListOf<String>()
+
+                users.value?.users?.map { user ->
+                    post.likeOwnerIds.map { id ->
+                        if (user.id == id) userLike.add(user.avatar)
+                    }
+                    post.mentionIds.map { id ->
+                        if (user.id == id) nameMentorsList.add(user.name)
+                    }
+                }
+
+            mentors.isVisible = nameMentorsList.isNotEmpty()
+            mentorsEdit.isVisible = nameMentorsList.isNotEmpty()
+
+            val nameMentorsString = Utils.listToString(nameMentorsList)
+            mentorsEdit.text = nameMentorsString
+            moreMentors.isVisible = nameMentorsString.utf8Size() > 36
+
             when {
                 post.likeOwnerIds.isNullOrEmpty() -> {
                     groupLike.visibility = View.GONE
+                    cardViewSecondLike.visibility = View.GONE
                 }
                 post.likeOwnerIds.size == 1 -> {
                     groupLike.visibility = View.VISIBLE
-//                    val user = likeOwner.first()
-//                    Utils.uploadingAvatar(firstLike, user.avatar) //TODO придумать как подтягивать аватарки лайкнувших
+                    if (userLike.isNotEmpty()) {
+                        val firstAvatar = userLike.first()
+                        Utils.uploadingAvatar(
+                            firstLike,
+                            firstAvatar
+                        )
+                    }
                 }
                 else -> {
                     groupLike.visibility = View.VISIBLE
                     cardViewSecondLike.visibility = View.VISIBLE
-//                    val firstUser = likeOwner.first()
-//                    val secondUser = likeOwner[2]
-//                    Utils.uploadingAvatar(firstLike, firstUser.avatar)
-//                    Utils.uploadingAvatar(secondLike, secondUser.avatar) //TODO придумать как подтягивать аватарки лайкнувших
+                    if (userLike.isNotEmpty()) {
+                        val firstAvatar = userLike.first()
+                        val secondAvatar = userLike[1]
+                        Utils.uploadingAvatar(firstLike, firstAvatar)
+                        Utils.uploadingAvatar(
+                            secondLike,
+                            secondAvatar
+                        )
+                    }
                 }
             }
 
-//            placeWork.text = //TODO подтянуть сюда инфу при работе с ui work
+            if (jobs.value?.isEmpty() == false) placeWork.text = jobs.value!!.first().name //TODO сейчас подтягиваются для всех юзеров работы авторизованного юзера
 
             Utils.uploadingAvatar(avatar, post.authorAvatar)
 
 
             when (post.attachment?.type) {
                 AttachmentType.IMAGE -> {
-                    Glide.with(mediaView)
-                        .load("$BASE_URL/media/${post.attachment.url}")
+                    Glide.with(imageView)
+                        .load(post.attachment.url)
                         .timeout(10_000)
-                        .into(mediaView as ImageView)
+                        .into(imageView)
                 }
                 AttachmentType.VIDEO -> {
                     // TODO загрузка видео
@@ -135,13 +175,9 @@ class PostViewHolder(
                     // TODO загрузка аудио
                 }
             }
-            mediaView.isVisible = post.attachment?.type == AttachmentType.IMAGE
+            imageView.isVisible = post.attachment?.type == AttachmentType.IMAGE
             groupMedia.isVisible = post.attachment?.type == AttachmentType.VIDEO
             groupAudio.isVisible = post.attachment?.type == AttachmentType.AUDIO
-
-            if (!post.link.isNullOrBlank()) {
-            //TODO придумать реализацию
-            }
 
             like.setOnClickListener {
                 postCallback.onLike(post)
@@ -163,17 +199,25 @@ class PostViewHolder(
                 postCallback.onAudio(post)
             }
 
-            mediaView.setOnClickListener {
-                when (post.attachment?.type) {
-                    AttachmentType.VIDEO -> {
-                        postCallback.onVideo(post)
-                    }
-                    AttachmentType.AUDIO -> {
-                        postCallback.onAudio(post)
-                    }
-                }
+            headerIconLike.setOnClickListener {
+                postCallback.onlikeOwner(post)
             }
 
+            firstLike.setOnClickListener {
+                postCallback.onlikeOwner(post)
+            }
+
+            secondLike.setOnClickListener {
+                postCallback.onlikeOwner(post)
+            }
+
+            moreMentors.setOnClickListener {
+                postCallback.onMentors(post)
+            }
+
+            mentorsEdit.setOnClickListener {
+                postCallback.onMentors(post)
+            }
 
             menu.setOnClickListener { view ->
                 PopupMenu(view.context, view).apply {

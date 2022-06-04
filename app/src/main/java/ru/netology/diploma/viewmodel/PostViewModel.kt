@@ -4,10 +4,7 @@ import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.net.toFile
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.filter
 import androidx.paging.insertSeparators
@@ -16,7 +13,10 @@ import androidx.work.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ru.netology.diploma.auth.AppAuth
 import ru.netology.diploma.dto.*
@@ -24,10 +24,10 @@ import ru.netology.diploma.enumeration.RetryType
 import ru.netology.diploma.model.FileModel
 import ru.netology.diploma.model.PostsModelState
 import ru.netology.diploma.repository.PostRepository
+import ru.netology.diploma.ui.USER_ID
 import ru.netology.diploma.utils.SingleLiveEvent
 import ru.netology.diploma.work.RemovePostWorker
 import ru.netology.diploma.work.SavePostWorker
-import java.io.File
 import java.time.Instant
 import javax.inject.Inject
 import kotlin.random.Random
@@ -54,15 +54,17 @@ val emptyPost = Post(
 class PostViewModel @Inject constructor(
     private val repository: PostRepository,
     private val workManager: WorkManager,
-    private val appAuth: AppAuth
-) : ViewModel() {
+    appAuth: AppAuth,
+    private val stateHandle: SavedStateHandle,
+
+    ) : ViewModel() {
 
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val data: Flow<PagingData<FeedItem>> = appAuth.authStateFlow.flatMapLatest { (myId, _) ->
         repository.data.map { post ->
             post.map { it.copy(ownedByMe = it.authorId == myId) }.filter { validPost ->
-                !hidePosts.contains(validPost) //TODO проверить работает ли фильтрация
+                !hidePosts.contains(validPost)
             }
         }
             .map { pagingData ->
@@ -71,7 +73,7 @@ class PostViewModel @Inject constructor(
                         if (before?.id?.rem(5) != 0L) null
                         else Ad(
                             Random.nextLong(),
-                            "image.png" //TODO подтягивается картинка с сервака? Если нет. то создать свою
+                            "https://ik.imagekit.io/dndjiayeehz/5384119566_BzAHtLM9x.jpg?ik-sdk-version=javascript-1.4.3&updatedAt=1651659074287"
                         )
                     }
                 )
@@ -81,7 +83,7 @@ class PostViewModel @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     val userWall: Flow<PagingData<FeedItem>> = appAuth.authStateFlow
         .flatMapLatest { (myId, _) ->
-            repository.userWall(myId).map { pagingData ->
+            repository.userWall(stateHandle.get(USER_ID) ?: myId).map { pagingData ->
                 pagingData.map { post ->
                     post.copy(
                         ownedByMe = post.authorId == myId,
@@ -95,7 +97,9 @@ class PostViewModel @Inject constructor(
     val dataState: LiveData<PostsModelState>
         get() = _dataState
 
-    val edited = MutableLiveData(emptyPost)
+    private val _edited = MutableLiveData(emptyPost)
+    val edited: LiveData<Post>
+        get() = _edited
 
     private val _postCreated = SingleLiveEvent<Unit>()
     val postCreated: LiveData<Unit>
@@ -107,6 +111,10 @@ class PostViewModel @Inject constructor(
         get() = _file
 
     private val hidePosts = mutableSetOf<Post>()
+
+    private var _mentorsId: MutableSet<Long> = mutableSetOf()
+    val mentorsId: Set<Long>
+        get() = _mentorsId
 
     init {
         loadPosts()
@@ -142,6 +150,8 @@ class PostViewModel @Inject constructor(
                     workManager.enqueue(request)
 
                     _dataState.value = PostsModelState()
+                    _file.value = noFile
+                    _edited.value = emptyPost
                 } catch (e: Exception) {
                     _dataState.value = PostsModelState(error = true)
                 }
@@ -191,20 +201,56 @@ class PostViewModel @Inject constructor(
         edited.value?.let {
             val text = content.trim()
             if (it.content != text)
-                edited.value = it.copy(content = text)
+                _edited.value = it.copy(content = text)
         }
     }
 
-    fun changeFile(uri: Uri?, file: File?) {
-        _file.value = FileModel(uri, file)
+    fun attachmentRepost(attachment: Attachment) {
+        edited.value?.let {
+            _edited.value = it.copy(attachment = attachment)
+        }
+    }
+
+    fun changeFile(uri: Uri?) {
+        _file.value = FileModel(uri)
+        edited.value?.let {
+            _edited.value = it.copy(
+                attachment = null
+            )
+        }
     }
 
     fun edit(post: Post) {
-        edited.value = post
+        _edited.value = post
     }
 
     fun hidePost(post: Post) {
         hidePosts.add(post)
+        viewModelScope.launch {
+            repository.getAll()
+        }
+    }
+
+    fun checkMentors(id: Long) {
+        _mentorsId.let {
+            if (it.contains(id))
+                it.remove(id)
+            else
+                it.add(id)
+        }
+    }
+
+    fun isCheckboxMentors(id: Long): Boolean {
+        return _mentorsId.any { it == id }
+    }
+
+    fun saveMentors() {
+        _edited.value = edited.value?.copy(mentionIds = _mentorsId)
+        clear()
+    }
+
+    fun clear() {
+        _mentorsId = mutableSetOf()
     }
 
 

@@ -30,13 +30,22 @@ class DbModule {
     fun providesPostRemoteKeyDao(appDb: AppDb): PostRemoteKeyDao = appDb.postRemoteKeyDao()
 
     @Provides
+    fun providesPostWorkDao(appDb: AppDb) : PostWorkDao = appDb.postWorkDao()
+
+    @Provides
+    fun providesEventDao(appDb: AppDb): EventDao = appDb.eventDao()
+
+    @Provides
+    fun providesEventRemoteKeyDao(appDb: AppDb): EventRemoteKeyDao = appDb.eventRemoteKeyDao()
+
+    @Provides
+    fun providesEventWorkDao(appDb: AppDb) : EventWorkDao = appDb.eventWorkDao()
+
+    @Provides
     fun providesUserDao(appDb: AppDb): UserDao = appDb.userDao()
 
     @Provides
     fun providesJobDao(appDb: AppDb): JobDao = appDb.jobDao()
-
-    @Provides
-    fun providesPostWorkDao(appDb: AppDb) : PostWorkDao = appDb.postWorkDao()
 
     @Provides
     fun providesJobWorkDao(appDb: AppDb) : JobWorkDao = appDb.jobWorkDao()

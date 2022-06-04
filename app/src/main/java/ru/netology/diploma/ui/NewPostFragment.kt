@@ -3,13 +3,16 @@ package ru.netology.diploma.ui
 import android.app.Activity
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.PopupMenu
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toFile
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.github.dhaval2404.imagepicker.constant.ImageProvider
 import com.google.android.material.snackbar.Snackbar
@@ -22,7 +25,7 @@ import ru.netology.diploma.viewmodel.PostViewModel
 class NewPostFragment : Fragment() {
 
     private var fragmentBinding: FragmentNewPostBinding? = null
-    private val viewModel: PostViewModel by activityViewModels() //TODO надо ли менять?
+    private val viewModel: PostViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,8 +60,19 @@ class NewPostFragment : Fragment() {
         fragmentBinding = binding
 
         val content = arguments?.getString("content")
+        val attachment = arguments?.getString("attachment")
+
         binding.edit.setText(content)
         binding.edit.requestFocus()
+
+        //TODO сделать проверку на тип вложения
+        if (attachment != null) {
+            viewModel.changeFile(attachment.toUri())
+            Glide.with(binding.photo)
+                .load(attachment)
+                .timeout(10_000)
+                .into(binding.photo)
+        }
 
         val pickPhotoLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -72,7 +86,8 @@ class NewPostFragment : Fragment() {
                     }
                     Activity.RESULT_OK -> {
                         val uri: Uri? = it.data?.data
-                        viewModel.changeFile(uri, uri?.toFile())
+                        viewModel.changeFile(uri)
+
                     }
                 }
             }
@@ -109,12 +124,19 @@ class NewPostFragment : Fragment() {
             }.show()
         }
         binding.removeFile.setOnClickListener {
-            viewModel.changeFile(null, null)
+            viewModel.changeFile(null)
         }
 
         viewModel.postCreated.observe(viewLifecycleOwner) {
             viewModel.loadPosts()
             findNavController().navigateUp()
+        }
+
+        binding.editMentions.setOnClickListener {
+
+            findNavController().navigate(
+                R.id.action_newPostFragment_to_mentorsFragment
+            )
         }
 
         viewModel.file.observe(viewLifecycleOwner) {

@@ -13,23 +13,38 @@
         <action
             android:id="@+id/action_navigation_main_to_newPostFragment"
             app:destination="@id/newPostFragment" />
+        <action
+            android:id="@+id/action_navigation_main_to_usersBottomSheet"
+            app:destination="@id/usersBottomSheet" />
     </fragment>
 
     <fragment
         android:id="@+id/navigation_events"
         android:name="ru.netology.diploma.ui.EventsFragment"
         android:label="@string/page_events"
-        tools:layout="@layout/fragment_events" />
+        tools:layout="@layout/fragment_events" >
+        <action
+            android:id="@+id/action_navigation_events_to_newEventFragment"
+            app:destination="@id/newEventFragment" />
+        <action
+            android:id="@+id/action_navigation_events_to_usersBottomSheet"
+            app:destination="@id/usersBottomSheet" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_users"
         android:name="ru.netology.diploma.ui.UsersFragment"
         android:label="@string/page_users"
-        tools:layout="@layout/fragment_users" />
+        tools:layout="@layout/fragment_users" >
+
+        <action
+            android:id="@+id/action_navigation_users_to_anotherProfileFragment"
+            app:destination="@id/anotherProfileFragment" />
+    </fragment>
 
     <fragment
-        android:id="@+id/navigation_profile"
-        android:name="ru.netology.diploma.ui.ProfileFragment"
+        android:id="@+id/navigation_my_profile"
+        android:name="ru.netology.diploma.ui.MyProfileFragment"
         android:label="@string/page_profile"
         tools:layout="@layout/fragment_profile" >
         <action
@@ -38,6 +53,16 @@
         <action
             android:id="@+id/action_navigation_profile_to_newJobFragment"
             app:destination="@id/newJobFragment" />
+        <action
+            android:id="@+id/action_navigation_my_profile_to_newEventFragment"
+            app:destination="@id/newEventFragment" />
+        <action
+            android:id="@+id/action_navigation_my_profile_to_usersBottomSheet"
+            app:destination="@id/usersBottomSheet" />
+        <action
+            android:id="@+id/action_navigation_my_profile_to_navigation_sign_in"
+            app:destination="@id/navigation_sign_in" />
+
     </fragment>
 
     <fragment
@@ -56,7 +81,7 @@
         android:id="@+id/navigation_sign_up"
         android:name="ru.netology.diploma.ui.SignUpFragment"
         android:label="sign_up"
-        tools:layout="@layout/fragment_sign_up" > >
+        tools:layout="@layout/fragment_sign_up" >
         <action
             android:id="@+id/action_navigation_signUp_to_navigation_sign_in"
             app:destination="@id/navigation_sign_in" />
@@ -67,9 +92,50 @@
         android:label="fragment_new_post"
         tools:layout="@layout/fragment_new_post" >
 
+        <action
+            android:id="@+id/action_newPostFragment_to_mentorsFragment"
+            app:destination="@id/mentorsFragment" />
     </fragment>
     <fragment
         android:id="@+id/newJobFragment"
         android:name="ru.netology.diploma.ui.NewJobFragment"
-        android:label="NewJobFragment" />
+        android:label="NewJobFragment" >
+
+    </fragment>
+    <fragment
+        android:id="@+id/anotherProfileFragment"
+        android:name="ru.netology.diploma.ui.ProfileFragment"
+        android:label="ProfileFragment" >
+        <action
+            android:id="@+id/action_anotherProfileFragment_to_usersBottomSheet"
+            app:destination="@id/usersBottomSheet" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/newEventFragment"
+        android:name="ru.netology.diploma.ui.NewEventFragment"
+        android:label="fragment_new_event"
+        tools:layout="@layout/fragment_new_event" >
+        <action
+            android:id="@+id/action_newEventFragment_to_speakersFragment"
+            app:destination="@id/speakersFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/speakersFragment"
+        android:name="ru.netology.diploma.ui.SpeakersFragment"
+        android:label="fragment_speakers"
+        tools:layout="@layout/fragment_check_users" />
+    <dialog
+        android:id="@+id/usersBottomSheet"
+        android:name="ru.netology.diploma.ui.UsersBottomSheet"
+        android:label="UsersBottomSheet" >
+        <action
+            android:id="@+id/action_usersBottomSheet_to_anotherProfileFragment"
+            app:destination="@id/anotherProfileFragment" />
+    </dialog>
+    <fragment
+        android:id="@+id/mentorsFragment"
+        android:name="ru.netology.diploma.ui.MentorsFragment"
+        android:label="MentorsFragment" />
+
 </navigation>

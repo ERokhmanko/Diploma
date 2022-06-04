@@ -26,12 +26,6 @@ class JobRepository @Inject constructor(
     private val jobDao: JobDao,
     private val jobWorkDao: JobWorkDao
 ) {
-    val data: Flow<List<Job>> = jobDao.getAll().map {
-        it.toDto()
-    }.flowOn(Dispatchers.Default)
-
-
-
 
     suspend fun getJobsByUserId(userId: Long) : List<Job> {
         try {

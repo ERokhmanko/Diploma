@@ -1,38 +1,32 @@
 package ru.netology.diploma.ui
 
-import android.app.Activity
-import android.net.Uri
 import android.os.Bundle
-import android.text.format.DateFormat
+import android.util.Log
 import android.view.*
-import android.widget.PopupMenu
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.net.toFile
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.github.dhaval2404.imagepicker.ImagePicker
-import com.github.dhaval2404.imagepicker.constant.ImageProvider
-import com.google.android.material.snackbar.Snackbar
 import ru.netology.diploma.R
 import ru.netology.diploma.databinding.FragmentNewJobBinding
-import ru.netology.diploma.databinding.FragmentNewPostBinding
+import ru.netology.diploma.extensions.afterTextChanged
 import ru.netology.diploma.utils.Utils
+import ru.netology.diploma.utils.Utils.dateToEpochSec
 import ru.netology.diploma.utils.Utils.formatDate
+import ru.netology.diploma.utils.Utils.showDateDialog
 import ru.netology.diploma.viewmodel.JobViewModel
-import ru.netology.diploma.viewmodel.PostViewModel
 import java.time.Instant
-import java.util.*
 
 
 class NewJobFragment : Fragment() {
 
     private var fragmentBinding: FragmentNewJobBinding? = null
-    private val viewModel: JobViewModel by activityViewModels() //TODO надо ли менять?
+    private val viewModel: JobViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -43,15 +37,45 @@ class NewJobFragment : Fragment() {
         return when (item.itemId) {
             R.id.save -> {
                 fragmentBinding?.let {
-                    viewModel.changeData(
-                        start = it.start.text.toString().toLong(),
-                        finish = it.finish.text.toString().toLong(),
-                        company = it.companyEdit.text.toString(),
-                        website = it.linkEdit.text.toString(),
-                        position = it.positionEdit.text.toString()
-                    )
-                    viewModel.save()
-                    Utils.hideKeyboard(requireView())
+                    val start = it.startEdit.text.toString()
+                    val position = it.positionEdit.text.toString()
+                    val company = it.companyEdit.text.toString()
+
+                    viewModel.requireData(start, position, company)
+
+                    val state = viewModel.dataState.value
+
+                     if (state != null) {
+                        if (state.emptyToDate != null) {
+                            it.startEdit.error =
+                                getString(state.emptyToDate)
+
+                        }
+
+                        if (state.emptyPositionError != null) {
+                            it.positionEdit.error =
+                                getString(state.emptyPositionError)
+                        }
+
+                        if (state.emptyCompanyError != null) {
+                            it.companyEdit.error =
+                                getString(state.emptyCompanyError)
+                        }
+
+                        if (state.isDataNotBlank) {
+                            dateToEpochSec(start)?.let { startLong ->
+                                viewModel.changeData(
+                                    start = startLong,
+                                    finish = dateToEpochSec(it.finishEdit.text.toString()),
+                                    company = company,
+                                    website = it.linkEdit.text.toString(),
+                                    position = position
+                                )
+                            }
+                            viewModel.save()
+                            Utils.hideKeyboard(requireView())
+                        } else return false
+                    }
                 }
                 true
             }
@@ -89,8 +113,31 @@ class NewJobFragment : Fragment() {
             findNavController().navigateUp()
         }
 
-        return binding.root
+        binding.startEdit.setOnClickListener {
+            binding.startEdit.error = null
+            context?.let { context -> showDateDialog(binding.startEdit, context) }
+        }
 
+        binding.finishEdit.setOnClickListener {
+            context?.let { context -> showDateDialog(binding.finishEdit, context) }
+        }
+
+        binding.linkEdit.afterTextChanged {
+            viewModel.isLinkValid(it)
+        }
+
+        viewModel.dataState.observe(viewLifecycleOwner, Observer {
+            val state = it ?: return@Observer
+
+            if (state.linkError != null) {
+                binding.linkEdit.error = getString(state.linkError)
+            }
+
+        })
+
+        return binding.root
 
     }
 }
+
+

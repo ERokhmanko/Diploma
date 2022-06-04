@@ -1,6 +1,7 @@
 package ru.netology.diploma.repository
 
 import android.net.Uri
+import android.util.Log
 import androidx.core.net.toFile
 import androidx.core.net.toUri
 import androidx.paging.*
@@ -108,7 +109,7 @@ class PostRepository @Inject constructor(
             val post = entity.toDto()
             if (entity.uri != null) {
                 val upload = MediaUpload(Uri.parse(entity.uri).toFile())
-                    saveWithAttachment(post, upload)
+                saveWithAttachment(post, upload)
             } else {
                 save(post)
             }
@@ -141,7 +142,7 @@ class PostRepository @Inject constructor(
 
             val postWithAttachment = post.copy(
                         attachment = Attachment(
-                            url = media.id,
+                            url = media.url,
                             type =AttachmentType.IMAGE
                         )
                     ) //TODO изменить для друких вложений

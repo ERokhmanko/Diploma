@@ -107,6 +107,36 @@ interface ApiService {
     @DELETE("my/jobs/{id}")
     suspend fun removeJobById(@Path("id") id: Long): Response<Unit>
 
+    //Events
 
+    @GET("events")
+    suspend fun getAllEvents(): Response<List<Event>>
+
+    @DELETE("events/{id}")
+    suspend fun removeEventById(@Path("id") id: Long): Response<Unit>
+
+    @POST("events")
+    suspend fun saveEvent(@Body event: Event): Response<Event>
+
+    @POST("events/{id}/likes")
+    suspend fun likedEventById(@Path("id") id: Long) : Response<Event>
+
+    @DELETE("events/{id}/likes")
+    suspend fun unlikedEventById(@Path("id") id: Long) : Response<Event>
+
+    @GET("events/latest")
+    suspend fun getLatestEvents(@Query("count") count: Int): Response<List<Event>>
+
+    @GET("events/{id}/before")
+    suspend fun getBeforeEvents(@Path("id") id: Long, @Query("count") count: Int): Response<List<Event>>
+
+    @GET("events/{id}/after")
+    suspend fun getAfterEvents(@Path("id") id: Long, @Query("count") count: Int): Response<List<Event>>
+
+    @POST("events/{id}/participants")
+    suspend fun participateById(@Path("id") id: Long):  Response<Event>
+
+    @DELETE("events/{id}/participants")
+    suspend fun unParticipateById(@Path("id") id: Long):  Response<Event>
 }
 

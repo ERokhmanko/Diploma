@@ -4,5 +4,8 @@ enum class RetryType {
     SAVE,
     REMOVE,
     LIKE,
-    UNLIKE
+    UNLIKE,
+    PARTICIPATE,
+    UNPARTICIPATE
+
 }

@@ -89,11 +89,50 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/indent"
         android:layout_marginBottom="@dimen/indent"
-        app:layout_constraintBottom_toTopOf="@id/barrier_mediaView"
+        app:layout_constraintBottom_toTopOf="@id/mentors"
         app:layout_constraintEnd_toEndOf="parent"
+        android:autoLink="web"
+        android:linksClickable="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/barrier"
         tools:text="Текст контента" />
+
+    <TextView
+        android:id="@+id/mentors"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:text="@string/mentors"
+        android:textStyle="bold"
+        android:visibility="visible"
+        android:layout_marginTop="@dimen/indent"
+        android:layout_marginBottom="@dimen/indent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/content"
+        app:layout_constraintBottom_toTopOf="@id/barrier_mediaView"
+        />
+
+
+    <TextView
+        android:id="@+id/mentors_edit"
+        android:layout_width="250dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="@dimen/indent"
+        android:layout_marginBottom="@dimen/indent"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@id/barrier_mediaView"
+        app:layout_constraintStart_toEndOf="@+id/mentors"
+        app:layout_constraintTop_toTopOf="@+id/mentors"
+        tools:text="Вася,Петя, Маша, Оля, Кеша, Эллинааа" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/moreMentors"
+        style="@style/Widget.AppCompat.ElementsMore"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/mentors_edit"
+        app:layout_constraintStart_toEndOf="@+id/mentors_edit"
+        app:layout_constraintTop_toTopOf="@+id/mentors_edit" />
 
 
     <androidx.constraintlayout.widget.Barrier
@@ -113,7 +152,7 @@
         app:icon="@drawable/ic_play_pause"
         app:layout_constraintBottom_toTopOf="@+id/barrier_like_count"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/mediaView" />
+        app:layout_constraintTop_toBottomOf="@id/videoView" />
 
     <TextView
         android:id="@+id/name_track"
@@ -169,7 +208,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="bottom"
-        app:constraint_referenced_ids="mediaView" />
+        app:constraint_referenced_ids="imageView" />
 
     <com.google.android.material.divider.MaterialDivider
         android:id="@+id/diver_like_count"
@@ -310,15 +349,7 @@
 
     </androidx.cardview.widget.CardView>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/comment"
-        style="@style/Widget.AppCompat.ElementsPostCard"
-        android:layout_width="@dimen/size_icon"
-        android:layout_height="@dimen/size_icon"
-        app:icon="@drawable/ic_baseline_comment_24"
-        app:layout_constraintEnd_toStartOf="@id/repost"
-        app:layout_constraintStart_toEndOf="@+id/cardView_button"
-        app:layout_constraintTop_toTopOf="@id/cardView_button" />
+
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/repost"
@@ -328,8 +359,8 @@
         android:textColor="?attr/colorControlNormal"
         app:icon="@drawable/ic_baseline_shortcut_24"
         app:layout_constraintEnd_toStartOf="@id/share"
-        app:layout_constraintStart_toEndOf="@+id/comment"
-        app:layout_constraintTop_toTopOf="@id/comment" />
+        app:layout_constraintStart_toEndOf="@+id/cardView_button"
+        app:layout_constraintTop_toTopOf="@id/cardView_button" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/share"
@@ -342,13 +373,24 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/repost" />
 
-    <View
-        android:id="@+id/mediaView"
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="372dp"
+        android:layout_height="270dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintBottom_toTopOf="@id/barrier_like_count"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/videoView"
+        tools:ignore="ContentDescription" />
+
+    <VideoView
+        android:id="@+id/videoView"
         android:layout_width="372dp"
         android:layout_height="270dp"
         android:layout_marginTop="4dp"
         app:layout_constraintEnd_toEndOf="parent"
-
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/barrier_mediaView" />
 
@@ -356,10 +398,10 @@
         android:id="@+id/play_video"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/mediaView"
-        app:layout_constraintEnd_toEndOf="@+id/mediaView"
-        app:layout_constraintStart_toStartOf="@+id/mediaView"
-        app:layout_constraintTop_toTopOf="@+id/mediaView"
+        app:layout_constraintBottom_toBottomOf="@+id/videoView"
+        app:layout_constraintEnd_toEndOf="@+id/videoView"
+        app:layout_constraintStart_toStartOf="@+id/videoView"
+        app:layout_constraintTop_toTopOf="@+id/videoView"
         app:srcCompat="@android:drawable/ic_media_play"
         android:contentDescription="@string/play_video" />
 
@@ -368,7 +410,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:constraint_referenced_ids="mediaView, play_video" />
+        app:constraint_referenced_ids="videoView, play_video" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

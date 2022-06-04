@@ -12,7 +12,7 @@ interface UserDao {
     @Query("SELECT * FROM UserEntity ORDER BY name")
     fun getAll(): Flow<List<UserEntity>>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE) //TODO оставить реплейс?
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(user: List<UserEntity>)
 
 }

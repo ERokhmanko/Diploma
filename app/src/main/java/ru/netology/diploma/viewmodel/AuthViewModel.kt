@@ -21,10 +21,6 @@ class AuthViewModel @Inject constructor
     private val authRepository: AuthRepository
 ) : ViewModel() {
 
-//    val dataAuth: LiveData<AuthState> = appAuth
-//        .authStateFlow
-//        .asLiveData(Dispatchers.Default) //TODO понять нужно ли заменить
-
     val authenticated: Boolean
         get() = appAuth.authStateFlow.value.id != 0L
 

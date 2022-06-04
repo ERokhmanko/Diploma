@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.NewEventFragment">
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/divider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TableRow
+                android:id="@+id/tableRowDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/date"
+                    style="@style/TableRow"
+                    android:layout_height="wrap_content"
+                    android:text="@string/date" />
+
+                <EditText
+                    android:id="@+id/date_edit"
+                    android:layout_width="@dimen/column_width"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:longClickable="false"
+                    android:cursorVisible="false"
+                    android:importantForAutofill="no"
+                    tools:ignore="LabelFor,TextFields" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRowDateTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/time"
+                style="@style/TableRow"
+                android:layout_height="wrap_content"
+                android:text="@string/time" />
+
+            <EditText
+                android:id="@+id/time_edit"
+                android:layout_width="@dimen/column_width"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:longClickable="false"
+                android:cursorVisible="false"
+                android:importantForAutofill="no"
+                tools:ignore="LabelFor,TextFields"
+                />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRowFormat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/format"
+                    style="@style/TableRow"
+                    android:layout_height="wrap_content"
+                    android:text="@string/formatEvent" />
+
+                <Spinner
+                    android:id="@+id/spinner"
+                    android:layout_width="@dimen/column_width"
+                    style="@style/Widget.AppCompat.Spinner.Underlined"
+                    android:dropDownSelector = "?attr/listChoiceBackgroundIndicator"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="0dp"
+                    />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRowLink"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+               >
+
+                <TextView
+                    android:id="@+id/link"
+                    style="@style/TableRow"
+                    android:layout_height="wrap_content"
+                    android:text="@string/link_event" />
+
+                <EditText
+                    android:id="@+id/link_edit"
+                    android:layout_width="@dimen/column_width"
+                    android:layout_height="wrap_content"
+                    android:inputType="textUri"
+                    android:importantForAutofill="no"
+                    tools:ignore="LabelFor"
+                    />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRowCoord"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/coord"
+                    style="@style/TableRow"
+                    android:layout_height="wrap_content"
+                    android:text="@string/event_location" />
+
+                <EditText
+                    android:id="@+id/coord_edit"
+                    android:layout_width="@dimen/column_width"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:importantForAutofill="no"
+                    tools:ignore="LabelFor"
+                    />
+
+                <ImageButton
+                    android:id="@+id/editLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/location"
+                    android:backgroundTint="@color/mtrl_btn_text_btn_bg_color_selector"
+                    android:src="@drawable/ic_baseline_location_on_24"/>
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRowSpeakers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/speakers"
+                    style="@style/TableRow"
+                    android:layout_height="wrap_content"
+                    android:text="@string/speakers" />
+
+                <EditText
+                    android:id="@+id/speakers_edit"
+                    android:layout_width="@dimen/column_width"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="0dp"
+                    android:focusable="false"
+                    android:longClickable="false"
+                    android:cursorVisible="false"
+                    android:importantForAutofill="no"
+                    tools:ignore="LabelFor,TextFields" />
+
+            </TableRow>
+
+            <EditText
+                android:id="@+id/edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:inputType="textMultiLine"
+                android:importantForAutofill="no"
+                tools:ignore="LabelFor"
+                android:padding="@dimen/padding_new_post" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/photoContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/photo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/description_photo"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/removeFile"
+                    style="@style/Widget.App.Button.OutlinedButton.IconOnly"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:icon="@drawable/ic_baseline_close_24"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="@dimen/padding_new_post"
+        android:layout_marginEnd="@dimen/padding_new_post"
+        android:background="@color/white"
+        app:layout_constraintBottom_toTopOf="@id/buttonPanel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/buttonPanel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/attach"
+            style="@style/Widget.App.Button.OutlinedButton.IconOnly"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/attach"
+            android:padding="@dimen/padding_new_post"
+            app:icon="@drawable/ic_baseline_attach_file_24" />
+
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

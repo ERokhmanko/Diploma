@@ -1,9 +1,11 @@
 package ru.netology.diploma.adapter
 
+import android.content.Context
 import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -11,11 +13,11 @@ import ru.netology.diploma.R
 import ru.netology.diploma.databinding.CardJobBinding
 import ru.netology.diploma.dto.Job
 import ru.netology.diploma.utils.Utils.formatDate
-import java.util.*
+
 
 interface JobCallback {
-    fun edit(job: Job)
-    fun remove(job: Job)
+    fun edit(job: Job){}
+    fun remove(job: Job){}
 }
 
 class JobsAdapter(private val jobCallback: JobCallback, private val showPopupMenu: Boolean) :
@@ -24,7 +26,7 @@ class JobsAdapter(private val jobCallback: JobCallback, private val showPopupMen
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JobViewHolder {
         val binding =
             CardJobBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return JobViewHolder(binding, jobCallback, showPopupMenu)
+        return JobViewHolder(parent.context, binding, jobCallback, showPopupMenu)
     }
 
     override fun onBindViewHolder(holder: JobViewHolder, position: Int) {
@@ -36,6 +38,7 @@ class JobsAdapter(private val jobCallback: JobCallback, private val showPopupMen
 
 
 class JobViewHolder(
+    private val context: Context,
     private val binding: CardJobBinding,
     private val jobCallback: JobCallback,
     private val showPopupMenu: Boolean
@@ -46,17 +49,22 @@ class JobViewHolder(
         with(binding) {
             val start = formatDate(job.start)
             val finish = formatDate(job.finish)
-            workPeriod.text = "$start - $finish" //TODO исправить
+            workPeriod.text = if (finish != null) context.getString(
+                R.string.period_of_work,
+                start, finish
+            ) else context.getString(R.string.start_of_work, start)
+
             nameCompany.text = job.name
             position.text = job.position
             link.text = job.link
+            menu.isVisible = showPopupMenu
 
             menu.setOnClickListener { view ->
                 PopupMenu(view.context, view).apply {
                     inflate(R.menu.object_options)
                     menu.let {
                         it.setGroupVisible(R.id.my_object_menu, showPopupMenu)
-                        it.setGroupVisible(R.id.other_object_menu, false)  //TODO работает так?
+                        it.setGroupVisible(R.id.other_object_menu, false)
                     }
                     setOnMenuItemClickListener { menuItem ->
                         when (menuItem.itemId) {

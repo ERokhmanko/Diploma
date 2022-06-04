@@ -1,24 +1,23 @@
 package ru.netology.diploma.viewmodel
 
+import android.util.Log
+import android.util.Patterns
 import androidx.lifecycle.*
 import androidx.work.*
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import ru.netology.diploma.R
 import ru.netology.diploma.auth.AppAuth
 import ru.netology.diploma.dto.Job
-import ru.netology.diploma.dto.MediaUpload
+import ru.netology.diploma.enumeration.EventType
 import ru.netology.diploma.enumeration.RetryType
-import ru.netology.diploma.model.JobModel
+import ru.netology.diploma.model.EventFormState
 import ru.netology.diploma.model.JobsModelState
-import ru.netology.diploma.model.PostsModelState
 import ru.netology.diploma.repository.JobRepository
+import ru.netology.diploma.ui.USER_ID
 import ru.netology.diploma.utils.SingleLiveEvent
 import ru.netology.diploma.work.RemoveJobWorker
-import ru.netology.diploma.work.RemovePostWorker
 import ru.netology.diploma.work.SaveJobWorker
-import ru.netology.diploma.work.SavePostWorker
 import javax.inject.Inject
 
 val emptyJob = Job(
@@ -33,21 +32,18 @@ val emptyJob = Job(
 @HiltViewModel
 class JobViewModel @Inject constructor(
     private val repository: JobRepository,
-//    private val stateHandle: SavedStateHandle,
+    stateHandle: SavedStateHandle,
     private val workManager: WorkManager,
     appAuth: AppAuth
 ) : ViewModel() {
 
-    val data: LiveData<JobModel> = repository.data
-        .map { job ->
-            JobModel(
-                job,
-                job.isEmpty()
-            )
-        }.asLiveData(Dispatchers.Default)
+    private val _jobData = MutableLiveData<List<Job>>()
+    val jobData: LiveData<List<Job>>
+        get() = _jobData
 
-    val id = appAuth.authStateFlow.value.id
-    val job = MutableLiveData<List<Job>>()
+
+    private var profileId = stateHandle.get(USER_ID) ?: appAuth.authStateFlow.value.id
+
 
     private val _dataState = MutableLiveData<JobsModelState>()
     val dataState: LiveData<JobsModelState>
@@ -60,14 +56,13 @@ class JobViewModel @Inject constructor(
         get() = _jobCreated
 
     init {
-        getJobsByUserId(id)
-//        getUserById(stateHandle.get(USER_ID) ?: 0)
+        getJobsByUserId(profileId)
     }
 
     fun loadJobs() = viewModelScope.launch {
         try {
             _dataState.value = JobsModelState(loading = true)
-            repository.getMyJobs()
+            getJobsByUserId(profileId)
             _dataState.value = JobsModelState()
         } catch (e: Exception) {
             _dataState.value = JobsModelState(error = true)
@@ -77,7 +72,7 @@ class JobViewModel @Inject constructor(
     private fun getJobsByUserId(id: Long) = viewModelScope.launch {
         try {
             _dataState.value = JobsModelState(loading = true)
-            job.value = repository.getJobsByUserId(id)
+            _jobData.value = repository.getJobsByUserId(id)
             _dataState.value = JobsModelState()
         } catch (e: Exception) {
             _dataState.value = JobsModelState(error = true)
@@ -90,7 +85,7 @@ class JobViewModel @Inject constructor(
             val constraints = Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
                 .build()
-            val request = OneTimeWorkRequestBuilder<RemovePostWorker>()
+            val request = OneTimeWorkRequestBuilder<RemoveJobWorker>()
                 .setInputData(data)
                 .setConstraints(constraints)
                 .build()
@@ -107,11 +102,12 @@ class JobViewModel @Inject constructor(
         edited.value = job
     }
 
-    fun changeData(start: Long, finish: Long, company: String, website: String, position: String) {
+    fun changeData(start: Long, finish: Long?, company: String, website: String, position: String) {
         edited.value?.let {
             val textCompany = company.trim()
             val textWebsite = website.trim()
             val textPosition = position.trim()
+
             if (it.start != start ||
                 it.finish != finish ||
                 it.name != textCompany ||
@@ -145,11 +141,39 @@ class JobViewModel @Inject constructor(
                     workManager.enqueue(request)
 
                     _dataState.value = JobsModelState()
+                    edited.value = emptyJob
                 } catch (e: Exception) {
                     _dataState.value = JobsModelState(error = true)
                 }
             }
         }
+    }
+
+    fun isLinkValid(link: String) {
+        val linkTrim = link.trim()
+        if (!Patterns.WEB_URL.matcher(linkTrim).matches()) {
+            _dataState.value = JobsModelState(linkError = R.string.invalid_link)
+        } else {
+            _dataState.value = JobsModelState(isDataValid = true)
+        }
+    }
+
+    fun requireData(
+        start: String, position: String, company: String
+    ) {
+
+        _dataState.value = JobsModelState(
+            emptyToDate = if (start.isBlank()) R.string.empty_field else null,
+            emptyPositionError = if (position.isBlank()) R.string.empty_field else null,
+            emptyCompanyError = if (company.isBlank()) R.string.empty_field else null,
+
+            isDataNotBlank =
+            start.isNotBlank()
+                    &&
+                    position.isNotBlank() &&
+                    company.isNotBlank()
+        )
+
     }
 }
 

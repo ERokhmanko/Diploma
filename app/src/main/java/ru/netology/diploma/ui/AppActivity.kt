@@ -1,6 +1,7 @@
 package ru.netology.diploma.ui
 
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -19,6 +20,15 @@ class AppActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val viewModelAuth: AuthViewModel by viewModels()
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                findNavController(R.id.nav_host_fragment_activity_main).navigateUp()
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -34,7 +44,7 @@ class AppActivity : AppCompatActivity() {
                 R.id.navigation_main,
                 R.id.navigation_events,
                 R.id.navigation_users,
-                R.id.navigation_profile
+                R.id.navigation_my_profile
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -58,6 +68,8 @@ class AppActivity : AppCompatActivity() {
         if (!viewModelAuth.authenticated) {
             findNavController(R.id.nav_host_fragment_activity_main).navigate(R.id.navigation_sign_in)
         }
+
+
     }
 
 }
