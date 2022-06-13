@@ -3,7 +3,6 @@ package ru.netology.diploma.viewmodel
 import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.core.net.toFile
 import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.filter
@@ -20,6 +19,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ru.netology.diploma.auth.AppAuth
 import ru.netology.diploma.dto.*
+import ru.netology.diploma.enumeration.AttachmentType
 import ru.netology.diploma.enumeration.RetryType
 import ru.netology.diploma.model.FileModel
 import ru.netology.diploma.model.PostsModelState
@@ -28,6 +28,7 @@ import ru.netology.diploma.ui.USER_ID
 import ru.netology.diploma.utils.SingleLiveEvent
 import ru.netology.diploma.work.RemovePostWorker
 import ru.netology.diploma.work.SavePostWorker
+import java.io.InputStream
 import java.time.Instant
 import javax.inject.Inject
 import kotlin.random.Random
@@ -137,7 +138,7 @@ class PostViewModel @Inject constructor(
             viewModelScope.launch {
                 try {
                     val id = repository.saveWork(
-                        it, _file.value?.uri?.let { MediaUpload(it.toFile()) }
+                        it, _file.value?.file?.let { MediaUpload(it) }
                     )
                     val data = workDataOf(SavePostWorker.postKey to id)
                     val constraints = Constraints.Builder()
@@ -197,11 +198,13 @@ class PostViewModel @Inject constructor(
         }
     }
 
-    fun changeContent(content: String) {
+    fun changeContent(content: String, coord: Coordinates?) {
         edited.value?.let {
             val text = content.trim()
-            if (it.content != text)
-                _edited.value = it.copy(content = text)
+
+            if (it.content != text ||
+                it.coords != coord )
+                _edited.value = it.copy(content = text, coords = coord)
         }
     }
 
@@ -251,6 +254,10 @@ class PostViewModel @Inject constructor(
 
     fun clear() {
         _mentorsId = mutableSetOf()
+    }
+
+    fun saveCoord(latitude: Double, longitude: Double) {
+        _edited.value = edited.value?.copy(coords = Coordinates(latitude, longitude))
     }
 
 

@@ -104,7 +104,7 @@ class PostViewHolder(
             like.isChecked = post.likedByMe
             groupLike.visibility =
                 if (!post.likeOwnerIds.isNullOrEmpty()) View.VISIBLE else View.GONE
-
+            coord.isVisible = post.coords != null
 
             //TODO разобраться от куда тянуть юзеров, лайв дата тянет только после загрузки страницы юзеров
             val userLike = mutableListOf<String?>()

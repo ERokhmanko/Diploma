@@ -16,7 +16,14 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+    Properties properties = new Properties()
+    if (rootProject.file("local.properties").exists()) {
+        properties.load(rootProject.file("local.properties").newDataInputStream())
     }
+
+    buildConfigField "String", "MAPS_API_KEY", "${properties.getProperty("MAPS_API_KEY", "")}"
+}
 
     buildTypes {
         release {
@@ -74,17 +81,16 @@ dependencies {
     implementation 'androidx.work:work-runtime-ktx:2.7.1'
     implementation 'androidx.hilt:hilt-work:1.0.0'
     kapt 'androidx.hilt:hilt-compiler:1.0.0'
-    implementation"androidx.lifecycle:lifecycle-viewmodel-savedstate:2.5.0-beta01" //проверить работает ли без этого
+    implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:2.5.0-beta01"
+    //проверить работает ли без этого TODO
 //    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0" //для запуска корутин, чтобы не блокировало основной thread
 //    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.0'// для хранения данных
     implementation "androidx.navigation:navigation-fragment-ktx:2.4.2"
+    implementation 'com.yandex.android:maps.mobile:4.0.0-lite'
 
 
-    implementation 'com.github.majidarabi:AndroidFilePicker:0.0.8' // ??
     implementation 'com.github.dhaval2404:imagepicker:2.1'
     implementation "com.github.bumptech.glide:glide:4.12.0" //glide
-
-
 
 
     testImplementation 'junit:junit:4.13.2'

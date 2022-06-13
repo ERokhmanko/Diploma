@@ -11,12 +11,6 @@ class Converters {
     @TypeConverter
     fun fromAttachmentType(value: AttachmentType) = value.name
 
-//    @TypeConverter
-//    fun toEventType(value: String) = enumValueOf<EventType>(value)
-//
-//    @TypeConverter
-//    fun fromEventType(value: EventType) = value.name
-
     @TypeConverter
     fun fromSet(set: Set<Long>): String = set.joinToString(",")
 

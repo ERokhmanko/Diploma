@@ -77,4 +77,8 @@
     <string name="event_location">координаты события</string>
     <string name="title_mentors">список менторов</string>
     <string name="mentors">Менторы</string>
+    <string name="location_searching">Кнопка для определения Вашего места положения</string>
+    <string name="use_card">Извините, Вы не сможете просмотреть карты без разрешения отображения вашей локации</string>
+    <string name="decline">Понятно</string>
+    <string name="myLocation">Кнопка для определения Вашей локации</string>
 </resources>

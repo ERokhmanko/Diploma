@@ -2,7 +2,6 @@ package ru.netology.diploma.viewmodel
 
 import android.net.Uri
 import android.os.Build
-import android.util.Log
 import android.util.Patterns
 import androidx.annotation.RequiresApi
 import androidx.core.net.toFile
@@ -27,12 +26,9 @@ import ru.netology.diploma.enumeration.EventType
 import ru.netology.diploma.enumeration.RetryType
 import ru.netology.diploma.model.*
 import ru.netology.diploma.repository.EventRepository
-import ru.netology.diploma.repository.UserRepository
 import ru.netology.diploma.utils.SingleLiveEvent
-import ru.netology.diploma.utils.Utils
 import ru.netology.diploma.work.RemoveEventWorker
 import ru.netology.diploma.work.SaveEventWorker
-import java.io.File
 import java.time.Instant
 import javax.inject.Inject
 import kotlin.random.Random
@@ -326,6 +322,10 @@ class EventViewModel @Inject constructor(
 
     fun clear() {
         _speakersId = mutableSetOf()
+    }
+
+    fun saveCoord(latitude: Double, longitude: Double) {
+        _edited.value = edited.value?.copy(coords = Coordinates(latitude, longitude))
     }
 
 }

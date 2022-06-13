@@ -56,7 +56,7 @@ class JobViewModel @Inject constructor(
         get() = _jobCreated
 
     init {
-        getJobsByUserId(profileId)
+        getJobsByUserId(profileId) //TODO в логах постоянно вызов этого метода, как исправить?
     }
 
     fun loadJobs() = viewModelScope.launch {

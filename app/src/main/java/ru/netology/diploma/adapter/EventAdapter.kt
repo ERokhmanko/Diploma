@@ -39,6 +39,7 @@ interface EventCallback {
     fun onSpeakers(event: Event)
     fun onlikeOwner(event: Event)
     fun onParticipants(event: Event)
+    fun onMap(event: Event)
 }
 
 class EventsAdapter(
@@ -214,6 +215,7 @@ class EventViewHolder(
             }
 
             coordinates.setOnClickListener {
+                eventCallback.onMap(event)
                 //TODO придумать реализацию по переходу на карту по координатам event.coordinates
             }
 

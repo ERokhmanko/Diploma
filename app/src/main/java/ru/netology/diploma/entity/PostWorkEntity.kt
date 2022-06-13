@@ -29,6 +29,7 @@ data class PostWorkEntity(
     val attachment: AttachmentEmbeddable? = null,
     val ownedByMe: Boolean = false,
     var uri: String? = null
+
 ) {
     fun toDto() = Post(
         id, authorId, author, authorAvatar,

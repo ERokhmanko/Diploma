@@ -86,7 +86,7 @@ class HomeFragment : Fragment() {
 
             override fun onRepost(post: Post) {
 
-                viewModel.changeContent(post.content)
+                viewModel.changeContent(post.content, post.coords)
                 if (post.attachment != null) {
                     viewModel.attachmentRepost(post.attachment)
                 }

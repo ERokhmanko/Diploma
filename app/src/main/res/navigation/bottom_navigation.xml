@@ -22,13 +22,16 @@
         android:id="@+id/navigation_events"
         android:name="ru.netology.diploma.ui.EventsFragment"
         android:label="@string/page_events"
-        tools:layout="@layout/fragment_events" >
+        tools:layout="@layout/fragment_events">
         <action
             android:id="@+id/action_navigation_events_to_newEventFragment"
             app:destination="@id/newEventFragment" />
         <action
             android:id="@+id/action_navigation_events_to_usersBottomSheet"
             app:destination="@id/usersBottomSheet" />
+        <action
+            android:id="@+id/action_navigation_events_to_mapFragment"
+            app:destination="@id/mapFragment" />
     </fragment>
 
     <fragment
@@ -90,7 +93,8 @@
         android:id="@+id/newPostFragment"
         android:name="ru.netology.diploma.ui.NewPostFragment"
         android:label="fragment_new_post"
-        tools:layout="@layout/fragment_new_post" >
+        tools:layout="@layout/fragment_new_post"
+        >
 
         <action
             android:id="@+id/action_newPostFragment_to_mentorsFragment"
@@ -115,10 +119,13 @@
         android:id="@+id/newEventFragment"
         android:name="ru.netology.diploma.ui.NewEventFragment"
         android:label="fragment_new_event"
-        tools:layout="@layout/fragment_new_event" >
+        tools:layout="@layout/fragment_new_event">
         <action
             android:id="@+id/action_newEventFragment_to_speakersFragment"
             app:destination="@id/speakersFragment" />
+        <action
+            android:id="@+id/action_newEventFragment_to_mapFragment"
+            app:destination="@id/mapFragment" />
     </fragment>
     <fragment
         android:id="@+id/speakersFragment"
@@ -128,7 +135,7 @@
     <dialog
         android:id="@+id/usersBottomSheet"
         android:name="ru.netology.diploma.ui.UsersBottomSheet"
-        android:label="UsersBottomSheet" >
+        android:label="UsersBottomSheet">
         <action
             android:id="@+id/action_usersBottomSheet_to_anotherProfileFragment"
             app:destination="@id/anotherProfileFragment" />
@@ -137,5 +144,9 @@
         android:id="@+id/mentorsFragment"
         android:name="ru.netology.diploma.ui.MentorsFragment"
         android:label="MentorsFragment" />
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="ru.netology.diploma.ui.MapFragment"
+        android:label="MapFragment" />
 
 </navigation>

@@ -1,13 +1,14 @@
 package ru.netology.diploma.ui
 
 import android.app.Activity
+import android.content.Context
+import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.PopupMenu
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.net.toFile
+import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -18,6 +19,7 @@ import com.github.dhaval2404.imagepicker.constant.ImageProvider
 import com.google.android.material.snackbar.Snackbar
 import ru.netology.diploma.R
 import ru.netology.diploma.databinding.FragmentNewPostBinding
+import ru.netology.diploma.dto.Coordinates
 import ru.netology.diploma.utils.Utils
 import ru.netology.diploma.viewmodel.PostViewModel
 
@@ -26,6 +28,7 @@ class NewPostFragment : Fragment() {
 
     private var fragmentBinding: FragmentNewPostBinding? = null
     private val viewModel: PostViewModel by activityViewModels()
+    private var shared: SharedPreferences? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,12 +40,22 @@ class NewPostFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val lat = arguments?.getDouble("lat")
+        val lng = arguments?.getDouble("lng")
         return when (item.itemId) {
             R.id.save -> {
                 fragmentBinding?.let {
-                    viewModel.changeContent(it.edit.text.toString())
+                    viewModel.changeContent(
+                        it.edit.text.toString(),
+                        coord = if (lat != null && lng != null) Coordinates(
+                            lat,
+                            lng
+                        ) else null
+                    )
                     viewModel.save()
                     Utils.hideKeyboard(requireView())
+                    shared?.edit()?.clear()?.commit()
+
                 }
                 true
             }
@@ -58,9 +71,13 @@ class NewPostFragment : Fragment() {
     ): View {
         val binding = FragmentNewPostBinding.inflate(inflater, container, false)
         fragmentBinding = binding
+        shared = activity?.getSharedPreferences("draft", Context.MODE_PRIVATE)
+        val keyShared = "content"
 
-        val content = arguments?.getString("content")
+        val content = arguments?.getString("content") ?: shared?.getString(keyShared, null)
         val attachment = arguments?.getString("attachment")
+        var lat: Double? = null
+        var lng: Double? = null
 
         binding.edit.setText(content)
         binding.edit.requestFocus()
@@ -74,23 +91,24 @@ class NewPostFragment : Fragment() {
                 .into(binding.photo)
         }
 
+
         val pickPhotoLauncher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                when (it.resultCode) {
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
+                when (activityResult.resultCode) {
                     ImagePicker.RESULT_ERROR -> {
                         Snackbar.make(
                             binding.root,
-                            ImagePicker.getError(it.data),
+                            ImagePicker.getError(activityResult.data),
                             Snackbar.LENGTH_LONG
                         ).show()
                     }
                     Activity.RESULT_OK -> {
-                        val uri: Uri? = it.data?.data
+                        val uri: Uri? = activityResult.data?.data
                         viewModel.changeFile(uri)
-
                     }
                 }
             }
+
 
         binding.attach.setOnClickListener {
             val view = this
@@ -115,7 +133,7 @@ class NewPostFragment : Fragment() {
                             true
                         }
                         R.id.audio -> {
-            //TODO
+                            //TODO
                             true
                         }
                         else -> false
@@ -129,7 +147,9 @@ class NewPostFragment : Fragment() {
 
         viewModel.postCreated.observe(viewLifecycleOwner) {
             viewModel.loadPosts()
-            findNavController().navigateUp()
+            findNavController().apply {
+                navigateUp()
+            }
         }
 
         binding.editMentions.setOnClickListener {
@@ -147,13 +167,41 @@ class NewPostFragment : Fragment() {
 
             binding.photoContainer.visibility = View.VISIBLE
             binding.photo.setImageURI(it.uri)
+
+            //TODO сделать для аудио
         }
 
-        //TODO сделать для аудио
+        viewModel.edited.observe(viewLifecycleOwner) {
+            lat = it.coords?.lat
+            lng = it.coords?.long
+        }
 
+        binding.editLocation.setOnClickListener {
+
+
+            shared?.edit {
+                putString(keyShared, binding.edit.text.toString())
+                apply()
+            }
+
+            val bundle = Bundle().apply {
+                putString("fragment", "newPost")
+                if (lat != null) {
+                    putDouble("lat", lat!!)
+                }
+                if (lng != null) {
+                    putDouble("lng", lng!!)
+                }
+            }
+            findNavController().navigate(
+                R.id.mapFragment, bundle
+            )
+        }
 
         return binding.root
 
 
     }
+
+
 }

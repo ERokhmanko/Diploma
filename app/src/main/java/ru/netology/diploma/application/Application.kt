@@ -1,18 +1,17 @@
 package ru.netology.diploma.application
 
 import android.app.Application
-import android.util.Log
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.*
+import com.yandex.mapkit.MapKitFactory
 import dagger.Lazy
 import dagger.hilt.android.HiltAndroidApp
-//import androidx.work.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import ru.netology.diploma.BuildConfig
 import ru.netology.diploma.auth.AppAuth
 import ru.netology.diploma.work.RefreshEventsWorker
-//import ru.netology.diploma.work.RefreshJobsWorker
 import ru.netology.diploma.work.RefreshPostsWorker
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -36,6 +35,7 @@ class Application : Application(), Configuration.Provider {
         setupAuth()
         setupWorkPosts()
         setupWorkEvents()
+        MapKitFactory.setApiKey(BuildConfig.MAPS_API_KEY)
     }
 
     private fun setupWorkPosts() {

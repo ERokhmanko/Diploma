@@ -67,15 +67,15 @@ class EventsFragment : Fragment() {
 
             override fun edit(event: Event) {
                 eventViewModel.edit(event)
-
-                bundle.putString("dateTime", event.datetime)
-                bundle.putString("content", event.content)
-                bundle.putString("format", event.type.toString())
-                bundle.putString("link", event.link)
-                // TODO передача координатов
-
-                bundle.putString("attachment", event.attachment?.url)
-
+                bundle.apply {
+                    putString("dateTime", event.datetime)
+                    putString("content", event.content)
+                    putString("format", event.type.toString())
+                    putString("link", event.link)
+                    event.coords?.lat?.let { putDouble("lat", it) }
+                    event.coords?.long?.let { putDouble("lng", it) }
+                    putString("attachment", event.attachment?.url)
+                }
 
                 findNavController().navigate(
                     R.id.action_navigation_events_to_newEventFragment,
@@ -122,6 +122,12 @@ class EventsFragment : Fragment() {
             override fun onParticipants(event: Event) {
                 userViewModel.getUsersIds(event.participantsIds)
                 findNavController().navigate(R.id.action_navigation_events_to_usersBottomSheet)
+            }
+
+            override fun onMap(event: Event) {
+                event.coords?.lat?.let { bundle.putDouble("lat", it) }
+                event.coords?.long?.let { bundle.putDouble("lng", it) }
+                findNavController().navigate(R.id.action_navigation_events_to_mapFragment, bundle)
             }
         }, userViewModel.data)
 

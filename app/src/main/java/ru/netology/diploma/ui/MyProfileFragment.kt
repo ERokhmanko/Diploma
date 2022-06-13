@@ -103,7 +103,7 @@ class MyProfileFragment : Fragment() {
 
             override fun onRepost(post: Post) {
 
-                postViewModel.changeContent(post.content)
+                postViewModel.changeContent(post.content, post.coords)
                 if (post.attachment != null) {
                     postViewModel.attachmentRepost(post.attachment)
                 }

@@ -124,9 +124,8 @@
                     android:id="@+id/coord_edit"
                     android:layout_width="@dimen/column_width"
                     android:layout_height="wrap_content"
-                    android:inputType="number"
                     android:importantForAutofill="no"
-                    tools:ignore="LabelFor"
+                    tools:ignore="LabelFor,TextFields"
                     />
 
                 <ImageButton

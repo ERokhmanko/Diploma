@@ -1,6 +1,8 @@
 package ru.netology.diploma.ui
 
 import android.app.Activity
+import android.content.Context
+import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -9,6 +11,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.PopupMenu
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.edit
 import androidx.core.net.toFile
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
@@ -38,7 +41,7 @@ class NewEventFragment : Fragment() {
     private var fragmentBinding: FragmentNewEventBinding? = null
     private val eventViewModel: EventViewModel by activityViewModels()
     private val userViewModel: UserViewModel by activityViewModels()
-
+    private var shared: SharedPreferences? = null
     private var format: EventType = EventType.ONLINE
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,7 +94,7 @@ class NewEventFragment : Fragment() {
                                 dateTime = dateTime,
                                 format = format,
                                 link = link,
-                                coord = if (coordLatLong.isNullOrEmpty()) Coordinates(
+                                coord = if (!coordLatLong.isNullOrEmpty()) Coordinates(
                                     coordLatLong[0].toDouble(),
                                     coordLatLong[1].toDouble()
                                 ) else null,
@@ -99,6 +102,7 @@ class NewEventFragment : Fragment() {
                             )
                             eventViewModel.save()
                             Utils.hideKeyboard(requireView())
+                            shared?.edit()?.clear()?.apply()
                         } else return false
                     }
                 }
@@ -116,16 +120,35 @@ class NewEventFragment : Fragment() {
     ): View {
         val binding = FragmentNewEventBinding.inflate(inflater, container, false)
         fragmentBinding = binding
+        shared = activity?.getSharedPreferences("draft", Context.MODE_PRIVATE)
 
-        val content = arguments?.getString("content")
-        val dateTime = arguments?.getString("dateTime")?.let { formatToDate(it) }?.split(" ")
-        val eventType = arguments?.getString("format")
-        val link = arguments?.getString("link")
+        val keyContent = "content"
+        val keyDate = "date"
+        val keyTime = "time"
+        val keyLink = "link"
+        val keyEventType = "format"
+
+
+        val content = arguments?.getString("content") ?: shared?.getString(keyContent, null)
+        val date = arguments?.getString("dateTime")?.let { formatToDate(it) }?.split(" ")?.get(0)
+            ?: shared?.getString(
+                keyDate, null
+            )
+        val time =
+            arguments?.getString("dateTime")?.let { formatToDate(it) }?.split(" ")?.get(1)
+                ?: shared?.getString(
+                    keyTime, null
+                )
+        val eventType = arguments?.getString("format") ?: shared?.getString(keyEventType, null)
+        val link = arguments?.getString("link") ?: shared?.getString(keyLink, null)
+
         val attachment = arguments?.getString("attachment")
+        var lat: Double? = null
+        var lng: Double? = null
 
         binding.edit.setText(content)
-        binding.dateEdit.setText(dateTime?.get(0))
-        binding.timeEdit.setText(dateTime?.get(1))
+        binding.dateEdit.setText(date)
+        binding.timeEdit.setText(time)
         binding.linkEdit.setText(link)
 
         //TODO сделать проверку на тип вложения
@@ -149,9 +172,18 @@ class NewEventFragment : Fragment() {
                 }
             }
 
+            lat = it.coords?.lat
+            lng = it.coords?.long
             val nameSpeakersString = listToString(nameSpeakers)
 
             binding.speakersEdit.setText(nameSpeakersString)
+            if (lat != null && lng != null) binding.coordEdit.setText(
+                getString(
+                    R.string.coordinates,
+                    lat,
+                    lng
+                )
+            )
         }
 
 
@@ -163,7 +195,7 @@ class NewEventFragment : Fragment() {
             ).also { adapter ->
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 binding.spinner.adapter = adapter
-                if (eventType == "OFFLINE") binding.spinner.setSelection(1)
+                if (eventType == "OFFLINE" || eventType == "offline") binding.spinner.setSelection(1)
             }
         }
 
@@ -247,7 +279,9 @@ class NewEventFragment : Fragment() {
 
         eventViewModel.eventCreated.observe(viewLifecycleOwner) {
             eventViewModel.loadEvents()
-            findNavController().navigateUp()
+            findNavController().apply {
+                navigateUp()
+            }
         }
 
         eventViewModel.file.observe(viewLifecycleOwner) {
@@ -292,8 +326,30 @@ class NewEventFragment : Fragment() {
 
         })
 
-        //TODO сделать для editLocation ClickListener
+        binding.editLocation.setOnClickListener {
 
+            shared?.edit {
+                putString(keyContent, binding.edit.text.toString())
+                putString(keyDate, binding.dateEdit.text.toString())
+                putString(keyTime, binding.timeEdit.text.toString())
+                putString(keyLink, binding.linkEdit.text.toString())
+                putString(keyEventType, binding.spinner.selectedItem.toString())
+                apply()
+            }
+
+            val bundle = Bundle().apply {
+                putString("fragment", "newEvent")
+                if (lat != null) {
+                    putDouble("lat", lat!!)
+                }
+                if (lng != null) {
+                    putDouble("lng", lng!!)
+                }
+            }
+            findNavController().navigate(
+                R.id.mapFragment, bundle
+            )
+        }
 
         return binding.root
 

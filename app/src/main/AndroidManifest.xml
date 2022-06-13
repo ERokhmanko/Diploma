@@ -6,6 +6,11 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- gps -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <!-- mobile / wi-fi -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:name="ru.netology.diploma.application.Application"
@@ -17,6 +22,8 @@
         android:theme="@style/Theme.Diploma"
         android:usesCleartextTraffic="${usesCleartextTraffic}"
         tools:targetApi="m">
+
+
         <activity
             android:name="ru.netology.diploma.ui.AppActivity"
             android:exported="true">
