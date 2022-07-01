@@ -8,13 +8,7 @@
     android:padding="@dimen/indent"
     tools:context=".ui.HomeFragment">
 
-    <com.google.android.material.divider.MaterialDivider
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="30dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/share" />
+
 
     <ImageView
         android:id="@+id/avatar"
@@ -164,68 +158,37 @@
         app:icon="@drawable/ic_play_pause"
         app:layout_constraintBottom_toTopOf="@+id/barrier_like_count"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/videoView" />
+        app:layout_constraintTop_toBottomOf="@id/imageView" />
 
-    <TextView
-        android:id="@+id/name_track"
-        android:layout_width="0dp"
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:ellipsize="end"
-        android:singleLine="true"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/name_album"
-        app:layout_constraintEnd_toStartOf="@id/time"
-        app:layout_constraintStart_toEndOf="@id/play_pause_audio"
-        app:layout_constraintTop_toTopOf="@id/play_pause_audio"
-        app:layout_constraintVertical_chainStyle="packed"
-        tools:text="Название песни" />
+        app:layout_constraintBottom_toBottomOf="@+id/play_pause_audio"
+        app:layout_constraintStart_toEndOf="@+id/play_pause_audio"
+        app:layout_constraintTop_toTopOf="@+id/play_pause_audio" />
 
-    <TextView
-        android:id="@+id/name_album"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:ellipsize="end"
-        android:singleLine="true"
-        app:layout_constraintBottom_toTopOf="@id/barrier_like_count"
-        app:layout_constraintEnd_toStartOf="@id/time"
-        app:layout_constraintStart_toEndOf="@id/play_pause_audio"
-        app:layout_constraintTop_toBottomOf="@id/name_track"
-        app:layout_constraintVertical_chainStyle="packed"
-        tools:text="Название альбома" />
-
-
-    <TextView
-        android:id="@+id/time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:padding="10dp"
-        app:layout_constraintBottom_toTopOf="@id/barrier_like_count"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/play_pause_audio"
-        tools:text="11:46" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/group_audio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
+        android:visibility="visible"
         app:constraint_referenced_ids="play_pause_audio,
-        name_track, name_album, time" />
+        seekBar" />
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/barrier_like_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="bottom"
-        app:constraint_referenced_ids="imageView" />
+        app:constraint_referenced_ids="play_pause_audio" />
 
     <com.google.android.material.divider.MaterialDivider
         android:id="@+id/diver_like_count"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/barrier_like_count" />
@@ -278,11 +241,13 @@
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/group_like"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="1dp"
+        android:layout_height="0dp"
         android:visibility="gone"
         app:constraint_referenced_ids="cardView_header_appraisers,cardView_first_like,
-        like_count, diver_like_count" />
+        like_count, diver_like_count"
+        tools:layout_editor_absoluteX="20dp"
+        tools:layout_editor_absoluteY="20dp" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView_second_like"
@@ -322,7 +287,7 @@
         android:id="@+id/materialDivider"
         android:layout_width="match_parent"
 
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/barrier_icon" />
@@ -391,20 +356,21 @@
         android:layout_width="372dp"
         android:layout_height="270dp"
         android:layout_marginTop="4dp"
-        app:layout_constraintBottom_toTopOf="@id/barrier_like_count"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/videoView"
         tools:ignore="ContentDescription" />
 
-    <VideoView
+    <ImageView
         android:id="@+id/videoView"
         android:layout_width="372dp"
         android:layout_height="270dp"
         android:layout_marginTop="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/barrier_mediaView" />
+        app:layout_constraintTop_toBottomOf="@id/barrier_mediaView"
+        tools:ignore="ContentDescription" />
 
     <ImageButton
         android:id="@+id/play_video"

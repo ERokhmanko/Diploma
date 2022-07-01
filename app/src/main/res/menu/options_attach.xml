@@ -5,10 +5,10 @@
             android:id="@+id/gallery"
             android:title="@string/menu_gallery" />
         <item
-            android:id="@+id/camera"
-            android:title="@string/menu_camera" />
+            android:id="@+id/video"
+            android:title="@string/menu_video" />
         <item
             android:id="@+id/audio"
             android:title="@string/menu_audio" />
-    </group>>
+    </group>
 </menu>

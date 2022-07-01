@@ -1,13 +1,17 @@
 package ru.netology.diploma.repository
 
+import android.content.Context
 import android.net.Uri
-import androidx.core.net.toFile
 import androidx.core.net.toUri
 import androidx.paging.*
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import ru.netology.diploma.api.ApiService
 import ru.netology.diploma.dao.PostDao
 import ru.netology.diploma.dao.PostRemoteKeyDao
@@ -34,6 +38,7 @@ class PostRepository @Inject constructor(
     private val postRemoteKeyDao: PostRemoteKeyDao,
     private val appDb: AppDb,
     private val postWorkDao: PostWorkDao,
+    @ApplicationContext private val context: Context
 ) {
 
     @OptIn(ExperimentalPagingApi::class)
@@ -74,11 +79,12 @@ class PostRepository @Inject constructor(
         }
     }
 
-    suspend fun saveWork(post: Post, upload: MediaUpload?): Long {
+    suspend fun saveWork(post: Post, upload: MediaUpload?, type: AttachmentType?): Long {
         try {
             val entity = PostWorkEntity.fromDto(post).apply {
                 if (upload != null) {
-                    this.uri = upload.file.toUri().toString()
+                    this.uri = upload.uri.toString()
+                    this.typeMedia = type?.name.toString()
                 }
             }
             return postWorkDao.insert(entity)
@@ -106,9 +112,17 @@ class PostRepository @Inject constructor(
         try {
             val entity = postWorkDao.getById(id)
             val post = entity.toDto()
-            if (entity.uri != null) {
-                val upload = MediaUpload(Uri.parse(entity.uri).toFile())
-                saveWithAttachment(post, upload)
+            val uri = entity.uri?.toUri()
+            val type = when (entity.typeMedia) {
+                "IMAGE" -> AttachmentType.IMAGE
+                "AUDIO" -> AttachmentType.AUDIO
+                "VIDEO" -> AttachmentType.VIDEO
+                else -> {
+                    null
+                }
+            }
+            if (uri != null && type != null) {
+                saveWithAttachment(post, uri, type)
             } else {
                 save(post)
             }
@@ -135,16 +149,16 @@ class PostRepository @Inject constructor(
         }
     }
 
-    private suspend fun saveWithAttachment(post: Post, upload: MediaUpload, ) {
+    private suspend fun saveWithAttachment(post: Post, uri: Uri, type: AttachmentType) {
         try {
-            val media = upload(upload)
+            val media = upload(uri)
 
             val postWithAttachment = post.copy(
-                        attachment = Attachment(
-                            url = media.url,
-                            type =AttachmentType.IMAGE
-                        )
-                    ) //TODO изменить для друких вложений
+                attachment = Attachment(
+                    url = media.url,
+                    type = type
+                )
+            )
 
             save(postWithAttachment)
         } catch (e: AppError) {
@@ -156,15 +170,21 @@ class PostRepository @Inject constructor(
         }
     }
 
-    private suspend fun upload(upload: MediaUpload): Media {
+    private suspend fun upload(uri: Uri): Media {
         try {
+            val contentProvider = context.contentResolver
+
+            val body = withContext(Dispatchers.IO) {
+                contentProvider?.openInputStream(uri)?.readBytes()
+            }?.toRequestBody("*/*".toMediaType()) ?: error("File not found")
+
             val media = MultipartBody.Part.createFormData(
-                "file",
-                upload.file.name,
-                upload.file.asRequestBody()
+                "file", "name", body
             )
 
             val response = apiService.upload(media)
+
+
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
             }

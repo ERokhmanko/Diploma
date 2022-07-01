@@ -1,23 +1,29 @@
 package ru.netology.diploma.repository
 
+import android.content.Context
 import android.net.Uri
-import androidx.core.net.toFile
 import androidx.core.net.toUri
 import androidx.paging.*
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import ru.netology.diploma.api.ApiService
 import ru.netology.diploma.dao.EventDao
 import ru.netology.diploma.dao.EventRemoteKeyDao
 import ru.netology.diploma.dao.EventWorkDao
-import ru.netology.diploma.dao.UserDao
 import ru.netology.diploma.db.AppDb
-import ru.netology.diploma.dto.*
-import ru.netology.diploma.entity.*
+import ru.netology.diploma.dto.Attachment
+import ru.netology.diploma.dto.Event
+import ru.netology.diploma.dto.Media
+import ru.netology.diploma.dto.MediaUpload
+import ru.netology.diploma.entity.EventEntity
+import ru.netology.diploma.entity.EventWorkEntity
+import ru.netology.diploma.entity.toEntity
 import ru.netology.diploma.enumeration.AttachmentType
 import ru.netology.diploma.error.ApiError
 import ru.netology.diploma.error.AppError
@@ -32,7 +38,8 @@ class EventRepository @Inject constructor(
     eventRemoteKeyDao: EventRemoteKeyDao,
     appDb: AppDb,
     private val eventWorkDao: EventWorkDao,
-    private val userDao: UserDao
+    @ApplicationContext private val context: Context
+
 ) {
 
     @OptIn(ExperimentalPagingApi::class)
@@ -47,26 +54,6 @@ class EventRepository @Inject constructor(
         }
     ).flow
         .map { it.map(EventEntity::toDto) }
-
-    val allUsers = userDao.getAll()
-        .map(List<UserEntity>::toDto)
-        .flowOn(Dispatchers.Default)
-
-
-    suspend fun getAllUsers() {
-        try {
-            val response = apiService.getAllUsers()
-            if (!response.isSuccessful) {
-                throw ApiError(response.code(), response.message())
-            }
-            val body = response.body() ?: throw Exception()
-            userDao.insert(body.toEntity())
-        } catch (e: IOException) {
-            throw NetworkError
-        } catch (e: Exception) {
-            throw UnknownError
-        }
-    }
 
     suspend fun getAll() {
         try {
@@ -83,11 +70,12 @@ class EventRepository @Inject constructor(
         }
     }
 
-    suspend fun saveWork(event: Event, upload: MediaUpload?): Long {
+    suspend fun saveWork(event: Event, upload: MediaUpload?, type: AttachmentType?): Long {
         try {
             val entity = EventWorkEntity.fromDto(event).apply {
                 if (upload != null) {
-                    this.uri = upload.file.toUri().toString()
+                    this.uri = upload.uri.toString()
+                    this.typeMedia = type?.name.toString()
                 }
             }
             return eventWorkDao.insert(entity)
@@ -115,9 +103,17 @@ class EventRepository @Inject constructor(
         try {
             val entity = eventWorkDao.getById(id)
             val event = entity.toDto()
-            if (entity.uri != null) {
-                val upload = MediaUpload(Uri.parse(entity.uri).toFile())
-                saveWithAttachment(event, upload)
+            val uri = entity.uri?.toUri()
+            val type = when (entity.typeMedia) {
+                "IMAGE" -> AttachmentType.IMAGE
+                "AUDIO" -> AttachmentType.AUDIO
+                "VIDEO" -> AttachmentType.VIDEO
+                else -> {
+                    null
+                }
+            }
+            if (uri != null && type != null) {
+                saveWithAttachment(event, uri, type)
             } else {
                 save(event)
             }
@@ -144,17 +140,16 @@ class EventRepository @Inject constructor(
         }
     }
 
-    private suspend fun saveWithAttachment(event: Event, upload: MediaUpload) {
+    private suspend fun saveWithAttachment(event: Event, uri: Uri, type: AttachmentType) {
         try {
-            val media = upload(upload)
+            val media = upload(uri)
 
             val eventWithAttachment = event.copy(
                 attachment = Attachment(
                     url = media.url,
-                    type = AttachmentType.IMAGE
+                    type = type
                 )
-            ) //TODO изменить для друких вложений
-
+            )
             save(eventWithAttachment)
         } catch (e: AppError) {
             throw e
@@ -165,12 +160,17 @@ class EventRepository @Inject constructor(
         }
     }
 
-    private suspend fun upload(upload: MediaUpload): Media {
+    private suspend fun upload(uri: Uri): Media {
         try {
+
+            val contentProvider = context.contentResolver
+
+            val body = withContext(Dispatchers.IO) {
+                contentProvider?.openInputStream(uri)?.readBytes()
+            }?.toRequestBody("*/*".toMediaType()) ?: error("File not found")
+
             val media = MultipartBody.Part.createFormData(
-                "file",
-                upload.file.name,
-                upload.file.asRequestBody()
+                "file", "name", body
             )
 
             val response = apiService.upload(media)

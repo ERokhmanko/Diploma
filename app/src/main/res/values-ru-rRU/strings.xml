@@ -44,7 +44,6 @@
     <string name="remove">Удалить</string>
     <string name="description_post_save">Сохранить</string>
     <string name="menu_gallery">Галерея</string>
-    <string name="menu_camera">Камера</string>
     <string name="menu_audio">Аудио</string>
     <string name="share_post">Поделиться сообщением</string>
     <string name="media_chooser">Выберите приложение</string>
@@ -81,4 +80,5 @@
     <string name="use_card">Извините, Вы не сможете просмотреть карты без разрешения отображения вашей локации</string>
     <string name="decline">Понятно</string>
     <string name="myLocation">Кнопка для определения Вашей локации</string>
+    <string name="menu_video">Видео</string>
 </resources>

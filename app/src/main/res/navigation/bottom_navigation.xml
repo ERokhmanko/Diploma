@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_navigation_main_to_usersBottomSheet"
             app:destination="@id/usersBottomSheet" />
+        <action
+            android:id="@+id/action_navigation_main_to_mapFragment"
+            app:destination="@id/mapFragment" />
     </fragment>
 
     <fragment
@@ -65,6 +68,9 @@
         <action
             android:id="@+id/action_navigation_my_profile_to_navigation_sign_in"
             app:destination="@id/navigation_sign_in" />
+        <action
+            android:id="@+id/action_navigation_my_profile_to_mapFragment"
+            app:destination="@id/mapFragment" />
 
     </fragment>
 
@@ -113,6 +119,9 @@
         <action
             android:id="@+id/action_anotherProfileFragment_to_usersBottomSheet"
             app:destination="@id/usersBottomSheet" />
+        <action
+            android:id="@+id/action_anotherProfileFragment_to_mapFragment"
+            app:destination="@id/mapFragment" />
 
     </fragment>
     <fragment

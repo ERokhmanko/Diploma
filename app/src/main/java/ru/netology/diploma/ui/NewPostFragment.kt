@@ -13,13 +13,13 @@ import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.Glide
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.github.dhaval2404.imagepicker.constant.ImageProvider
 import com.google.android.material.snackbar.Snackbar
 import ru.netology.diploma.R
 import ru.netology.diploma.databinding.FragmentNewPostBinding
 import ru.netology.diploma.dto.Coordinates
+import ru.netology.diploma.enumeration.AttachmentType
 import ru.netology.diploma.utils.Utils
 import ru.netology.diploma.viewmodel.PostViewModel
 
@@ -29,6 +29,8 @@ class NewPostFragment : Fragment() {
     private var fragmentBinding: FragmentNewPostBinding? = null
     private val viewModel: PostViewModel by activityViewModels()
     private var shared: SharedPreferences? = null
+    var type: AttachmentType? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,19 +78,27 @@ class NewPostFragment : Fragment() {
 
         val content = arguments?.getString("content") ?: shared?.getString(keyShared, null)
         val attachment = arguments?.getString("attachment")
+        val attachmentType = arguments?.getString("attachmentType")
         var lat: Double? = null
         var lng: Double? = null
 
         binding.edit.setText(content)
         binding.edit.requestFocus()
 
-        //TODO сделать проверку на тип вложения
         if (attachment != null) {
-            viewModel.changeFile(attachment.toUri())
-            Glide.with(binding.photo)
-                .load(attachment)
-                .timeout(10_000)
-                .into(binding.photo)
+            when (attachmentType) {
+                "IMAGE" -> {
+                    viewModel.changeFile(attachment.toUri(), AttachmentType.IMAGE)
+                    Utils.uploadingMedia(binding.media, attachment)
+                }
+                "AUDIO" -> {
+                    viewModel.changeFile(attachment.toUri(), AttachmentType.AUDIO)
+                }
+                "VIDEO" -> {
+                    viewModel.changeFile(attachment.toUri(), AttachmentType.VIDEO)
+                    Utils.uploadingMedia(binding.media, attachment)
+                }
+            }
         }
 
 
@@ -104,8 +114,15 @@ class NewPostFragment : Fragment() {
                     }
                     Activity.RESULT_OK -> {
                         val uri: Uri? = activityResult.data?.data
-                        viewModel.changeFile(uri)
+                        viewModel.changeFile(uri, type)
                     }
+                }
+            }
+
+        val pickMediaLauncher =
+            registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+                uri?.let {
+                    viewModel.changeFile(it, type)
                 }
             }
 
@@ -120,20 +137,20 @@ class NewPostFragment : Fragment() {
                             ImagePicker.with(view)
                                 .crop()
                                 .compress(2048)
-                                .provider(ImageProvider.GALLERY)
+                                .provider(ImageProvider.BOTH)
                                 .createIntent(pickPhotoLauncher::launch)
+
+                            type = AttachmentType.IMAGE
                             true
                         }
-                        R.id.camera -> {
-                            ImagePicker.with(view)
-                                .crop()
-                                .compress(2048)
-                                .provider(ImageProvider.CAMERA)
-                                .createIntent(pickPhotoLauncher::launch)
+                        R.id.video -> {
+                            pickMediaLauncher.launch("video/*")
+                            type = AttachmentType.VIDEO
                             true
                         }
                         R.id.audio -> {
-                            //TODO
+                            pickMediaLauncher.launch("audio/*")
+                            type = AttachmentType.AUDIO
                             true
                         }
                         else -> false
@@ -142,8 +159,12 @@ class NewPostFragment : Fragment() {
             }.show()
         }
         binding.removeFile.setOnClickListener {
-            viewModel.changeFile(null)
+            viewModel.changeFile(null, null)
         }
+        binding.removeAudio.setOnClickListener {
+            viewModel.changeFile(null, null)
+        }
+
 
         viewModel.postCreated.observe(viewLifecycleOwner) {
             viewModel.loadPosts()
@@ -161,14 +182,27 @@ class NewPostFragment : Fragment() {
 
         viewModel.file.observe(viewLifecycleOwner) {
             if (it.uri == null) {
-                binding.photoContainer.visibility = View.GONE
+                binding.mediaContainer.visibility = View.GONE
+                binding.audioContainer.visibility = View.GONE
+
                 return@observe
             }
 
-            binding.photoContainer.visibility = View.VISIBLE
-            binding.photo.setImageURI(it.uri)
-
-            //TODO сделать для аудио
+            when (it.type) {
+                AttachmentType.IMAGE -> {
+                    binding.mediaContainer.visibility = View.VISIBLE
+                    binding.media.setImageURI(it.uri)
+                }
+                AttachmentType.AUDIO -> {
+                    binding.audioContainer.visibility = View.VISIBLE
+                }
+                AttachmentType.VIDEO -> {
+                    binding.mediaContainer.visibility = View.VISIBLE
+                    Utils.uploadingMedia(binding.media, it.uri.toString())
+                }
+                else -> {
+                    error("Unknown attachment type")}
+            }
         }
 
         viewModel.edited.observe(viewLifecycleOwner) {
@@ -203,5 +237,9 @@ class NewPostFragment : Fragment() {
 
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.changeFile(null, null)
+    }
 
 }

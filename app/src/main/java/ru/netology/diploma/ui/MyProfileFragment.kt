@@ -84,6 +84,7 @@ class MyProfileFragment : Fragment() {
                 postViewModel.edit(post)
                 bundle.putString("content", post.content)
                 bundle.putString("attachment", post.attachment?.url)
+                bundle.putString("attachmentType", post.attachment?.type?.name.toString())
                 findNavController().navigate(
                     R.id.action_navigation_profile_to_newPostFragment,
                     bundle
@@ -100,6 +101,14 @@ class MyProfileFragment : Fragment() {
                 startActivity(videoIntent)
             }
 
+            override fun onMap(post: Post) {
+                post.coords?.lat?.let { bundle.putDouble("lat", it) }
+                post.coords?.long?.let { bundle.putDouble("lng", it) }
+                findNavController().navigate(
+                    R.id.action_navigation_my_profile_to_mapFragment,
+                    bundle
+                )
+            }
 
             override fun onRepost(post: Post) {
 
@@ -128,7 +137,7 @@ class MyProfileFragment : Fragment() {
                 findNavController().navigate(R.id.action_navigation_my_profile_to_usersBottomSheet)
             }
 
-            override fun onlikeOwner(post: Post) {
+            override fun onLikeOwner(post: Post) {
                 userViewModel.getUsersIds(post.likeOwnerIds)
                 findNavController().navigate(R.id.action_navigation_my_profile_to_usersBottomSheet)
             }

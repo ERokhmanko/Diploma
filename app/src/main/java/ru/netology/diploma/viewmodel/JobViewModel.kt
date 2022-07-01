@@ -1,6 +1,5 @@
 package ru.netology.diploma.viewmodel
 
-import android.util.Log
 import android.util.Patterns
 import androidx.lifecycle.*
 import androidx.work.*
@@ -9,9 +8,7 @@ import kotlinx.coroutines.launch
 import ru.netology.diploma.R
 import ru.netology.diploma.auth.AppAuth
 import ru.netology.diploma.dto.Job
-import ru.netology.diploma.enumeration.EventType
 import ru.netology.diploma.enumeration.RetryType
-import ru.netology.diploma.model.EventFormState
 import ru.netology.diploma.model.JobsModelState
 import ru.netology.diploma.repository.JobRepository
 import ru.netology.diploma.ui.USER_ID

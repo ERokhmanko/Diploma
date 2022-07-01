@@ -1,6 +1,5 @@
 package ru.netology.diploma.ui
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -13,7 +12,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import ru.netology.diploma.R
@@ -21,7 +19,6 @@ import ru.netology.diploma.adapter.PostCallback
 import ru.netology.diploma.adapter.PostLoadStateAdapter
 import ru.netology.diploma.adapter.PostsAdapter
 import ru.netology.diploma.databinding.FragmentHomeBinding
-import ru.netology.diploma.dto.Event
 import ru.netology.diploma.dto.Post
 import ru.netology.diploma.viewmodel.JobViewModel
 import ru.netology.diploma.viewmodel.PostViewModel
@@ -69,6 +66,7 @@ class HomeFragment : Fragment() {
                 viewModel.edit(post)
                 bundle.putString("content", post.content)
                 bundle.putString("attachment", post.attachment?.url)
+                bundle.putString("attachmentType", post.attachment?.type?.name.toString())
                 findNavController().navigate(R.id.action_navigation_main_to_newPostFragment, bundle)
             }
 
@@ -106,13 +104,20 @@ class HomeFragment : Fragment() {
                 findNavController().navigate(R.id.action_navigation_main_to_usersBottomSheet)
             }
 
+            override fun onMap(post: Post) {
+                post.coords?.lat?.let { bundle.putDouble("lat", it) }
+                post.coords?.long?.let { bundle.putDouble("lng", it) }
+                findNavController().navigate(R.id.action_navigation_main_to_mapFragment, bundle)
+            }
+
             override fun onAudio(post: Post) {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(post.attachment?.url))
                 val audioIntent = Intent.createChooser(intent, getString(R.string.media_chooser))
-                startActivity(audioIntent) //TODO переделать
+                startActivity(audioIntent)
+
             }
 
-            override fun onlikeOwner(post: Post) {
+            override fun onLikeOwner(post: Post) {
                 userViewModel.getUsersIds(post.likeOwnerIds)
                 findNavController().navigate(R.id.action_navigation_main_to_usersBottomSheet)
             }
@@ -143,6 +148,12 @@ class HomeFragment : Fragment() {
         }
 
         binding.swipeRefresh.setOnRefreshListener(adapter::refresh)
+
+        viewModel.dataState.observe(viewLifecycleOwner) { state ->
+            if (state.error) {
+                Toast.makeText(context, R.string.error_loading, Toast.LENGTH_SHORT).show()
+            }
+        }
         return binding.root
     }
 }

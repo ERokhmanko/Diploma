@@ -2,7 +2,6 @@ package ru.netology.diploma.dao
 
 import androidx.room.TypeConverter
 import ru.netology.diploma.enumeration.AttachmentType
-import ru.netology.diploma.enumeration.EventType
 
 class Converters {
     @TypeConverter

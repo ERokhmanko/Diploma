@@ -28,7 +28,6 @@ import ru.netology.diploma.ui.USER_ID
 import ru.netology.diploma.utils.SingleLiveEvent
 import ru.netology.diploma.work.RemovePostWorker
 import ru.netology.diploma.work.SavePostWorker
-import java.io.InputStream
 import java.time.Instant
 import javax.inject.Inject
 import kotlin.random.Random
@@ -84,7 +83,7 @@ class PostViewModel @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     val userWall: Flow<PagingData<FeedItem>> = appAuth.authStateFlow
         .flatMapLatest { (myId, _) ->
-            repository.userWall(stateHandle.get(USER_ID) ?: myId).map { pagingData ->
+            repository.userWall(stateHandle[USER_ID] ?: myId).map { pagingData ->
                 pagingData.map { post ->
                     post.copy(
                         ownedByMe = post.authorId == myId,
@@ -114,8 +113,6 @@ class PostViewModel @Inject constructor(
     private val hidePosts = mutableSetOf<Post>()
 
     private var _mentorsId: MutableSet<Long> = mutableSetOf()
-    val mentorsId: Set<Long>
-        get() = _mentorsId
 
     init {
         loadPosts()
@@ -138,7 +135,7 @@ class PostViewModel @Inject constructor(
             viewModelScope.launch {
                 try {
                     val id = repository.saveWork(
-                        it, _file.value?.file?.let { MediaUpload(it) }
+                        it, _file.value?.uri?.let { MediaUpload(it) }, _file.value?.type
                     )
                     val data = workDataOf(SavePostWorker.postKey to id)
                     val constraints = Constraints.Builder()
@@ -214,8 +211,8 @@ class PostViewModel @Inject constructor(
         }
     }
 
-    fun changeFile(uri: Uri?) {
-        _file.value = FileModel(uri)
+    fun changeFile(uri: Uri?, type: AttachmentType?) {
+        _file.value = FileModel(uri, type)
         edited.value?.let {
             _edited.value = it.copy(
                 attachment = null

@@ -1,7 +1,6 @@
 package ru.netology.diploma.model
 
 import ru.netology.diploma.dto.Event
-import ru.netology.diploma.dto.Post
 import ru.netology.diploma.enumeration.RetryType
 
 data class EventModelState(

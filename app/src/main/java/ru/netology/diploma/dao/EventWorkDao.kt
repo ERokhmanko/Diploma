@@ -6,7 +6,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy.REPLACE
 import androidx.room.Query
 import ru.netology.diploma.entity.EventWorkEntity
-import ru.netology.diploma.entity.PostWorkEntity
 
 @Dao
 interface EventWorkDao {

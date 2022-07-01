@@ -49,7 +49,7 @@
     <string name="attach">Button for adding multimedia</string>
     <string name="mentions">Button to add a mentor</string>
     <string name="menu_gallery">Gallery</string>
-    <string name="menu_camera">Camera</string>
+    <string name="menu_video">Video</string>
     <string name="menu_audio">Audio</string>
     <string name="share_post">Share post</string>
     <string name="share_event">Share event</string>

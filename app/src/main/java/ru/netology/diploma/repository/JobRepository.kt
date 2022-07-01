@@ -1,20 +1,12 @@
 package ru.netology.diploma.repository
 
-import android.net.Uri
-import androidx.core.net.toFile
-import androidx.core.net.toUri
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
 import ru.netology.diploma.api.ApiService
 import ru.netology.diploma.dao.JobDao
 import ru.netology.diploma.dao.JobWorkDao
-import ru.netology.diploma.dao.PostWorkDao
 import ru.netology.diploma.dto.Job
-import ru.netology.diploma.dto.MediaUpload
-import ru.netology.diploma.dto.Post
-import ru.netology.diploma.entity.*
+import ru.netology.diploma.entity.JobEntity
+import ru.netology.diploma.entity.JobWorkEntity
+import ru.netology.diploma.entity.toEntity
 import ru.netology.diploma.error.ApiError
 import ru.netology.diploma.error.NetworkError
 import ru.netology.diploma.error.UnknownError
@@ -93,21 +85,6 @@ class JobRepository @Inject constructor(
         } catch (e: Exception) {
             throw UnknownError
         }
-    }
-
-    suspend fun getMyJobs() {
-            try {
-                val response = apiService.getMyJobs()
-                if (!response.isSuccessful) {
-                    throw ApiError(response.code(), response.message())
-                }
-                val body = response.body() ?: throw Exception()
-                jobDao.insert(body.toEntity())
-            } catch (e: IOException) {
-                throw NetworkError
-            } catch (e: Exception) {
-                throw UnknownError
-            }
     }
 
 }

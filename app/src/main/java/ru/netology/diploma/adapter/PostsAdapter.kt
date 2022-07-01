@@ -6,21 +6,19 @@ import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.core.view.isVisible
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.map
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import okio.utf8Size
 import ru.netology.diploma.R
 import ru.netology.diploma.databinding.CardAdBinding
 import ru.netology.diploma.databinding.CardPostBinding
 import ru.netology.diploma.dto.*
 import ru.netology.diploma.enumeration.AttachmentType
-import ru.netology.diploma.extensions.load
 import ru.netology.diploma.model.UserModel
 import ru.netology.diploma.utils.Utils
 import ru.netology.diploma.utils.Utils.formatDate
+import ru.netology.diploma.utils.Utils.uploadingMedia
 
 interface PostCallback {
     fun onLike(post: Post)
@@ -31,8 +29,9 @@ interface PostCallback {
     fun onVideo(post: Post)
     fun onRepost(post: Post)
     fun onAudio(post: Post)
-    fun onlikeOwner(post: Post)
+    fun onLikeOwner(post: Post)
     fun onMentors(post: Post)
+    fun onMap(post: Post)
 }
 
 class PostsAdapter(
@@ -82,8 +81,7 @@ class AdViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(ad: Ad) {
-        binding.imageAd.load(ad.name)
-
+        uploadingMedia(binding.imageAd, ad.name)
     }
 }
 
@@ -163,17 +161,12 @@ class PostViewHolder(
 
             when (post.attachment?.type) {
                 AttachmentType.IMAGE -> {
-                    Glide.with(imageView)
-                        .load(post.attachment.url)
-                        .timeout(10_000)
-                        .into(imageView)
+                    uploadingMedia(imageView, post.attachment.url)
                 }
                 AttachmentType.VIDEO -> {
-                    // TODO загрузка видео
+                    uploadingMedia(videoView, post.attachment.url)
                 }
-                AttachmentType.AUDIO -> {
-                    // TODO загрузка аудио
-                }
+
             }
             imageView.isVisible = post.attachment?.type == AttachmentType.IMAGE
             groupMedia.isVisible = post.attachment?.type == AttachmentType.VIDEO
@@ -200,15 +193,15 @@ class PostViewHolder(
             }
 
             headerIconLike.setOnClickListener {
-                postCallback.onlikeOwner(post)
+                postCallback.onLikeOwner(post)
             }
 
             firstLike.setOnClickListener {
-                postCallback.onlikeOwner(post)
+                postCallback.onLikeOwner(post)
             }
 
             secondLike.setOnClickListener {
-                postCallback.onlikeOwner(post)
+                postCallback.onLikeOwner(post)
             }
 
             moreMentors.setOnClickListener {
@@ -217,6 +210,10 @@ class PostViewHolder(
 
             mentorsEdit.setOnClickListener {
                 postCallback.onMentors(post)
+            }
+
+            coord.setOnClickListener {
+                postCallback.onMap(post)
             }
 
             menu.setOnClickListener { view ->

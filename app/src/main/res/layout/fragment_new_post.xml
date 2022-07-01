@@ -26,15 +26,17 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:inputType="textMultiLine"
-                android:padding="@dimen/padding_new_post" />
+                android:padding="@dimen/padding_new_post"
+                tools:ignore="Autofill,LabelFor" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/photoContainer"
+                android:id="@+id/mediaContainer"
                 android:layout_width="match_parent"
+                android:visibility="gone"
                 android:layout_height="wrap_content">
 
                 <ImageView
-                    android:id="@+id/photo"
+                    android:id="@+id/media"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                    app:layout_constraintStart_toStartOf="parent"
@@ -53,6 +55,33 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/audioContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/audio"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:contentDescription="@string/description_photo"
+                    android:src="@drawable/ic_baseline_music_note_24"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/removeAudio"
+                    style="@style/Widget.App.Button.OutlinedButton.IconOnly"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:icon="@drawable/ic_baseline_close_24"
+                    app:layout_constraintStart_toEndOf="@+id/audio"
+                    app:layout_constraintTop_toTopOf="@+id/audio" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
         </LinearLayout>
     </ScrollView>
 

@@ -4,8 +4,10 @@ import android.net.Uri
 import android.os.Build
 import android.util.Patterns
 import androidx.annotation.RequiresApi
-import androidx.core.net.toFile
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.filter
 import androidx.paging.insertSeparators
@@ -22,9 +24,12 @@ import kotlinx.coroutines.launch
 import ru.netology.diploma.R
 import ru.netology.diploma.auth.AppAuth
 import ru.netology.diploma.dto.*
+import ru.netology.diploma.enumeration.AttachmentType
 import ru.netology.diploma.enumeration.EventType
 import ru.netology.diploma.enumeration.RetryType
-import ru.netology.diploma.model.*
+import ru.netology.diploma.model.EventFormState
+import ru.netology.diploma.model.EventModelState
+import ru.netology.diploma.model.FileModel
 import ru.netology.diploma.repository.EventRepository
 import ru.netology.diploma.utils.SingleLiveEvent
 import ru.netology.diploma.work.RemoveEventWorker
@@ -97,8 +102,6 @@ class EventViewModel @Inject constructor(
         get() = _edited
 
     private var _speakersId: MutableSet<Long> = mutableSetOf()
-    val speakersId: Set<Long>
-        get() = _speakersId
 
     private val _eventCreated = SingleLiveEvent<Unit>()
     val eventCreated: LiveData<Unit>
@@ -135,7 +138,7 @@ class EventViewModel @Inject constructor(
             viewModelScope.launch {
                 try {
                     val id = repository.saveWork(
-                        it, _file.value?.uri?.let { MediaUpload(it.toFile()) }
+                        it, _file.value?.uri?.let { MediaUpload(it) }, _file.value?.type
                     )
                     val data = workDataOf(SaveEventWorker.eventKey to id)
                     val constraints = Constraints.Builder()
@@ -242,8 +245,8 @@ class EventViewModel @Inject constructor(
         }
     }
 
-    fun changeFile(uri: Uri?) {
-        _file.value = FileModel(uri)
+    fun changeFile(uri: Uri?, type: AttachmentType?) {
+        _file.value = FileModel(uri, type)
 
         _edited.value?.let {
             _edited.value = it.copy(

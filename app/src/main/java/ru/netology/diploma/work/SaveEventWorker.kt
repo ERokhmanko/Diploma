@@ -7,7 +7,6 @@ import androidx.work.WorkerParameters
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import ru.netology.diploma.repository.EventRepository
-import ru.netology.diploma.repository.PostRepository
 
 
 @HiltWorker

@@ -5,8 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import ru.netology.diploma.R
 import ru.netology.diploma.databinding.CardUserBinding
 import ru.netology.diploma.dto.User
 import ru.netology.diploma.extensions.addAllOnClickListener

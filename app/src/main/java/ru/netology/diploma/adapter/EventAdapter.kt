@@ -1,6 +1,5 @@
 package ru.netology.diploma.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,8 +9,6 @@ import androidx.lifecycle.LiveData
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import okhttp3.HttpUrl.Companion.toHttpUrl
 import okio.utf8Size
 import ru.netology.diploma.R
 import ru.netology.diploma.databinding.CardAdBinding
@@ -37,7 +34,7 @@ interface EventCallback {
     fun onAudio(event: Event)
     fun onLink(event: Event)
     fun onSpeakers(event: Event)
-    fun onlikeOwner(event: Event)
+    fun onLikeOwner(event: Event)
     fun onParticipants(event: Event)
     fun onMap(event: Event)
 }
@@ -187,23 +184,15 @@ class EventViewHolder(
                 }
             }
 
-
-
-
             when (event.attachment?.type) {
                 AttachmentType.IMAGE -> {
-                    Glide.with(imageView)
-                        .load(event.attachment.url)
-                        .timeout(10_000)
-                        .into(imageView)
+                    Utils.uploadingMedia(imageView, event.attachment.url)
                 }
                 AttachmentType.VIDEO -> {
-                    // TODO загрузка видео
-                }
-                AttachmentType.AUDIO -> {
-                    // TODO загрузка аудио
+                    Utils.uploadingMedia(videoView, event.attachment.url)
                 }
             }
+
             imageView.isVisible = event.attachment?.type == AttachmentType.IMAGE
             groupMedia.isVisible = event.attachment?.type == AttachmentType.VIDEO
             groupAudio.isVisible = event.attachment?.type == AttachmentType.AUDIO
@@ -216,7 +205,6 @@ class EventViewHolder(
 
             coordinates.setOnClickListener {
                 eventCallback.onMap(event)
-                //TODO придумать реализацию по переходу на карту по координатам event.coordinates
             }
 
             like.setOnClickListener {
@@ -248,15 +236,15 @@ class EventViewHolder(
             }
 
             headerIconLike.setOnClickListener {
-                eventCallback.onlikeOwner(event)
+                eventCallback.onLikeOwner(event)
             }
 
             firstLike.setOnClickListener {
-                eventCallback.onlikeOwner(event)
+                eventCallback.onLikeOwner(event)
             }
 
             secondLike.setOnClickListener {
-                eventCallback.onlikeOwner(event)
+                eventCallback.onLikeOwner(event)
             }
 
             headerIconParticipants.setOnClickListener {

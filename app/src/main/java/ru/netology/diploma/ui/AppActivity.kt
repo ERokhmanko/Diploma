@@ -1,6 +1,5 @@
 package ru.netology.diploma.ui
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -20,6 +19,7 @@ import ru.netology.diploma.viewmodel.AuthViewModel
 class AppActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val viewModelAuth: AuthViewModel by viewModels()
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {

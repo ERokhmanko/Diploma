@@ -12,20 +12,18 @@ import android.widget.ArrayAdapter
 import android.widget.PopupMenu
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.edit
-import androidx.core.net.toFile
 import androidx.core.net.toUri
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.Glide
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.github.dhaval2404.imagepicker.constant.ImageProvider
 import com.google.android.material.snackbar.Snackbar
 import ru.netology.diploma.R
 import ru.netology.diploma.databinding.FragmentNewEventBinding
 import ru.netology.diploma.dto.Coordinates
+import ru.netology.diploma.enumeration.AttachmentType
 import ru.netology.diploma.enumeration.EventType
 import ru.netology.diploma.extensions.afterTextChanged
 import ru.netology.diploma.utils.Utils
@@ -43,6 +41,7 @@ class NewEventFragment : Fragment() {
     private val userViewModel: UserViewModel by activityViewModels()
     private var shared: SharedPreferences? = null
     private var format: EventType = EventType.ONLINE
+    var type: AttachmentType? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,7 +93,7 @@ class NewEventFragment : Fragment() {
                                 dateTime = dateTime,
                                 format = format,
                                 link = link,
-                                coord = if (!coordLatLong.isNullOrEmpty()) Coordinates(
+                                coord = if (coordText.isNotEmpty()) Coordinates(
                                     coordLatLong[0].toDouble(),
                                     coordLatLong[1].toDouble()
                                 ) else null,
@@ -143,6 +142,8 @@ class NewEventFragment : Fragment() {
         val link = arguments?.getString("link") ?: shared?.getString(keyLink, null)
 
         val attachment = arguments?.getString("attachment")
+        val attachmentType = arguments?.getString("attachmentType")
+
         var lat: Double? = null
         var lng: Double? = null
 
@@ -151,13 +152,20 @@ class NewEventFragment : Fragment() {
         binding.timeEdit.setText(time)
         binding.linkEdit.setText(link)
 
-        //TODO сделать проверку на тип вложения
         if (attachment != null) {
-            eventViewModel.changeFile(attachment.toUri())
-            Glide.with(binding.photo)
-                .load(attachment)
-                .timeout(10_000)
-                .into(binding.photo)
+            when (attachmentType) {
+                "IMAGE" -> {
+                    eventViewModel.changeFile(attachment.toUri(), AttachmentType.IMAGE)
+                    Utils.uploadingMedia(binding.media, attachment)
+                }
+                "AUDIO" -> {
+                    eventViewModel.changeFile(attachment.toUri(), AttachmentType.AUDIO)
+                }
+                "VIDEO" -> {
+                    eventViewModel.changeFile(attachment.toUri(), AttachmentType.VIDEO)
+                    Utils.uploadingMedia(binding.media, attachment)
+                }
+            }
         }
 
         binding.edit.requestFocus()
@@ -235,9 +243,16 @@ class NewEventFragment : Fragment() {
                     }
                     Activity.RESULT_OK -> {
                         val uri: Uri? = it.data?.data
-                        eventViewModel.changeFile(uri)
+                        eventViewModel.changeFile(uri, type)
 
                     }
+                }
+            }
+
+        val pickMediaLauncher =
+            registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+                uri?.let {
+                    eventViewModel.changeFile(it, type)
                 }
             }
 
@@ -251,20 +266,18 @@ class NewEventFragment : Fragment() {
                             ImagePicker.with(view)
                                 .crop()
                                 .compress(2048)
-                                .provider(ImageProvider.GALLERY)
+                                .provider(ImageProvider.BOTH)
                                 .createIntent(pickPhotoLauncher::launch)
                             true
                         }
-                        R.id.camera -> {
-                            ImagePicker.with(view)
-                                .crop()
-                                .compress(2048)
-                                .provider(ImageProvider.CAMERA)
-                                .createIntent(pickPhotoLauncher::launch)
+                        R.id.video -> {
+                            pickMediaLauncher.launch("video/*")
+                            type = AttachmentType.VIDEO
                             true
                         }
                         R.id.audio -> {
-                            //TODO
+                            pickMediaLauncher.launch("audio/*")
+                            type = AttachmentType.AUDIO
                             true
                         }
                         else -> false
@@ -273,9 +286,12 @@ class NewEventFragment : Fragment() {
             }.show()
         }
         binding.removeFile.setOnClickListener {
-            eventViewModel.changeFile(null)
+            eventViewModel.changeFile(null, null)
         }
 
+        binding.removeAudio.setOnClickListener {
+            eventViewModel.changeFile(null, null)
+        }
 
         eventViewModel.eventCreated.observe(viewLifecycleOwner) {
             eventViewModel.loadEvents()
@@ -286,15 +302,28 @@ class NewEventFragment : Fragment() {
 
         eventViewModel.file.observe(viewLifecycleOwner) {
             if (it.uri == null) {
-                binding.photoContainer.visibility = View.GONE
+                binding.mediaContainer.visibility = View.GONE
+                binding.audioContainer.visibility = View.GONE
                 return@observe
             }
-            binding.photoContainer.visibility = View.VISIBLE
-            binding.photo.setImageURI(it.uri)
 
+            when (it.type) {
+                AttachmentType.IMAGE -> {
+                    binding.mediaContainer.visibility = View.VISIBLE
+                    binding.media.setImageURI(it.uri)
+                }
+                AttachmentType.AUDIO -> {
+                    binding.audioContainer.visibility = View.VISIBLE
+                }
+                AttachmentType.VIDEO -> {
+                    binding.mediaContainer.visibility = View.VISIBLE
+                    Utils.uploadingMedia(binding.media, it.uri.toString())
+                }
+                else -> {
+                    error("Unknown attachment type")
+                }
+            }
         }
-
-        //TODO сделать для аудио
 
         binding.dateEdit.setOnClickListener {
             binding.dateEdit.error = null
@@ -354,6 +383,11 @@ class NewEventFragment : Fragment() {
         return binding.root
 
 
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        eventViewModel.changeFile(null, null)
     }
 
 }

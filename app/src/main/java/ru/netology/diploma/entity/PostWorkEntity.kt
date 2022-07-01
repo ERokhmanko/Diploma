@@ -3,10 +3,7 @@ package ru.netology.diploma.entity
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import ru.netology.diploma.dto.Attachment
-import ru.netology.diploma.dto.Coordinates
 import ru.netology.diploma.dto.Post
-import ru.netology.diploma.enumeration.AttachmentType
 
 @Entity
 data class PostWorkEntity(
@@ -28,7 +25,8 @@ data class PostWorkEntity(
     @Embedded
     val attachment: AttachmentEmbeddable? = null,
     val ownedByMe: Boolean = false,
-    var uri: String? = null
+    var uri: String? = null,
+    var typeMedia: String? = null
 
 ) {
     fun toDto() = Post(

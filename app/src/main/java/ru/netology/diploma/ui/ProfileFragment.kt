@@ -28,7 +28,7 @@ import ru.netology.diploma.viewmodel.UserViewModel
 
 
 @AndroidEntryPoint
-class ProfileFragment() : Fragment() {
+class ProfileFragment : Fragment() {
 
     private val postViewModel: PostViewModel by viewModels()
     private val userViewModel: UserViewModel by viewModels()
@@ -43,6 +43,7 @@ class ProfileFragment() : Fragment() {
 
 
         val binding = FragmentProfileBinding.inflate(inflater, container, false)
+        val bundle = Bundle()
         binding.buttonLogout.visibility = View.GONE
 
         userViewModel.user.observe(viewLifecycleOwner) {
@@ -103,9 +104,18 @@ class ProfileFragment() : Fragment() {
                 findNavController().navigate(R.id.action_anotherProfileFragment_to_usersBottomSheet)
             }
 
-            override fun onlikeOwner(post: Post) {
+            override fun onLikeOwner(post: Post) {
                 userViewModel.getUsersIds(post.likeOwnerIds)
                 findNavController().navigate(R.id.action_anotherProfileFragment_to_usersBottomSheet)
+            }
+
+            override fun onMap(post: Post) {
+                post.coords?.lat?.let { bundle.putDouble("lat", it) }
+                post.coords?.long?.let { bundle.putDouble("lng", it) }
+                findNavController().navigate(
+                    R.id.action_anotherProfileFragment_to_mapFragment,
+                    bundle
+                )
             }
         }, userViewModel.data, jobViewModel.jobData)
 

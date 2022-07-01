@@ -1,7 +1,6 @@
 package ru.netology.diploma.work
 
 import android.content.Context
-import android.util.Log
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
@@ -10,7 +9,6 @@ import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import ru.netology.diploma.repository.EventRepository
-import ru.netology.diploma.repository.PostRepository
 
 @HiltWorker
 class RefreshEventsWorker @AssistedInject constructor(

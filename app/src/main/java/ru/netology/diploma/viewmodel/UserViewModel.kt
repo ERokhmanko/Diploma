@@ -29,7 +29,7 @@ class UserViewModel @Inject constructor(
             )
         }.asLiveData(Dispatchers.Default)
 
-    private var profileId = stateHandle.get(USER_ID) ?: appAuth.authStateFlow.value.id
+    private var profileId = stateHandle[USER_ID] ?: appAuth.authStateFlow.value.id
 
     val user = MutableLiveData<User>()
 

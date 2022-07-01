@@ -3,7 +3,6 @@ package ru.netology.diploma.entity
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import ru.netology.diploma.dto.Job
-import ru.netology.diploma.dto.User
 
 
 @Entity

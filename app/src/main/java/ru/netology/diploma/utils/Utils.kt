@@ -5,25 +5,20 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
 import android.text.format.DateFormat
-import android.text.format.DateFormat.is24HourFormat
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import com.bumptech.glide.Glide
-import com.google.android.material.timepicker.MaterialTimePicker
-import com.google.android.material.timepicker.TimeFormat
 import ru.netology.diploma.R
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
-import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.*
 import java.util.stream.Collectors
-import kotlin.collections.AbstractCollection
 
 object Utils {
 
@@ -70,6 +65,13 @@ object Utils {
             .load(avatar)
             .circleCrop()
             .placeholder(R.drawable.ic_baseline_avatar_24)
+            .timeout(10_000)
+            .into(view)
+    }
+
+    fun uploadingMedia(view: ImageView, url: String?) {
+        Glide.with(view)
+            .load(url)
             .timeout(10_000)
             .into(view)
     }

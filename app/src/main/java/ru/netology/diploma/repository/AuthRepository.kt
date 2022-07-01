@@ -1,8 +1,11 @@
 package ru.netology.diploma.repository
 
+import android.content.Context
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import ru.netology.diploma.api.ApiService
 import ru.netology.diploma.dto.AuthState
@@ -19,7 +22,8 @@ import javax.inject.Inject
  */
 
 class AuthRepository @Inject constructor(
-    private val apiService: ApiService
+    private val apiService: ApiService,
+    @ApplicationContext private val context: Context
 ) {
     suspend fun authUser(login: String, password: String): AuthState {
         try {
@@ -40,13 +44,19 @@ class AuthRepository @Inject constructor(
         login: String,
         password: String,
         name: String,
-        file: MediaUpload
+        mediaUpload: MediaUpload
     ): AuthState {
         try {
+
+            val contentProvider = context.contentResolver
+            val body = withContext(Dispatchers.IO) {
+                contentProvider?.openInputStream(mediaUpload.uri)?.readBytes()
+            }?.toRequestBody() ?: error("File not found")
+
             val media = MultipartBody.Part.createFormData(
                 "file",
-                file.file.name,
-                file.file.asRequestBody()
+                "name",
+                body
             )
 
             val response = apiService.registrationUserWithAvatar(

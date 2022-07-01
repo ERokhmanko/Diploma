@@ -1,17 +1,19 @@
 package ru.netology.diploma.viewmodel
 
 import android.net.Uri
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.netology.diploma.R
 import ru.netology.diploma.auth.AppAuth
 import ru.netology.diploma.dto.AuthState
 import ru.netology.diploma.dto.MediaUpload
-import ru.netology.diploma.model.LoginFormState
 import ru.netology.diploma.model.FileModel
+import ru.netology.diploma.model.LoginFormState
 import ru.netology.diploma.repository.AuthRepository
-import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -52,7 +54,7 @@ class AuthViewModel @Inject constructor
     fun registrationUser(login: String, password: String, name: String) {
         viewModelScope.launch {
             try {
-                val user = _photo.value?.file?.let {
+                val user = _photo.value?.uri?.let {
                     MediaUpload(it)
                 }
                     .run {
@@ -79,7 +81,7 @@ class AuthViewModel @Inject constructor
         return password.length >= 5
     }
 
-    fun changePhoto(uri: Uri?, file: File?) {
-        _photo.value = FileModel(uri, file)
+    fun changePhoto(uri: Uri?) {
+        _photo.value = FileModel(uri)
     }
 }

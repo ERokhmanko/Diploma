@@ -1,7 +1,6 @@
 package ru.netology.diploma.dto
 
 import ru.netology.diploma.enumeration.EventType
-import java.time.Instant
 
 data class Event(
     override val id: Long,

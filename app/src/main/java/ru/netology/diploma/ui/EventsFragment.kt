@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.net.toUri
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -14,14 +14,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import okhttp3.HttpUrl.Companion.toHttpUrl
 import ru.netology.diploma.R
 import ru.netology.diploma.adapter.EventCallback
 import ru.netology.diploma.adapter.EventsAdapter
 import ru.netology.diploma.adapter.PostLoadStateAdapter
 import ru.netology.diploma.databinding.FragmentEventsBinding
 import ru.netology.diploma.dto.Event
-import ru.netology.diploma.enumeration.AttachmentType
 import ru.netology.diploma.viewmodel.EventViewModel
 import ru.netology.diploma.viewmodel.UserViewModel
 
@@ -75,6 +73,8 @@ class EventsFragment : Fragment() {
                     event.coords?.lat?.let { putDouble("lat", it) }
                     event.coords?.long?.let { putDouble("lng", it) }
                     putString("attachment", event.attachment?.url)
+                    putString("attachmentType", event.attachment?.type?.name.toString())
+
                 }
 
                 findNavController().navigate(
@@ -97,7 +97,7 @@ class EventsFragment : Fragment() {
             override fun onAudio(event: Event) {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(event.attachment?.url))
                 val audioIntent = Intent.createChooser(intent, getString(R.string.media_chooser))
-                startActivity(audioIntent)  //TODO переделать
+                startActivity(audioIntent)
             }
 
             override fun onLink(event: Event) {
@@ -114,7 +114,7 @@ class EventsFragment : Fragment() {
                 findNavController().navigate(R.id.action_navigation_events_to_usersBottomSheet)
             }
 
-            override fun onlikeOwner(event: Event) {
+            override fun onLikeOwner(event: Event) {
                 userViewModel.getUsersIds(event.likeOwnerIds)
                 findNavController().navigate(R.id.action_navigation_events_to_usersBottomSheet)
             }
@@ -141,6 +141,12 @@ class EventsFragment : Fragment() {
             })
 
         binding.swipeRefresh.setOnRefreshListener(adapter::refresh)
+
+        eventViewModel.dataState.observe(viewLifecycleOwner) { state ->
+            if (state.error) {
+                Toast.makeText(context, R.string.error_loading, Toast.LENGTH_SHORT).show()
+            }
+        }
 
         lifecycleScope.launchWhenCreated {
             eventViewModel.data.collectLatest {

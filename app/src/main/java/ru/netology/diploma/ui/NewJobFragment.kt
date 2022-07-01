@@ -1,7 +1,6 @@
 package ru.netology.diploma.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -15,7 +14,6 @@ import ru.netology.diploma.utils.Utils.dateToEpochSec
 import ru.netology.diploma.utils.Utils.formatDate
 import ru.netology.diploma.utils.Utils.showDateDialog
 import ru.netology.diploma.viewmodel.JobViewModel
-import java.time.Instant
 
 
 class NewJobFragment : Fragment() {

@@ -4,7 +4,6 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import ru.netology.diploma.dto.Event
-import ru.netology.diploma.enumeration.EventType
 
 @Entity
 data class EventWorkEntity(
@@ -30,7 +29,8 @@ data class EventWorkEntity(
     val attachment: AttachmentEmbeddable? = null,
     val link: String? = null,
     val ownedByMe: Boolean = false,
-    var uri: String? = null
+    var uri: String? = null,
+    var typeMedia: String? = null
 ) {
     fun toDto() = Event(
         id, authorId, author, authorAvatar,
