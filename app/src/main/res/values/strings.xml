@@ -55,7 +55,7 @@
     <string name="share_event">Share event</string>
     <string name="media_chooser">Select an application</string>
     <string name="period_of_work" translatable="false">%1$s - %2$s </string>
-    <string name="coordinates" translatable="false">%1$f %2$f </string>
+    <string name="coordinates" translatable="false">%1$s %2$s </string>
     <string name="start_of_work" translatable="false">%1$s</string>
     <string name="empty_jobs">The user has not yet specified a place of work</string>
     <string name="dateEvent">Date of the event</string>

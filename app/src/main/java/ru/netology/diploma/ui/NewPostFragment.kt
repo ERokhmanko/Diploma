@@ -30,7 +30,8 @@ class NewPostFragment : Fragment() {
     private val viewModel: PostViewModel by activityViewModels()
     private var shared: SharedPreferences? = null
     var type: AttachmentType? = null
-
+    var lat: Double? = null
+    var lng: Double? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,19 +43,17 @@ class NewPostFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val lat = if (arguments?.getDouble("lat") == 0.0) null else arguments?.getDouble("lat")
-        val lng = if (arguments?.getDouble("lng") == 0.0) null else arguments?.getDouble("lng")
-
         return when (item.itemId) {
             R.id.save -> {
                 fragmentBinding?.let {
                     viewModel.changeContent(
                         it.edit.text.toString(),
                         coord = if (lat != null && lng != null) Coordinates(
-                            lat,
-                            lng
+                            lat!!,
+                            lng!!
                         ) else null
                     )
+
                     viewModel.save()
                     Utils.hideKeyboard(requireView())
                     shared?.edit()?.clear()?.commit()
@@ -80,8 +79,6 @@ class NewPostFragment : Fragment() {
         val content = arguments?.getString("content") ?: shared?.getString(keyShared, null)
         val attachment = arguments?.getString("attachment")
         val attachmentType = arguments?.getString("attachmentType")
-        var lat: Double? = null
-        var lng: Double? = null
 
         binding.edit.setText(content)
         binding.edit.requestFocus()

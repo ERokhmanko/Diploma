@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -188,8 +187,8 @@ class NewEventFragment : Fragment() {
             if (lat != null && lng != null) binding.coordEdit.setText(
                 getString(
                     R.string.coordinates,
-                    lat,
-                    lng
+                    lat.toString(),
+                    lng.toString()
                 )
             )
         }

@@ -205,6 +205,7 @@ class PostViewModel @Inject constructor(
         }
     }
 
+
     fun attachmentRepost(attachment: Attachment) {
         edited.value?.let {
             _edited.value = it.copy(attachment = attachment)
