@@ -42,8 +42,9 @@ class NewPostFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val lat = arguments?.getDouble("lat")
-        val lng = arguments?.getDouble("lng")
+        val lat = if (arguments?.getDouble("lat") == 0.0) null else arguments?.getDouble("lat")
+        val lng = if (arguments?.getDouble("lng") == 0.0) null else arguments?.getDouble("lng")
+
         return when (item.itemId) {
             R.id.save -> {
                 fragmentBinding?.let {
