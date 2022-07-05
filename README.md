@@ -16,7 +16,8 @@
 * ImagePicker, Glide, Intent
 
 ## Возможности приложения
-Для входа в приложение вам необходимо аутетифицироваться. Вы можете зайти под тестовым пользователем:
+Для входа в приложение вам необходимо аутентифицироваться. Вы можете зайти под тестовым пользователем:
+
 __Логин__ 111111
 __Пароль__ 111111
 
@@ -46,15 +47,17 @@ __Лента постов__
 ![Image alt](https://github.com/ERokhmanko/Diploma/blob/master/screenshots/myMenuPost.jpg)
 ![Image alt](https://github.com/ERokhmanko/Diploma/blob/master/screenshots/ownerMenuPost.jpg)
  - Проставляйте лайки на постах, которые вам понравились. Под постом вы увидите первых двух пользователей, которые оценили пост. Нажмите на список, чтобы просмотреть всех пользователей, которым понравился пост.
+
  ![Image alt](https://github.com/ERokhmanko/Diploma/blob/master/screenshots/likePost.jpg)
  ![Image alt](https://github.com/ERokhmanko/Diploma/blob/master/screenshots/listLike.jpg)
  - Просматривайте отмеченных менторов в постах. Нажмите на список, чтобы просмотреть всех отмеченных пользователей.
+
  ![Image alt](https://github.com/ERokhmanko/Diploma/blob/master/screenshots/mentors.jpg)
  ![Image alt](https://github.com/ERokhmanko/Diploma/blob/master/screenshots/listMentors.jpg)
  - Просматривайте координаты, оставленные в посте в "Яндекс. Карты". Нажмите на иконку, чтобы просмотреть.
  ![Image alt](https://github.com/ERokhmanko/Diploma/blob/master/screenshots/CoordPost.jpg)
  ![Image alt](https://github.com/ERokhmanko/Diploma/blob/master/screenshots/mapPost.jpg)
- - Вы можете репостнуть пост себе на стену или отправить его другу с помощью другого приложения.
+ - Вы можете сделать репост себе на стену или отправить его другу с помощью другого приложения.
  ![Image alt](https://github.com/ERokhmanko/Diploma/blob/master/screenshots/repostAndShare.jpg)
  ![Image alt](https://github.com/ERokhmanko/Diploma/blob/master/screenshots/share.jpg)
  - Ознакамливайтесь с рекламой прямо в ленте постов.
@@ -62,10 +65,11 @@ __Лента постов__
 
  __Лента событий__
 
- Вы можете просмотреть все события пользователей, в том числе и свои. Совершайте те же действия в событиях, как и в постах. А еще:
- - Нажмитие на иконки форматов событий и перейдите на сайт встречи или просмотрите координаты.
+ Вы можете просмотреть все события пользователей, в том числе и свои. Совершайте в событиях те же действия, что и в постах. А еще:
+ - Нажмите на иконки форматов событий и перейдите на сайт встречи или просмотрите координаты.
  ![Image alt](https://github.com/ERokhmanko/Diploma/blob/master/screenshots/coordAndWebEvent.jpg)
  - Нажмите на иконку, чтобы присоединиться к событию. Под событием вы увидите первых двух пользователей, которые будут участвовать в мероприятии. Нажмите на список, чтобы просмотреть всех участников.
+
  ![Image alt](https://github.com/ERokhmanko/Diploma/blob/master/screenshots/joinEvent.jpg)
  
  __Список пользователей__
@@ -77,46 +81,58 @@ __Лента постов__
 __Мой профиль__
 
 - Просмотрите список работ и свои посты
+
 ![Image alt](https://github.com/ERokhmanko/Diploma/blob/master/screenshots/profileSections.jpg)
 - Создавайте новое: Место работы, Событие, Пост.
+
 ![Image alt](https://github.com/ERokhmanko/Diploma/blob/master/screenshots/new.jpg)
 - При необходимости выйдите из профиля.
+
 ![Image alt](https://github.com/ERokhmanko/Diploma/blob/master/screenshots/exit.jpg)
 
 __Создание работы__
 
 - Заполните поля.
+
 ![Image alt](https://github.com/ERokhmanko/Diploma/blob/master/screenshots/newJob.jpg)
 - Указывая период работы, нажмите на поле и выберите дату в календаре.
+
 ![Image alt](https://github.com/ERokhmanko/Diploma/blob/master/screenshots/calendar.jpg)
 - Если вы укажите некорректную ссылку в поле "Сайт", приложение сообщит об этом.
+
 ![Image alt](https://github.com/ERokhmanko/Diploma/blob/master/screenshots/linkErrorJob.jpg)
 
 __Создание события__
 
 - Заполните поля.
+
 ![Image alt](https://github.com/ERokhmanko/Diploma/blob/master/screenshots/newEvent.jpg)
 - Указывая дату и время, нажмите на поле и выберите необходимое в календаре и часах.
+
 ![Image alt](https://github.com/ERokhmanko/Diploma/blob/master/screenshots/time.jpg)
 - Выберите формат из списка. В зависимости от варианта, укажите ссылку на событие или координаты на карте.
+
 ![Image alt](https://github.com/ERokhmanko/Diploma/blob/master/screenshots/formatEvent.jpg)
 ![Image alt](https://github.com/ERokhmanko/Diploma/blob/master/screenshots/coordEvent.jpg)
-- Для добавления координатов нажмите на место в картах, а затем на знак плюс или добавьте место длительным нажатием на место. Если вам необходимо найти свое место положение, надмите на кнопку "моя локация"
+- Для добавления координат нажмите на место в картах, а затем на знак плюс или добавьте точку длительным нажатием на место. Если вам необходимо найти свое местоположение, нажмите на кнопку "моя локация"
+
 ![Image alt](https://github.com/ERokhmanko/Diploma/blob/master/screenshots/mapAddPlace.jpg)
-- Укажите спикеров. Нажмите на поле и установите флажок на юзерах.
+- Укажите спикеров. Нажмите на поле и установите флажки на юзерах.
 ![Image alt](https://github.com/ERokhmanko/Diploma/blob/master/screenshots/listSpeakers.jpg)
 - Добавьте вложение.
+
 ![Image alt](https://github.com/ERokhmanko/Diploma/blob/master/screenshots/attachmentChooser.jpg)
 ![Image alt](https://github.com/ERokhmanko/Diploma/blob/master/screenshots/imageChooser.jpg)
 ![Image alt](https://github.com/ERokhmanko/Diploma/blob/master/screenshots/videoChooser.jpg)
 ![Image alt](https://github.com/ERokhmanko/Diploma/blob/master/screenshots/attachmentVideo.jpg)
 ![Image alt](https://github.com/ERokhmanko/Diploma/blob/master/screenshots/attachmentAudio.jpg)
-- Если обязательные поля не заполненные, приложение сообщит об этом при сохранении.
+- Если обязательные поля не заполнены, приложение сообщит об этом при сохранении.
 ![Image alt](https://github.com/ERokhmanko/Diploma/blob/master/screenshots/errorEvent.jpg)
 
 __Создание поста__
 
-Напиши о том, что для вас важно. Вы можете сделать вложение (фото, аудио, видео), оставить координаты и отметить людей.
+Напишите о том, что для вас важно. Вы можете сделать вложение (фото, аудио, видео), оставить координаты и отметить людей.
+
 ![Image alt](https://github.com/ERokhmanko/Diploma/blob/master/screenshots/newPost.jpg)
 
 
