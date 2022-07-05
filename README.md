@@ -55,18 +55,23 @@ __Лента постов__
  ![Image alt](https://github.com/ERokhmanko/Diploma/blob/master/screenshots/mentors.jpg)
  ![Image alt](https://github.com/ERokhmanko/Diploma/blob/master/screenshots/listMentors.jpg)
  - Просматривайте координаты, оставленные в посте в "Яндекс. Карты". Нажмите на иконку, чтобы просмотреть.
+
  ![Image alt](https://github.com/ERokhmanko/Diploma/blob/master/screenshots/CoordPost.jpg)
  ![Image alt](https://github.com/ERokhmanko/Diploma/blob/master/screenshots/mapPost.jpg)
+
  - Вы можете сделать репост себе на стену или отправить его другу с помощью другого приложения.
+
  ![Image alt](https://github.com/ERokhmanko/Diploma/blob/master/screenshots/repostAndShare.jpg)
  ![Image alt](https://github.com/ERokhmanko/Diploma/blob/master/screenshots/share.jpg)
  - Ознакамливайтесь с рекламой прямо в ленте постов.
+
  ![Image alt](https://github.com/ERokhmanko/Diploma/blob/master/screenshots/ad.jpg)
 
  __Лента событий__
 
  Вы можете просмотреть все события пользователей, в том числе и свои. Совершайте в событиях те же действия, что и в постах. А еще:
  - Нажмите на иконки форматов событий и перейдите на сайт встречи или просмотрите координаты.
+
  ![Image alt](https://github.com/ERokhmanko/Diploma/blob/master/screenshots/coordAndWebEvent.jpg)
  - Нажмите на иконку, чтобы присоединиться к событию. Под событием вы увидите первых двух пользователей, которые будут участвовать в мероприятии. Нажмите на список, чтобы просмотреть всех участников.
 
@@ -75,6 +80,7 @@ __Лента постов__
  __Список пользователей__
 
 Просматривайте список пользователей и переходите к ним в профиль.
+
 ![Image alt](https://github.com/ERokhmanko/Diploma/blob/master/screenshots/users.jpg)
 ![Image alt](https://github.com/ERokhmanko/Diploma/blob/master/screenshots/userProfile.jpg)
 
@@ -118,6 +124,7 @@ __Создание события__
 
 ![Image alt](https://github.com/ERokhmanko/Diploma/blob/master/screenshots/mapAddPlace.jpg)
 - Укажите спикеров. Нажмите на поле и установите флажки на юзерах.
+
 ![Image alt](https://github.com/ERokhmanko/Diploma/blob/master/screenshots/listSpeakers.jpg)
 - Добавьте вложение.
 
@@ -127,6 +134,7 @@ __Создание события__
 ![Image alt](https://github.com/ERokhmanko/Diploma/blob/master/screenshots/attachmentVideo.jpg)
 ![Image alt](https://github.com/ERokhmanko/Diploma/blob/master/screenshots/attachmentAudio.jpg)
 - Если обязательные поля не заполнены, приложение сообщит об этом при сохранении.
+
 ![Image alt](https://github.com/ERokhmanko/Diploma/blob/master/screenshots/errorEvent.jpg)
 
 __Создание поста__
