@@ -51,7 +51,8 @@ object Utils {
     }
 
     fun formatDate(value: Long?): String? {
-      return if(value==null) null else DateFormat.format("yyyy-MM-dd", Date(value * 1000)).toString()
+        return if (value == null) null else DateFormat.format("yyyy-MM-dd", Date(value * 1000))
+            .toString()
     }
 
 
@@ -128,11 +129,11 @@ object Utils {
         return formatter.format(date?.toInstant())
     }
 
-fun listToString(list: List<String>): String{
-   return list.stream()
-        .map { n -> java.lang.String.valueOf(n) }
-        .collect(Collectors.joining(", ", "", ""))
-}
+    fun listToString(list: List<String>): String {
+        return list.stream()
+            .map { n -> java.lang.String.valueOf(n) }
+            .collect(Collectors.joining(", ", "", ""))
+    }
 
     fun formatToDate(value: String): String {
         val formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT)

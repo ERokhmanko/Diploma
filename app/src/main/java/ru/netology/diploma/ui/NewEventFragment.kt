@@ -170,17 +170,15 @@ class NewEventFragment : Fragment() {
         binding.edit.requestFocus()
 
 
-        eventViewModel.edited.observe(viewLifecycleOwner) {
+        eventViewModel.edited.observe(viewLifecycleOwner) {event->
             val nameSpeakers = mutableListOf<String>()
 
-            it.speakerIds.map { id ->
-                userViewModel.data.value?.users?.map { user -> //TODO корректна ли такая запись?
-                    if (id == user.id) nameSpeakers.add(user.name)
-                }
+            event.speakerIds.map { id ->
+                userViewModel.getUserName(id)?.let { nameSpeakers.add(it) }
             }
 
-            lat = it.coords?.lat
-            lng = it.coords?.long
+            lat = event.coords?.lat
+            lng = event.coords?.long
             val nameSpeakersString = listToString(nameSpeakers)
 
             binding.speakersEdit.setText(nameSpeakersString)

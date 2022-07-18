@@ -12,6 +12,7 @@ import androidx.work.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
@@ -23,6 +24,7 @@ import ru.netology.diploma.enumeration.AttachmentType
 import ru.netology.diploma.enumeration.RetryType
 import ru.netology.diploma.model.FileModel
 import ru.netology.diploma.model.PostsModelState
+import ru.netology.diploma.repository.PostEventListRepository
 import ru.netology.diploma.repository.PostRepository
 import ru.netology.diploma.ui.USER_ID
 import ru.netology.diploma.utils.SingleLiveEvent
@@ -53,6 +55,7 @@ val emptyPost = Post(
 @HiltViewModel
 class PostViewModel @Inject constructor(
     private val repository: PostRepository,
+    private val listRepo: PostEventListRepository,
     private val workManager: WorkManager,
     appAuth: AppAuth,
     private val stateHandle: SavedStateHandle,
@@ -93,6 +96,9 @@ class PostViewModel @Inject constructor(
             }
         }
 
+    val postListModel: MutableList<PostListModel> = mutableListOf()
+
+
     private val _dataState = MutableLiveData<PostsModelState>()
     val dataState: LiveData<PostsModelState>
         get() = _dataState
@@ -116,6 +122,7 @@ class PostViewModel @Inject constructor(
 
     init {
         loadPosts()
+        getPostList()
     }
 
 
@@ -126,6 +133,28 @@ class PostViewModel @Inject constructor(
             _dataState.value = PostsModelState()
         } catch (e: Exception) {
             _dataState.value = PostsModelState(error = true)
+        }
+    }
+
+    private fun getPostList() = viewModelScope.launch {
+        try {
+            listRepo.getPosts()
+                .map { post ->
+                    async {
+                        postListModel.add(
+                            PostListModel(
+                                post,
+                                listRepo.getUserAvatars(post.likeOwnerIds),
+                                listRepo.getUsersNames(post.mentionIds),
+                                listRepo.getJobAuthor(post.authorId)
+                            )
+                        )
+                    }.onAwait
+
+                }
+
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 

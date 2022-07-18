@@ -141,7 +141,7 @@ class MyProfileFragment : Fragment() {
                 userViewModel.getUsersIds(post.likeOwnerIds)
                 findNavController().navigate(R.id.action_navigation_my_profile_to_usersBottomSheet)
             }
-        }, userViewModel.data, jobViewModel.jobData)
+        }, postViewModel.postListModel)
 
         binding.listPosts.adapter = postsAdapter
 
@@ -178,7 +178,6 @@ class MyProfileFragment : Fragment() {
         binding.listJobs.adapter = jobsAdapter
 
             jobViewModel.jobData.observe(viewLifecycleOwner) {
-                jobViewModel.loadJobs() //TODO смущает этот вызов в фрагменте, спросить у куратора
                 jobsAdapter.submitList(it)
                 binding.emptyText.isVisible = it.isEmpty()
                 binding.listJobs.isVisible = it.isNotEmpty()

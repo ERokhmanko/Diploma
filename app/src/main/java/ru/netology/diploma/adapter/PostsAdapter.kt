@@ -1,11 +1,11 @@
 package ru.netology.diploma.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.core.view.isVisible
-import androidx.lifecycle.LiveData
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -15,7 +15,6 @@ import ru.netology.diploma.databinding.CardAdBinding
 import ru.netology.diploma.databinding.CardPostBinding
 import ru.netology.diploma.dto.*
 import ru.netology.diploma.enumeration.AttachmentType
-import ru.netology.diploma.model.UserModel
 import ru.netology.diploma.utils.Utils
 import ru.netology.diploma.utils.Utils.formatDate
 import ru.netology.diploma.utils.Utils.uploadingMedia
@@ -36,8 +35,7 @@ interface PostCallback {
 
 class PostsAdapter(
     private val postCallback: PostCallback,
-    private val users: LiveData<UserModel>,
-    private val jobs: LiveData<List<Job>>
+    private val postListModel: MutableList<PostListModel>,
 ) :
     PagingDataAdapter<FeedItem, RecyclerView.ViewHolder>(PostsDiffCallback()) {
 
@@ -55,7 +53,7 @@ class PostsAdapter(
             R.layout.card_post -> {
                 val binding =
                     CardPostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                PostViewHolder(binding, postCallback, users, jobs)
+                PostViewHolder(parent.context, binding, postCallback, postListModel)
             }
             R.layout.card_ad -> {
                 val binding =
@@ -86,10 +84,10 @@ class AdViewHolder(
 }
 
 class PostViewHolder(
+    private val context: Context,
     private val binding: CardPostBinding,
     private val postCallback: PostCallback,
-    private val users: LiveData<UserModel>,
-    private val jobs: LiveData<List<Job>>
+    private val postListModel: MutableList<PostListModel>
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(post: Post) {
@@ -104,18 +102,29 @@ class PostViewHolder(
                 if (!post.likeOwnerIds.isNullOrEmpty()) View.VISIBLE else View.GONE
             coord.isVisible = post.coords != null
 
-            //TODO разобраться от куда тянуть юзеров, лайв дата тянет только после загрузки страницы юзеров
+            //TODO Изменено на объект. Корректно?
             val userLike = mutableListOf<String?>()
             val nameMentorsList = mutableListOf<String>()
+            val listJob = mutableListOf<String?>()
 
-                users.value?.users?.map { user ->
-                    post.likeOwnerIds.map { id ->
-                        if (user.id == id) userLike.add(user.avatar)
+            postListModel.map { listModel ->
+
+                if (listModel.post.id == post.id) {
+                    listModel.userLikeAvatars.map {
+                        userLike.add(it)
                     }
-                    post.mentionIds.map { id ->
-                        if (user.id == id) nameMentorsList.add(user.name)
+
+                    listModel.mentorNames.map {
+                        if (it != null) {
+                            nameMentorsList.add(it)
+                        }
+                    }
+
+                    listModel.jobsAuthor.map {
+                        listJob.add(it?.name)
                     }
                 }
+            }
 
             mentors.isVisible = nameMentorsList.isNotEmpty()
             mentorsEdit.isVisible = nameMentorsList.isNotEmpty()
@@ -154,7 +163,13 @@ class PostViewHolder(
                 }
             }
 
-            if (jobs.value?.isEmpty() == false) placeWork.text = jobs.value!!.first().name //TODO сейчас подтягиваются для всех юзеров работы авторизованного юзера
+            placeWork.text = if (listJob.isNotEmpty()) {
+                listJob.first()
+            } else {
+                context.getString(
+                    R.string.experience
+                )
+            }
 
             Utils.uploadingAvatar(avatar, post.authorAvatar)
 

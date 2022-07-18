@@ -4,6 +4,7 @@ import android.util.Patterns
 import androidx.lifecycle.*
 import androidx.work.*
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import ru.netology.diploma.R
 import ru.netology.diploma.auth.AppAuth
@@ -53,7 +54,7 @@ class JobViewModel @Inject constructor(
         get() = _jobCreated
 
     init {
-        getJobsByUserId(profileId) //TODO в логах постоянно вызов этого метода, как исправить?
+        getJobsByUserId(profileId)
     }
 
     fun loadJobs() = viewModelScope.launch {
@@ -135,8 +136,9 @@ class JobViewModel @Inject constructor(
                         .setInputData(data)
                         .setConstraints(constraints)
                         .build()
-                    workManager.enqueue(request)
+                     workManager.enqueue(request).await()
 
+                    loadJobs()  //TODO не работает, работы не обновляются
                     _dataState.value = JobsModelState()
                     edited.value = emptyJob
                 } catch (e: Exception) {

@@ -64,6 +64,7 @@ class PostRepository @Inject constructor(
         .flow
         .map { it.map(PostEntity::toDto) }
 
+
     suspend fun getAll() {
         try {
             val response = apiService.getAllPosts()
@@ -151,15 +152,14 @@ class PostRepository @Inject constructor(
 
     private suspend fun saveWithAttachment(post: Post, uri: Uri, type: AttachmentType) {
         try {
-            val media = upload(uri)
+            val media = if(!uri.toString().contains("http")) upload(uri).url else uri.toString()
 
             val postWithAttachment = post.copy(
                 attachment = Attachment(
-                    url = media.url,
+                    url = media,
                     type = type
                 )
             )
-
             save(postWithAttachment)
         } catch (e: AppError) {
             throw e

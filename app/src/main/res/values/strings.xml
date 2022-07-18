@@ -89,5 +89,6 @@
     <string name="use_card">Sorry, you won\'t be able to view maps without permission to display your location</string>
     <string name="decline">Clear</string>
     <string name="myLocation">A button to determine your location</string>
+    <string name="experience">No prior experience</string>
 
 </resources>

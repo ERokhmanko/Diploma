@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.core.view.isVisible
-import androidx.lifecycle.LiveData
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -13,13 +12,9 @@ import okio.utf8Size
 import ru.netology.diploma.R
 import ru.netology.diploma.databinding.CardAdBinding
 import ru.netology.diploma.databinding.CardEventBinding
-import ru.netology.diploma.dto.Ad
-import ru.netology.diploma.dto.Event
-import ru.netology.diploma.dto.FeedItem
-import ru.netology.diploma.dto.Post
+import ru.netology.diploma.dto.*
 import ru.netology.diploma.enumeration.AttachmentType
 import ru.netology.diploma.enumeration.EventType
-import ru.netology.diploma.model.UserModel
 import ru.netology.diploma.utils.Utils
 import ru.netology.diploma.utils.Utils.formatDate
 
@@ -41,7 +36,7 @@ interface EventCallback {
 
 class EventsAdapter(
     private val eventCallback: EventCallback,
-    private val users: LiveData<UserModel>
+    private val eventListModel: MutableList<EventListModel>
 ) :
     PagingDataAdapter<FeedItem, RecyclerView.ViewHolder>(EventsDiffCallback()) {
 
@@ -60,7 +55,7 @@ class EventsAdapter(
             R.layout.card_event -> {
                 val binding =
                     CardEventBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                EventViewHolder(binding, eventCallback, users)
+                EventViewHolder(binding, eventCallback, eventListModel)
             }
             R.layout.card_ad -> {
                 val binding =
@@ -84,7 +79,7 @@ class EventsAdapter(
 class EventViewHolder(
     private val binding: CardEventBinding,
     private val eventCallback: EventCallback,
-    private val users: LiveData<UserModel>
+    private val eventListModel: MutableList<EventListModel>
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(event: Event) {
@@ -104,17 +99,22 @@ class EventViewHolder(
             val nameSpeakersList = mutableListOf<String>()
             val avatarParticipants = mutableListOf<String?>()
 
-            //TODO разобраться от куда тянуть юзеров, лайв дата тянет только после загрузки страницы юзеров
-            users.value?.users?.map { user ->
-                event.speakerIds.map { speakerId ->
-                    if (user.id == speakerId) nameSpeakersList.add(user.name)
-                }
-                event.participantsIds.map { participantId ->
-                    if (user.id == participantId) avatarParticipants.add(user.avatar)
-                }
-                event.likeOwnerIds.map { id ->
-                    if (user.id == id) userLike.add(user.avatar)
+            eventListModel.map { listModel ->
 
+                if (listModel.event.id == event.id) {
+                    listModel.usersLikeAvatars.map {
+                        userLike.add(it)
+                    }
+
+                    listModel.speakersNames.map {
+                        if (it != null) {
+                            nameSpeakersList.add(it)
+                        }
+                    }
+
+                    listModel.usersParticipantsAvatars.map {
+                        avatarParticipants.add(it)
+                    }
                 }
             }
 
@@ -141,22 +141,26 @@ class EventViewHolder(
                 }
                 event.likeOwnerIds.size == 1 -> {
                     groupLike.visibility = View.VISIBLE
-                    val firstAvatar = userLike.first()
-                    Utils.uploadingAvatar(
-                        firstLike,
-                        firstAvatar
-                    )
+                    if (userLike.isNotEmpty()) {
+                        val firstAvatar = userLike.first()
+                        Utils.uploadingAvatar(
+                            firstLike,
+                            firstAvatar
+                        )
+                    }
                 }
                 else -> {
                     groupLike.visibility = View.VISIBLE
                     cardViewSecondLike.visibility = View.VISIBLE
-                    val firstAvatar = userLike.first()
-                    val secondAvatar = userLike[1]
-                    Utils.uploadingAvatar(firstLike, firstAvatar)
-                    Utils.uploadingAvatar(
-                        secondLike,
-                        secondAvatar
-                    )
+                    if (userLike.isNotEmpty()) {
+                        val firstAvatar = userLike.first()
+                        val secondAvatar = userLike[1]
+                        Utils.uploadingAvatar(firstLike, firstAvatar)
+                        Utils.uploadingAvatar(
+                            secondLike,
+                            secondAvatar
+                        )
+                    }
                 }
             }
 
@@ -171,16 +175,20 @@ class EventViewHolder(
                 }
                 event.participantsIds.size == 1 -> {
                     groupParticipant.visibility = View.VISIBLE
-                    val firstAvatar = avatarParticipants.first()
-                    Utils.uploadingAvatar(firstParticipant, firstAvatar)
+                    if (avatarParticipants.isNotEmpty()) {
+                        val firstAvatar = avatarParticipants.first()
+                        Utils.uploadingAvatar(firstParticipant, firstAvatar)
+                    }
                 }
                 else -> {
                     groupParticipant.visibility = View.VISIBLE
                     cardViewSecondParticipant.visibility = View.VISIBLE
-                    val firstAvatar = avatarParticipants.first()
-                    val secondAvatar = avatarParticipants[2]
-                    Utils.uploadingAvatar(firstLike, firstAvatar)
-                    Utils.uploadingAvatar(secondLike, secondAvatar)
+                    if (avatarParticipants.isNotEmpty()) {
+                        val firstAvatar = avatarParticipants.first()
+                        val secondAvatar = avatarParticipants[1]
+                        Utils.uploadingAvatar(firstLike, firstAvatar)
+                        Utils.uploadingAvatar(secondLike, secondAvatar)
+                    }
                 }
             }
 

@@ -70,7 +70,12 @@ class UserViewModel @Inject constructor(
         _usersIds.value = set
     }
 
-
+    fun getUserName(id: Long): String? {
+        data.value?.users?.map { user ->
+            if (id == user.id) return user.name
+        }
+        return null
+    }
 
 }
 

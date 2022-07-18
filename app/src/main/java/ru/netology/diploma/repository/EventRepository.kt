@@ -142,11 +142,11 @@ class EventRepository @Inject constructor(
 
     private suspend fun saveWithAttachment(event: Event, uri: Uri, type: AttachmentType) {
         try {
-            val media = upload(uri)
+            val media = if(!uri.toString().contains("http")) upload(uri).url else uri.toString()
 
             val eventWithAttachment = event.copy(
                 attachment = Attachment(
-                    url = media.url,
+                    url = media,
                     type = type
                 )
             )

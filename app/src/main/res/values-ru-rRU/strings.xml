@@ -81,4 +81,5 @@
     <string name="decline">Понятно</string>
     <string name="myLocation">Кнопка для определения Вашей локации</string>
     <string name="menu_video">Видео</string>
+    <string name="experience">Без опыта работы</string>
 </resources>

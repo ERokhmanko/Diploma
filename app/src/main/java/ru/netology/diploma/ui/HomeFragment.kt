@@ -38,7 +38,6 @@ class HomeFragment : Fragment() {
 
         val viewModel: PostViewModel by activityViewModels()
         val userViewModel: UserViewModel by activityViewModels()
-        val jobViewModel: JobViewModel by activityViewModels()
 
         val bundle = Bundle()
 
@@ -121,7 +120,7 @@ class HomeFragment : Fragment() {
                 userViewModel.getUsersIds(post.likeOwnerIds)
                 findNavController().navigate(R.id.action_navigation_main_to_usersBottomSheet)
             }
-        }, userViewModel.data, jobViewModel.jobData)
+        }, viewModel.postListModel)
 
         binding.list.adapter = adapter.withLoadStateHeaderAndFooter(
             header = PostLoadStateAdapter {
