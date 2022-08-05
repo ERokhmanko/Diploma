@@ -12,6 +12,11 @@ import ru.netology.diploma.error.NetworkError
 import ru.netology.diploma.error.UnknownError
 import java.io.IOException
 import javax.inject.Inject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
+import ru.netology.diploma.entity.toDto
 
 class JobRepository @Inject constructor(
     private val apiService: ApiService,
@@ -19,30 +24,33 @@ class JobRepository @Inject constructor(
     private val jobWorkDao: JobWorkDao
 ) {
 
-    suspend fun getJobsByUserId(userId: Long) : List<Job> {
+    val data: Flow<List<Job>> = jobDao.getAll()
+        .map { it.toDto() }
+        .flowOn(Dispatchers.Default)
+
+    suspend fun getJobsByUserId(id: Long) {
         try {
-            val response = apiService.getJobs(userId)
+            jobDao.removeAll()
+            val response = apiService.getJobs(id)
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
             }
-            val body = response.body() ?: throw ApiError(response.code(), response.message())
-            jobDao.insert(body.toEntity())
-            return body
+            val data = response.body() ?: throw ApiError(response.code(), response.message())
+            jobDao.insert(data.toEntity())
         } catch (e: IOException) {
             throw NetworkError
-        } catch (e: Exception) {
-            throw UnknownError
+        } catch (e: java.lang.Exception) {
+            throw UnknownError()
         }
     }
 
     suspend fun removeById(id: Long) {
         try {
-            jobDao.removeById(id)
             val response = apiService.removeJobById(id)
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
             }
-
+            jobDao.removeById(id)
         } catch (e: IOException) {
             throw NetworkError
         } catch (e: Exception) {

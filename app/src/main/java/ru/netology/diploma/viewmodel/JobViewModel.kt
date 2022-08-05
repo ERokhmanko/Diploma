@@ -4,7 +4,6 @@ import android.util.Patterns
 import androidx.lifecycle.*
 import androidx.work.*
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import ru.netology.diploma.R
 import ru.netology.diploma.auth.AppAuth
@@ -35,13 +34,9 @@ class JobViewModel @Inject constructor(
     appAuth: AppAuth
 ) : ViewModel() {
 
-    private val _jobData = MutableLiveData<List<Job>>()
-    val jobData: LiveData<List<Job>>
-        get() = _jobData
-
+    val jobData = repository.data.asLiveData()
 
     private var profileId = stateHandle.get(USER_ID) ?: appAuth.authStateFlow.value.id
-
 
     private val _dataState = MutableLiveData<JobsModelState>()
     val dataState: LiveData<JobsModelState>
@@ -57,20 +52,10 @@ class JobViewModel @Inject constructor(
         getJobsByUserId(profileId)
     }
 
-    fun loadJobs() = viewModelScope.launch {
-        try {
-            _dataState.value = JobsModelState(loading = true)
-            getJobsByUserId(profileId)
-            _dataState.value = JobsModelState()
-        } catch (e: Exception) {
-            _dataState.value = JobsModelState(error = true)
-        }
-    }
-
     private fun getJobsByUserId(id: Long) = viewModelScope.launch {
         try {
             _dataState.value = JobsModelState(loading = true)
-            _jobData.value = repository.getJobsByUserId(id)
+            repository.getJobsByUserId(id)
             _dataState.value = JobsModelState()
         } catch (e: Exception) {
             _dataState.value = JobsModelState(error = true)
@@ -138,7 +123,6 @@ class JobViewModel @Inject constructor(
                         .build()
                      workManager.enqueue(request).await()
 
-                    loadJobs()  //TODO не работает, работы не обновляются
                     _dataState.value = JobsModelState()
                     edited.value = emptyJob
                 } catch (e: Exception) {

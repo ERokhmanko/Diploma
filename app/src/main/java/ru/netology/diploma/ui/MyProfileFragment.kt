@@ -152,7 +152,6 @@ class MyProfileFragment : Fragment() {
 
         }
 
-
         val jobsAdapter = JobsAdapter(object : JobCallback {
             override fun edit(job: Job) {
                 jobViewModel.edit(job)
@@ -173,12 +172,14 @@ class MyProfileFragment : Fragment() {
             }
         }, true)
 
-
-
         binding.listJobs.adapter = jobsAdapter
 
             jobViewModel.jobData.observe(viewLifecycleOwner) {
-                jobsAdapter.submitList(it)
+                val listComparison = jobsAdapter.itemCount < it.size
+                jobsAdapter.submitList(it){
+                    if (listComparison) binding.listJobs.scrollToPosition(0)
+                }
+                postsAdapter.refresh()
                 binding.emptyText.isVisible = it.isEmpty()
                 binding.listJobs.isVisible = it.isNotEmpty()
             }
