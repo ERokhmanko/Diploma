@@ -38,6 +38,9 @@ data class Post(
     val likedByMe: Boolean = false,
     val attachment: Attachment? = null,
     val ownedByMe: Boolean = false,
+    val usersLikeAvatars: List<String?>? = null,
+    val mentorsNames: List<String?>? = null,
+    val jobs: List<String?>? = null
 ) : FeedItem {
     companion object {
         val empty = Post(

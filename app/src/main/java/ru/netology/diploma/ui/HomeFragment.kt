@@ -120,7 +120,7 @@ class HomeFragment : Fragment() {
                 userViewModel.getUsersIds(post.likeOwnerIds)
                 findNavController().navigate(R.id.action_navigation_main_to_usersBottomSheet)
             }
-        }, viewModel.postListModel)
+        })
 
         binding.list.adapter = adapter.withLoadStateHeaderAndFooter(
             header = PostLoadStateAdapter {

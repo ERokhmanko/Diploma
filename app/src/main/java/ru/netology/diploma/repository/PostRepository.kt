@@ -52,7 +52,25 @@ class PostRepository @Inject constructor(
             postDao.getPagingSource()
         }
     ).flow
-        .map { it.map(PostEntity::toDto) }
+        .map {
+            it.map(PostEntity::toDto).map { post ->
+                val usersId = post.likeOwnerIds + post.mentionIds
+                val users = getUsers(usersId)
+                post.copy(
+                    usersLikeAvatars = users.filter { user ->
+                        post.likeOwnerIds.contains(user?.id)
+                    }.map { user ->
+                        user?.avatar
+                    },
+                    mentorsNames = users.filter { user ->
+                        post.mentionIds.contains(user?.id)
+                    }.map { user ->
+                        user?.name
+                    },
+                    jobs = getJobName(post.authorId)
+                )
+            }
+        }
 
 
     @OptIn(ExperimentalPagingApi::class)
@@ -62,7 +80,25 @@ class PostRepository @Inject constructor(
         pagingSourceFactory = { postDao.getPagingSource(userId) },
     )
         .flow
-        .map { it.map(PostEntity::toDto) }
+        .map {
+            it.map(PostEntity::toDto).map { post ->
+                val usersId = post.likeOwnerIds + post.mentionIds
+                val users = getUsers(usersId)
+                post.copy(
+                    usersLikeAvatars = users.filter { user ->
+                        post.likeOwnerIds.contains(user?.id)
+                    }.map { user ->
+                        user?.avatar
+                    },
+                    mentorsNames = users.filter { user ->
+                        post.mentionIds.contains(user?.id)
+                    }.map { user ->
+                        user?.name
+                    },
+                    jobs = getJobName(post.authorId)
+                )
+            }
+        }
 
 
     suspend fun getAll() {
@@ -79,6 +115,28 @@ class PostRepository @Inject constructor(
             throw UnknownError
         }
     }
+
+    private suspend fun getJobName(id: Long) =
+        try {
+            apiService.getJobs(id).body()?.map {
+                it.name
+            }
+        } catch (e: IOException) {
+            throw NetworkError
+        }
+
+    private suspend fun getUsers(listId: Set<Long>) =
+        try {
+            listId.map {
+                val response = apiService.getUserById(it)
+                if (!response.isSuccessful) {
+                    throw ApiError(response.code(), response.message())
+                }
+                response.body()
+            }
+        } catch (e: IOException) {
+            throw NetworkError
+        }
 
     suspend fun saveWork(post: Post, upload: MediaUpload?, type: AttachmentType?): Long {
         try {

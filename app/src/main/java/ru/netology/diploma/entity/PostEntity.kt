@@ -26,7 +26,10 @@ data class PostEntity(
     val likedByMe: Boolean = false,
     @Embedded
     val attachment: AttachmentEmbeddable? = null,
-    val ownedByMe: Boolean = false
+    val ownedByMe: Boolean = false,
+    val usersLikeAvatars: List<String?>? = null,
+    val mentorsNames: List<String?>? = null,
+    val jobs: List<String?>? = null
 ) {
     fun toDto() = Post(
         id, authorId, author, authorAvatar,
@@ -39,7 +42,9 @@ data class PostEntity(
         likeOwnerIds,
         likedByMe,
         attachment?.toDto(),
-        ownedByMe
+        ownedByMe,
+        usersLikeAvatars,
+        mentorsNames, jobs
     )
 
     companion object {
@@ -54,7 +59,10 @@ data class PostEntity(
             post.likeOwnerIds,
             post.likedByMe,
             AttachmentEmbeddable.fromDto(post.attachment),
-            post.ownedByMe
+            post.ownedByMe,
+            post.usersLikeAvatars,
+            post.mentorsNames,
+            post.jobs
         )
     }
 }

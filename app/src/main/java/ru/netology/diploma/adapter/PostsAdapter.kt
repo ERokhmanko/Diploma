@@ -35,7 +35,6 @@ interface PostCallback {
 
 class PostsAdapter(
     private val postCallback: PostCallback,
-    private val postListModel: MutableList<PostListModel>,
 ) :
     PagingDataAdapter<FeedItem, RecyclerView.ViewHolder>(PostsDiffCallback()) {
 
@@ -53,7 +52,7 @@ class PostsAdapter(
             R.layout.card_post -> {
                 val binding =
                     CardPostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                PostViewHolder(parent.context, binding, postCallback, postListModel)
+                PostViewHolder(parent.context, binding, postCallback)
             }
             R.layout.card_ad -> {
                 val binding =
@@ -86,8 +85,7 @@ class AdViewHolder(
 class PostViewHolder(
     private val context: Context,
     private val binding: CardPostBinding,
-    private val postCallback: PostCallback,
-    private val postListModel: MutableList<PostListModel>
+    private val postCallback: PostCallback
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(post: Post) {
@@ -102,29 +100,9 @@ class PostViewHolder(
                 if (!post.likeOwnerIds.isNullOrEmpty()) View.VISIBLE else View.GONE
             coord.isVisible = post.coords != null
 
-            //TODO Изменено на объект. Корректно?
-            val userLike = mutableListOf<String?>()
-            val nameMentorsList = mutableListOf<String>()
-            val listJob = mutableListOf<String?>()
-
-            postListModel.map { listModel ->
-
-                if (listModel.post.id == post.id) {
-                    listModel.userLikeAvatars.map {
-                        userLike.add(it)
-                    }
-
-                    listModel.mentorNames.map {
-                        if (it != null) {
-                            nameMentorsList.add(it)
-                        }
-                    }
-
-                    listModel.jobsAuthor.map {
-                        listJob.add(it?.name)
-                    }
-                }
-            }
+            val userLike = post.usersLikeAvatars ?: emptyList()
+            val nameMentorsList = post.mentorsNames ?: emptyList()
+            val listJob = post.jobs ?: emptyList()
 
             mentors.isVisible = nameMentorsList.isNotEmpty()
             mentorsEdit.isVisible = nameMentorsList.isNotEmpty()

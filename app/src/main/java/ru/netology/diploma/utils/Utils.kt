@@ -129,7 +129,7 @@ object Utils {
         return formatter.format(date?.toInstant())
     }
 
-    fun listToString(list: List<String>): String {
+    fun listToString(list: List<String?>): String {
         return list.stream()
             .map { n -> java.lang.String.valueOf(n) }
             .collect(Collectors.joining(", ", "", ""))

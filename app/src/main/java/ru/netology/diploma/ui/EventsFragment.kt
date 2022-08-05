@@ -129,7 +129,7 @@ class EventsFragment : Fragment() {
                 event.coords?.long?.let { bundle.putDouble("lng", it) }
                 findNavController().navigate(R.id.action_navigation_events_to_mapFragment, bundle)
             }
-        }, eventViewModel.eventListModel)
+        })
 
 
         binding.list.adapter = adapter.withLoadStateHeaderAndFooter(

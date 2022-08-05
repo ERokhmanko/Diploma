@@ -117,7 +117,7 @@ class ProfileFragment : Fragment() {
                     bundle
                 )
             }
-        }, postViewModel.postListModel)
+        })
 
         binding.listPosts.adapter = postsAdapter
 

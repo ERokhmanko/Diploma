@@ -16,4 +16,12 @@ class Converters {
     @TypeConverter
     fun toSet(data: String): Set<Long> =
         if (data.isBlank()) emptySet() else data.split(",").map { it.toLong() }.toSet()
+
+    @TypeConverter
+    fun fromList(list: List<String?>?): String? = list?.joinToString(",")
+
+    @TypeConverter
+    fun toList(data: String?): List<String?>? =
+        if (data?.isBlank() == true) emptyList() else data?.split(",")?.map { it }
+            ?.toList()
 }

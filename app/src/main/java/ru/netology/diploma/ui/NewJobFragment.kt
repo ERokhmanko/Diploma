@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.diploma.R
 import ru.netology.diploma.databinding.FragmentNewJobBinding
 import ru.netology.diploma.extensions.afterTextChanged
@@ -15,7 +16,7 @@ import ru.netology.diploma.utils.Utils.formatDate
 import ru.netology.diploma.utils.Utils.showDateDialog
 import ru.netology.diploma.viewmodel.JobViewModel
 
-
+@AndroidEntryPoint
 class NewJobFragment : Fragment() {
 
     private var fragmentBinding: FragmentNewJobBinding? = null
@@ -107,7 +108,6 @@ class NewJobFragment : Fragment() {
 
 
         viewModel.jobCreated.observe(viewLifecycleOwner) {
-            viewModel.loadJobs()
             findNavController().navigateUp()
         }
 

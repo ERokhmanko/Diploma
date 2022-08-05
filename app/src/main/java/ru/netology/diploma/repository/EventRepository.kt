@@ -53,7 +53,29 @@ class EventRepository @Inject constructor(
             eventDao.getPagingSource()
         }
     ).flow
-        .map { it.map(EventEntity::toDto) }
+        .map {
+            it.map(EventEntity::toDto).map { event ->
+                val usersId = event.likeOwnerIds + event.speakerIds + event.participantsIds
+                val users = getUsers(usersId)
+                event.copy(
+                    usersLikeAvatars = users.filter { user ->
+                        event.likeOwnerIds.contains(user?.id)
+                    }.map { user ->
+                        user?.avatar
+                    },
+                    speakersNames = users.filter { user ->
+                        event.speakerIds.contains(user?.id)
+                    }.map { user ->
+                        user?.name
+                    },
+                    usersParticipantsAvatars = users.filter { user ->
+                        event.participantsIds.contains(user?.id)
+                    }.map { user ->
+                        user?.avatar
+                    }
+                )
+            }
+        }
 
     suspend fun getAll() {
         try {
@@ -69,6 +91,19 @@ class EventRepository @Inject constructor(
             throw UnknownError
         }
     }
+
+    private suspend fun getUsers(listId: Set<Long>) =
+        try {
+            listId.map {
+                val response = apiService.getUserById(it)
+                if (!response.isSuccessful) {
+                    throw ApiError(response.code(), response.message())
+                }
+                response.body()
+            }
+        } catch (e: IOException) {
+            throw NetworkError
+        }
 
     suspend fun saveWork(event: Event, upload: MediaUpload?, type: AttachmentType?): Long {
         try {

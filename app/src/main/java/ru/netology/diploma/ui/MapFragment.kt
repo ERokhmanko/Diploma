@@ -25,12 +25,13 @@ import com.yandex.mapkit.map.Map
 import com.yandex.mapkit.mapview.MapView
 import com.yandex.mapkit.user_location.UserLocationLayer
 import com.yandex.runtime.ui_view.ViewProvider
+import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.diploma.R
 import ru.netology.diploma.databinding.FragmentMapBinding
 import ru.netology.diploma.viewmodel.EventViewModel
 import ru.netology.diploma.viewmodel.PostViewModel
 
-
+@AndroidEntryPoint
 class MapFragment : Fragment(), InputListener {
 
     private lateinit var mapView: MapView

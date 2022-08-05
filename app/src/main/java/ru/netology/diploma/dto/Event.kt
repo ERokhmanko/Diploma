@@ -44,6 +44,9 @@ data class Event(
     val attachment: Attachment? = null,
     val link: String? = null,
     val ownedByMe: Boolean = false,
+    val usersLikeAvatars: List<String?>? = null,
+    val speakersNames: List<String?>? = null,
+    val usersParticipantsAvatars: List<String?>? = null
 ) : FeedItem {
     companion object {
         val empty = Event(

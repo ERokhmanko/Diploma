@@ -29,6 +29,10 @@ data class EventEntity(
     val attachment: AttachmentEmbeddable? = null,
     val link: String? = null,
     val ownedByMe: Boolean = false,
+    val usersLikeAvatars: List<String?>? = null,
+    val speakersNames: List<String?>? = null,
+    val usersParticipantsAvatars: List<String?>? = null
+
 ) {
     fun toDto() = Event(
         id, authorId, author, authorAvatar,
@@ -38,7 +42,10 @@ data class EventEntity(
         likeOwnerIds,
         likedByMe, speakerIds, participantsIds, participatedByMe,
         attachment?.toDto(), link,
-        ownedByMe
+        ownedByMe,
+        usersLikeAvatars,
+        speakersNames,
+        usersParticipantsAvatars
     )
 
     companion object {
@@ -50,7 +57,10 @@ data class EventEntity(
             event.likeOwnerIds,
             event.likedByMe, event.speakerIds, event.participantsIds, event.participatedByMe,
             AttachmentEmbeddable.fromDto(event.attachment), event.link,
-            event.ownedByMe
+            event.ownedByMe,
+            event.usersLikeAvatars,
+            event.speakersNames,
+            event.usersParticipantsAvatars
         )
     }
 }

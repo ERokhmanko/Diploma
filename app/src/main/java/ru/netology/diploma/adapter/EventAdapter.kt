@@ -36,7 +36,6 @@ interface EventCallback {
 
 class EventsAdapter(
     private val eventCallback: EventCallback,
-    private val eventListModel: MutableList<EventListModel>
 ) :
     PagingDataAdapter<FeedItem, RecyclerView.ViewHolder>(EventsDiffCallback()) {
 
@@ -55,7 +54,7 @@ class EventsAdapter(
             R.layout.card_event -> {
                 val binding =
                     CardEventBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                EventViewHolder(binding, eventCallback, eventListModel)
+                EventViewHolder(binding, eventCallback)
             }
             R.layout.card_ad -> {
                 val binding =
@@ -79,7 +78,6 @@ class EventsAdapter(
 class EventViewHolder(
     private val binding: CardEventBinding,
     private val eventCallback: EventCallback,
-    private val eventListModel: MutableList<EventListModel>
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(event: Event) {
@@ -95,28 +93,9 @@ class EventViewHolder(
             link.isVisible = event.type == EventType.ONLINE
             coordinates.isVisible = event.type == EventType.OFFLINE
 
-            val userLike = mutableListOf<String?>()
-            val nameSpeakersList = mutableListOf<String>()
-            val avatarParticipants = mutableListOf<String?>()
-
-            eventListModel.map { listModel ->
-
-                if (listModel.event.id == event.id) {
-                    listModel.usersLikeAvatars.map {
-                        userLike.add(it)
-                    }
-
-                    listModel.speakersNames.map {
-                        if (it != null) {
-                            nameSpeakersList.add(it)
-                        }
-                    }
-
-                    listModel.usersParticipantsAvatars.map {
-                        avatarParticipants.add(it)
-                    }
-                }
-            }
+            val userLike = event.usersLikeAvatars ?: emptyList()
+            val nameSpeakersList = event.speakersNames ?: emptyList()
+            val avatarParticipants = event.usersParticipantsAvatars ?: emptyList()
 
             speakers.isVisible = nameSpeakersList.isNotEmpty()
             speakersEdit.isVisible = nameSpeakersList.isNotEmpty()

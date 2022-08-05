@@ -16,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.github.dhaval2404.imagepicker.constant.ImageProvider
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.diploma.R
 import ru.netology.diploma.databinding.FragmentNewPostBinding
 import ru.netology.diploma.dto.Coordinates
@@ -23,7 +24,7 @@ import ru.netology.diploma.enumeration.AttachmentType
 import ru.netology.diploma.utils.Utils
 import ru.netology.diploma.viewmodel.PostViewModel
 
-
+@AndroidEntryPoint
 class NewPostFragment : Fragment() {
 
     private var fragmentBinding: FragmentNewPostBinding? = null

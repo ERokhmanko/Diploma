@@ -16,7 +16,6 @@ import androidx.work.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
@@ -32,7 +31,6 @@ import ru.netology.diploma.model.EventFormState
 import ru.netology.diploma.model.EventModelState
 import ru.netology.diploma.model.FileModel
 import ru.netology.diploma.repository.EventRepository
-import ru.netology.diploma.repository.PostEventListRepository
 import ru.netology.diploma.utils.SingleLiveEvent
 import ru.netology.diploma.work.RemoveEventWorker
 import ru.netology.diploma.work.SaveEventWorker
@@ -64,7 +62,6 @@ val emptyEvent = Event(
 @HiltViewModel
 class EventViewModel @Inject constructor(
     private val repository: EventRepository,
-    private val listRepo: PostEventListRepository,
     private val workManager: WorkManager,
     appAuth: AppAuth,
 ) : ViewModel() {
@@ -121,11 +118,8 @@ class EventViewModel @Inject constructor(
     val eventFormState: LiveData<EventFormState>
         get() = _eventForm
 
-    val eventListModel: MutableList<EventListModel> = mutableListOf()
-
     init {
         loadEvents()
-        getEventList()
     }
 
     fun loadEvents() = viewModelScope.launch {
@@ -135,27 +129,6 @@ class EventViewModel @Inject constructor(
             _dataState.value = EventModelState()
         } catch (e: Exception) {
             _dataState.value = EventModelState(error = true)
-        }
-    }
-
-    private fun getEventList() = viewModelScope.launch {
-        try {
-            listRepo.getEvents()
-                .map { event ->
-                    async {
-                        eventListModel.add(
-                            EventListModel(
-                                event,
-                                listRepo.getUserAvatars(event.likeOwnerIds),
-                                listRepo.getUsersNames(event.speakerIds),
-                                listRepo.getUserAvatars(event.participantsIds)
-                            )
-                        )
-                    }.onAwait
-                }
-
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
     }
 

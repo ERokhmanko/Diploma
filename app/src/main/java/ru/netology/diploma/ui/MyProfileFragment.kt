@@ -141,7 +141,7 @@ class MyProfileFragment : Fragment() {
                 userViewModel.getUsersIds(post.likeOwnerIds)
                 findNavController().navigate(R.id.action_navigation_my_profile_to_usersBottomSheet)
             }
-        }, postViewModel.postListModel)
+        })
 
         binding.listPosts.adapter = postsAdapter
 

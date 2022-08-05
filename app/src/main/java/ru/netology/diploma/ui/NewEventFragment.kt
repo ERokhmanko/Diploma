@@ -19,6 +19,7 @@ import androidx.navigation.fragment.findNavController
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.github.dhaval2404.imagepicker.constant.ImageProvider
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.diploma.R
 import ru.netology.diploma.databinding.FragmentNewEventBinding
 import ru.netology.diploma.dto.Coordinates
@@ -32,7 +33,7 @@ import ru.netology.diploma.utils.Utils.listToString
 import ru.netology.diploma.viewmodel.EventViewModel
 import ru.netology.diploma.viewmodel.UserViewModel
 
-
+@AndroidEntryPoint
 class NewEventFragment : Fragment() {
 
     private var fragmentBinding: FragmentNewEventBinding? = null
