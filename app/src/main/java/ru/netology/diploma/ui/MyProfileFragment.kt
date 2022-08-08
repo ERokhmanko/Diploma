@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
@@ -37,8 +38,8 @@ class MyProfileFragment : Fragment() {
     lateinit var appAuth: AppAuth
 
     private val postViewModel: PostViewModel by activityViewModels()
-    private val userViewModel: UserViewModel by activityViewModels()
-    private val jobViewModel: JobViewModel by activityViewModels()
+    private val userViewModel: UserViewModel by viewModels()
+    private val jobViewModel: JobViewModel by viewModels()
     private val eventViewModel: EventViewModel by activityViewModels()
 
     override fun onCreateView(
