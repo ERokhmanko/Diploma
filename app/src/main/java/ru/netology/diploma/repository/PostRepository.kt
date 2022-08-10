@@ -6,6 +6,8 @@ import androidx.core.net.toUri
 import androidx.paging.*
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
@@ -54,21 +56,28 @@ class PostRepository @Inject constructor(
     ).flow
         .map {
             it.map(PostEntity::toDto).map { post ->
-                val usersId = post.likeOwnerIds + post.mentionIds
-                val users = getUsers(usersId)
-                post.copy(
-                    usersLikeAvatars = users.filter { user ->
-                        post.likeOwnerIds.contains(user?.id)
-                    }.map { user ->
-                        user?.avatar
-                    },
-                    mentorsNames = users.filter { user ->
-                        post.mentionIds.contains(user?.id)
-                    }.map { user ->
-                        user?.name
-                    },
-                    jobs = getJobName(post.authorId)
-                )
+
+                coroutineScope {
+                    val usersId = post.likeOwnerIds + post.mentionIds
+
+                    val usersAsync = async { getUsers(usersId) }
+                    val jobsAsync = async { getJobName(post.authorId) }
+                    val users = usersAsync.await()
+                    val jobs = jobsAsync.await()
+                    post.copy(
+                        usersLikeAvatars = users.filter { user ->
+                            post.likeOwnerIds.contains(user?.id)
+                        }.map { user ->
+                            user?.avatar
+                        },
+                        mentorsNames = users.filter { user ->
+                            post.mentionIds.contains(user?.id)
+                        }.map { user ->
+                            user?.name
+                        },
+                        jobs = jobs
+                    )
+                }
             }
         }
 
@@ -82,21 +91,28 @@ class PostRepository @Inject constructor(
         .flow
         .map {
             it.map(PostEntity::toDto).map { post ->
-                val usersId = post.likeOwnerIds + post.mentionIds
-                val users = getUsers(usersId)
-                post.copy(
-                    usersLikeAvatars = users.filter { user ->
-                        post.likeOwnerIds.contains(user?.id)
-                    }.map { user ->
-                        user?.avatar
-                    },
-                    mentorsNames = users.filter { user ->
-                        post.mentionIds.contains(user?.id)
-                    }.map { user ->
-                        user?.name
-                    },
-                    jobs = getJobName(post.authorId)
-                )
+
+                coroutineScope {
+                    val usersId = post.likeOwnerIds + post.mentionIds
+
+                    val usersAsync = async { getUsers(usersId) }
+                    val jobsAsync = async { getJobName(post.authorId) }
+                    val users = usersAsync.await()
+                    val jobs = jobsAsync.await()
+                    post.copy(
+                        usersLikeAvatars = users.filter { user ->
+                            post.likeOwnerIds.contains(user?.id)
+                        }.map { user ->
+                            user?.avatar
+                        },
+                        mentorsNames = users.filter { user ->
+                            post.mentionIds.contains(user?.id)
+                        }.map { user ->
+                            user?.name
+                        },
+                        jobs = jobs
+                    )
+                }
             }
         }
 

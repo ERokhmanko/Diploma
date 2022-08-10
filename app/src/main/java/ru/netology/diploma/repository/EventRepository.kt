@@ -6,6 +6,8 @@ import androidx.core.net.toUri
 import androidx.paging.*
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
@@ -55,25 +57,30 @@ class EventRepository @Inject constructor(
     ).flow
         .map {
             it.map(EventEntity::toDto).map { event ->
-                val usersId = event.likeOwnerIds + event.speakerIds + event.participantsIds
-                val users = getUsers(usersId)
-                event.copy(
-                    usersLikeAvatars = users.filter { user ->
-                        event.likeOwnerIds.contains(user?.id)
-                    }.map { user ->
-                        user?.avatar
-                    },
-                    speakersNames = users.filter { user ->
-                        event.speakerIds.contains(user?.id)
-                    }.map { user ->
-                        user?.name
-                    },
-                    usersParticipantsAvatars = users.filter { user ->
-                        event.participantsIds.contains(user?.id)
-                    }.map { user ->
-                        user?.avatar
-                    }
-                )
+
+                coroutineScope {
+                    val usersId = event.likeOwnerIds + event.speakerIds + event.participantsIds
+
+                    val usersAsync = async { getUsers(usersId) }
+                    val users = usersAsync.await()
+                    event.copy(
+                        usersLikeAvatars = users.filter { user ->
+                            event.likeOwnerIds.contains(user?.id)
+                        }.map { user ->
+                            user?.avatar
+                        },
+                        speakersNames = users.filter { user ->
+                            event.speakerIds.contains(user?.id)
+                        }.map { user ->
+                            user?.name
+                        },
+                        usersParticipantsAvatars = users.filter { user ->
+                            event.participantsIds.contains(user?.id)
+                        }.map { user ->
+                            user?.avatar
+                        }
+                    )
+                }
             }
         }
 
