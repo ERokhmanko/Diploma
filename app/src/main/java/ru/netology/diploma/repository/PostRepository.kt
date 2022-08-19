@@ -116,10 +116,9 @@ class PostRepository @Inject constructor(
             }
         }
 
-
-    suspend fun getAll() {
+    suspend fun getLatest() {
         try {
-            val response = apiService.getAllPosts()
+            val response = apiService.getLatest(10)
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
             }

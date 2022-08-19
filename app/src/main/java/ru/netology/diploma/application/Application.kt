@@ -33,8 +33,8 @@ class Application : Application(), Configuration.Provider {
     override fun onCreate() {
         super.onCreate()
         setupAuth()
-        setupWorkPosts()
-        setupWorkEvents()
+//        setupWorkPosts()
+//        setupWorkEvents()
         MapKitFactory.setApiKey(BuildConfig.MAPS_API_KEY)
     }
 

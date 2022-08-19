@@ -115,21 +115,6 @@ class PostViewModel @Inject constructor(
 
     private var _mentorsId: MutableSet<Long> = mutableSetOf()
 
-    init {
-        loadPosts()
-    }
-
-
-    fun loadPosts() = viewModelScope.launch {
-        try {
-            _dataState.value = PostsModelState(loading = true)
-            repository.getAll()
-            _dataState.value = PostsModelState()
-        } catch (e: Exception) {
-            _dataState.value = PostsModelState(error = true)
-        }
-    }
-
     fun save() {
         edited.value?.let {
             _postCreated.value = Unit
@@ -228,9 +213,6 @@ class PostViewModel @Inject constructor(
 
     fun hidePost(post: Post) {
         hidePosts.add(post)
-        viewModelScope.launch {
-            repository.getAll()
-        }
     }
 
     fun checkMentors(id: Long) {

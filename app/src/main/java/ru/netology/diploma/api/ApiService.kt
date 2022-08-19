@@ -44,8 +44,6 @@ interface ApiService {
 
 
     //Posts
-    @GET("posts")
-    suspend fun getAllPosts(): Response<List<Post>>
 
     @GET("posts/latest")
     suspend fun getLatest(@Query("count") count: Int): Response<List<Post>>
@@ -108,10 +106,6 @@ interface ApiService {
     suspend fun removeJobById(@Path("id") id: Long): Response<Unit>
 
     //Events
-
-    @GET("events")
-    suspend fun getAllEvents(): Response<List<Event>>
-
     @DELETE("events/{id}")
     suspend fun removeEventById(@Path("id") id: Long): Response<Unit>
 

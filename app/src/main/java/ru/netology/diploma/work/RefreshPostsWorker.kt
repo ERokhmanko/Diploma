@@ -25,7 +25,7 @@ class RefreshPostsWorker @AssistedInject constructor(
     override suspend fun doWork(): Result = withContext(Dispatchers.Default) {
 
         try {
-            repository.getAll()
+            repository.getLatest()
             Result.success()
         } catch (e: Exception) {
             Result.failure()

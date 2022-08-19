@@ -292,7 +292,6 @@ class NewEventFragment : Fragment() {
         }
 
         eventViewModel.eventCreated.observe(viewLifecycleOwner) {
-            eventViewModel.loadEvents()
             findNavController().apply {
                 navigateUp()
             }

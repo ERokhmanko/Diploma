@@ -118,20 +118,6 @@ class EventViewModel @Inject constructor(
     val eventFormState: LiveData<EventFormState>
         get() = _eventForm
 
-    init {
-        loadEvents()
-    }
-
-    fun loadEvents() = viewModelScope.launch {
-        try {
-            _dataState.value = EventModelState(loading = true)
-            repository.getAll()
-            _dataState.value = EventModelState()
-        } catch (e: Exception) {
-            _dataState.value = EventModelState(error = true)
-        }
-    }
-
     fun save() {
         _edited.value?.let {
             _eventCreated.value = Unit
@@ -261,9 +247,6 @@ class EventViewModel @Inject constructor(
 
     fun hideEvent(event: Event) {
         hideEvents.add(event)
-        viewModelScope.launch {
-            repository.getAll()
-        }
     }
 
     fun isLinkValid(link: String) {

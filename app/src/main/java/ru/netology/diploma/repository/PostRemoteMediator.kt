@@ -49,7 +49,7 @@ class PostRemoteMediator @Inject constructor(
             }
 
             if (!result.isSuccessful) throw HttpException(result)
-            if (result.body().isNullOrEmpty()) return MediatorResult.Success(true)
+            if (result.body().isNullOrEmpty()) return MediatorResult.Success(false)
             val data = result.body() ?: throw ApiError(
                 result.code(),
                 result.message(),

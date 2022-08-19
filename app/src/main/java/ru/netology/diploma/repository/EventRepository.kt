@@ -84,9 +84,9 @@ class EventRepository @Inject constructor(
             }
         }
 
-    suspend fun getAll() {
+    suspend fun getLatest() {
         try {
-            val response = apiService.getAllEvents()
+            val response = apiService.getLatestEvents(10)
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
             }
